@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Linux 命令大全</title>
+ 
+<meta name="keywords" content="Linux,命令行,命令" />
+<meta name="description" content="本专题荟萃了本站发布的各种 Linux 命令相关文章，并按字母进行索引。 ,Linux.中国 - 开源社区" />
+<meta name="copyright" content="2005-2015 Linux.cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="referrer" content="always">
+<base href="https://linux.cn/" /><link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_common.css?g08" />
+<link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_portal_topic.css?g08" />
+<link href="https://dn-linuxcn.qbox.me/static/css/responsive.css?g08" rel="stylesheet">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f219a1d7ae00e99bdc4410080f3a6ef7";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">var STYLEID = '1', STATICURL = 'https://dn-linuxcn.qbox.me/static/', IMGDIR = 'https://dn-linuxcn.qbox.me/static/image/common', VERHASH = 'g08', charset = 'utf-8', discuz_uid = '0', cookiepre = 'dx_516d_', cookiedomain = '.linux.cn', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = '', creditnotice = '1|经验|,2|L币|,3|贡献|', defaultstyle = '', REPORTURL = 'aHR0cDovL2xpbnV4LmNuL3RvcGljLWNvbW1hbmRzLmh0bWw=', SITEURL = 'https://linux.cn/', JSPATH = 'https://dn-linuxcn.qbox.me/static/js/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/common.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery.plugins.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/bootstrap.min.js?g08" type="text/javascript"></script>
+<link rel="alternate" type="application/rss+xml" title="Linux.中国 - 开源社区 RSS" href="/rss.xml" />
+<link rel="shortcut icon" href="https://dn-linuxcn.qbox.me/favicon.ico"  sizes="32x32" />
+<script src="https://dn-linuxcn.qbox.me/static/js/portal.js?g08" type="text/javascript"></script>
+</head>
+
+<body id="nv_portal" class="pg_topic" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<div id="toptb" class="cl">
+<div class="wp">
+<div class="z"><a href="//linux.cn/rss.xml" target="_blank" >RSS</a><a href="//linux.cn/tag/" >TAG</a><a href="//mail.qq.com/cgi-bin/bookcol?colid=20274" >邮件列表</a></div>
+<div class="y">
+<a href="//linux.cn/article-1-1.html" >关于我们/About</a><a href="//linux.cn/article-2-1.html" >广告合作/AD</a></div>
+</div>
+</div>
+
+
+<div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2 style="padding:5px 20px 5px 0;"><a href="./" title="Linux.中国 - 开源社区"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_230x80_ani2.gif" alt="Linux.中国 - 开源社区" border="0" /></a></h2><div class="y"><script src="https://dn-linuxcn.qbox.me/static/js/logging.js?g08" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="pwmd5('ls_password');return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td><label for="ls_username">帐号</label></td>
+<td><input type="text" name="username" id="ls_username" class="px vm xg1"  value="用户名/Email" onfocus="if(this.value == '用户名/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = '用户名/Email';this.className = 'px vm xg1';}" tabindex="901" /></td>
+<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label></td>
+<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password">密码</label></td>
+<td><input type="password" name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" /></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904"><em>登录</em></button></td>
+<td>&nbsp;<a href="member.php?mod=knight" class="xi2 xw1">骑士注册</a></td>
+</tr>
+</table>
+<input type="hidden" name="quickforward" value="yes" />
+<input type="hidden" name="handlekey" value="ls" />
+</div>
+
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="http://linux.cn/connect.php?mod=login&op=init&referer=portal.php%3Fmod%3Dtopic%26topic%3Dcommands&statfrom=login_simple"><img src="https://dn-linuxcn.qbox.me/static/image/common/qq_login.gif" class="vm" alt="QQ登录" /></a></p>
+<p><a href="xwb.php?m=xwbAuth.login"><img src="https://dn-linuxcn.qbox.me/static/image/common/sina_login.gif" class="vm" style="padding: 2px 0;" alt="微博登录" /></a></p>
+</div>
+
+<script>
+try{
+(function(){
+var node = document.getElementById("lsform").firstChild;
+var i = 1;
+while(i < 3 && node.nodeType!=1){
+node=node.nextSibling;
+i++;
+}
+node.style.width = 'auto';
+})();
+}catch(e){}
+</script>
+</div>
+</form>
+
+<script src="https://dn-linuxcn.qbox.me/static/js/md5.js?g08" type="text/javascript" reload="1"></script>
+</div>
+<h2 style="padding:5px 20px;float:right;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/gxb" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/142644s4ff31fa3gg313my.jpg" height="80" width="100%" border="0"></a></div></div>
+</h2>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="topmenu_wrapper">
+<div id="topmenu">
+<div id="nv">
+<ul><li id="mn_N6666" ><a href="/" hidefocus="true"   style="font-weight: bold;">首页</a></li><li id="mn_P3" onmouseover="navShow('P3')"><a href="https://linux.cn/tech/" hidefocus="true"   style="color: #FFFAE5;">技术 ◆ 学习</a></li><li id="mn_P1" ><a href="https://linux.cn/news/" hidefocus="true"   style="color: #FFFAE5;">新闻 ◆ 快讯</a></li><li id="mn_P4" ><a href="https://linux.cn/talk/" hidefocus="true"   style="color: #FFFAE5;">观点 ◆ 热议</a></li><li id="mn_P8" onmouseover="navShow('P8')"><a href="https://linux.cn/share/" hidefocus="true"   style="color: #FFFAE5;">软件 ◆ 分享</a></li><li id="mn_N9be8" onmouseover="navShow('N9be8')"><a href="/forum/" hidefocus="true" target="_blank"   style="color: cyan;">论坛</a></li><li id="mn_Ne749" ><a href="/forum.php?mod=post&action=newthread&fid=119" hidefocus="true" target="_blank"   style="color: red;">投稿</a></li></ul>
+</div>
+<div id="mu" class="cl">
+<ul class="cl " id="snav_mn_P3" style="display:none;">
+<li><a href="https://linux.cn/tech/desktop/" hidefocus="true" >桌面应用</a></li><li><a href="https://linux.cn/tech/sa/" hidefocus="true" >系统运维</a></li><li><a href="https://linux.cn/tech/program/" hidefocus="true" >软件开发</a></li></ul>
+<ul class="cl " id="snav_mn_P8" style="display:none;">
+<li><a href="https://linux.cn/share/distro/" hidefocus="true" >Linux 发行版</a></li></ul>
+<ul class="cl " id="snav_mn_N9be8" style="display:none;">
+<li><a href="/thread/" hidefocus="true"  style="color: blue;">全部话题</a></li><li><a href="javascript:showWindow('nav', 'forum.php?mod=misc&action=nav&special=0');" hidefocus="true"  style="color: red;">发新帖</a></li><li><a href="javascript:void();" hidefocus="true" >|</a></li><li><a href="/forum/news/" hidefocus="true" >新闻杂谈</a></li><li><a href="/forum/sa/" hidefocus="true" >系统运维</a></li><li><a href="/forum/program/" hidefocus="true" >编程开发</a></li></ul>
+<ul class="cl " id="snav_mn_N39f5" style="display:none;">
+<li><a href="/space.php" hidefocus="true" >首页</a></li><li><a href="/home.php?mod=space&do=home" hidefocus="true" >动态</a></li><li><a href="/home.php?mod=space&do=doing" hidefocus="true" >记录</a></li><li><a href="/home.php?mod=space&do=blog" hidefocus="true" >博客</a></li><li><a href="/home.php?mod=space&do=album" hidefocus="true" >相册</a></li><li><a href="/home.php?mod=space&do=favorite" hidefocus="true" >收藏</a></li><li><a href="/home.php?mod=space&do=friend" hidefocus="true" >好友</a></li><li><a href="/home.php?mod=spacecp&ac=invite" hidefocus="true" >邀请</a></li></ul>
+<ul class="cl " id="snav_mn_userapp" style="display:none;">
+</ul>
+</div></div>
+</div>
+<div id="scbar" class="cl">
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+<input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="4f8870df" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="0" />
+<input type="hidden" name="srhlocality" value="portal::topic" />
+<table id="scbar_table" cellspacing="0" cellpadding="0" style="float:right;">
+<tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="请注册后再搜索" autocomplete="off" speech /></td>
+<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+</div>
+</td>
+</tr>
+</table>
+</form>
+<span class="z titletext" style="padding: 0 10px 0 20px;">❏ <a href="http://locez.com" target="_blank">Locez</a> 新手指南：</span>
+<ul class="cl mutag z">
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-4130-1.html">下载 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-5893-1.html">安装 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6042-1.html">安装软件 »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6160-1.html">基础命令 »</a></li>
+
+</ul>
+</div>
+<br class="clear" />
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="search">全站</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar', '');
+</script>
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+$("#topmenu").affix({offset : {
+top : $("#topmenu").offset().top,
+bottom: 218}});
+$("#topmenu").width($('.hdc').width());
+$('#topmenu_wrapper').height($("#topmenu").height());
+
+$("#search_more").affix({offset : {
+top: 1000}});
+})
+})(jQuery);
+</script>
+
+</div>
+</div>
+<div id="wp" class="wp">
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="./" class="nvhm" title="首页">Linux.中国 - 开源社区</a> <em>&rsaquo;</em> Linux 命令大全</div>
+</div>
+<link id="style_css" rel="stylesheet" type="text/css" href="static/topic/t1/style.css">
+<style id="diy_style" type="text/css">#frame9dIFul {  background-color:transparent !important;background-image:none !important;}#portal_block_269 {  background-color:#ffffff !important;background-image:none !important;border:#cccccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_269 .dxb_bc {  margin:0px !important;}#portal_block_270 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_270 .dxb_bc {  margin:0px !important;}#portal_block_271 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_271 .dxb_bc {  margin:0px !important;}#portal_block_272 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_272 .dxb_bc {  margin:0px !important;}#portal_block_273 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_273 .dxb_bc {  margin:0px !important;}#portal_block_274 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_274 .dxb_bc {  margin:0px !important;}#portal_block_275 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_275 .dxb_bc {  margin:0px !important;}#portal_block_276 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_276 .dxb_bc {  margin:0px !important;}#portal_block_277 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_277 .dxb_bc {  margin:0px !important;}#portal_block_278 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_278 .dxb_bc {  margin:0px !important;}#portal_block_279 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_279 .dxb_bc {  margin:0px !important;}#portal_block_280 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_280 .dxb_bc {  margin:0px !important;}#portal_block_281 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_281 .dxb_bc {  margin:0px !important;}#portal_block_282 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_282 .dxb_bc {  margin:0px !important;}#portal_block_283 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_283 .dxb_bc {  margin:0px !important;}#portal_block_284 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_284 .dxb_bc {  margin:0px !important;}#portal_block_285 {  background-color:#ffffff !important;background-image:none !important;border:#cccccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_285 .dxb_bc {  margin:0px !important;}#portal_block_286 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_286 .dxb_bc {  margin:0px !important;}#portal_block_287 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_287 .dxb_bc {  margin:0px !important;}#portal_block_288 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_288 .dxb_bc {  margin:0px !important;}#portal_block_289 {  background-color:#ffffff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_289 .dxb_bc {  margin:0px !important;}#portal_block_290 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_290 .dxb_bc {  margin:0px !important;}#portal_block_291 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_291 .dxb_bc {  margin:0px !important;}#portal_block_292 {  background-color:#ffffff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_292 .dxb_bc {  margin:0px !important;}#portal_block_293 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_293 .dxb_bc {  margin:0px !important;}#portal_block_294 {  background-color:#FFFFFF !important;background-image:none !important;border:#FFFFFF 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_294 .dxb_bc {  margin:0px !important;}#portal_block_295 {  background-color:#FFFFFF !important;background-image:none !important;border:#CCCCCC 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#portal_block_295 .dxb_bc {  margin:0px !important;}</style>
+<div id="widgets">
+</div>
+<div class="wp">
+<div class="bm vw">
+<div class="h hm">
+<h1 class="ph" id="topic_title">Linux 命令大全</h1>
+<p class="xg1">
+2015-1-20<span class="pipe">|</span>
+查看: <em id="_viewnum">14678</em><span class="pipe">|</span>
+评论: <em id="_commentnum">7</em></p>
+</div>
+</div>
+    <div class="cl_frame_bm move-span cl frame-1-2">
+    	<div class="column frame-1-2-l"><div class=" frame move-span cl frame-1"><div class="column frame-1-c"><div class="move-span"><div class="dxb_bc">
+    		<div id="indexCarousel" class="carousel slide">  
+   				<div class="carousel-inner"><div class="item active">
+         			<a href="https://linux.cn/topic-commands.html" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/portal/201501/20/124218szlh1pn7f3zwu7f1.png" alt="Linux 命令大全"></a>
+         			<div class="carousel-caption"><a href="https://linux.cn/topic-commands.html" target="_blank">Linux 命令大全</a></div>
+      			</div></div>
+</div> 
+</div></div></div></div></div>
+<div class="column frame-1-2-r"><div class="cl_frame_bm move-span cl frame-1"><div class="column frame-1-c">
+<div class="xbs_1 move-span topic_summary">
+<div class="dxb_bc" id="topic_summary">
+<p>本专题荟萃了本站发布的各种 Linux 命令相关文章，并按字母进行索引。</p>
+
+<p>收录原则：</p>
+<ul><li>- 可在终端执行和查看的命令</li>
+<li>- 对命令进行了较为详细介绍的文章</li></ul>
+<p>本专题还在不断收集整理中。</p></div>
+</div>
+<div class="move-span">
+<div class="hm">
+<a title="分享到新浪微博" href="javascript:void( share_tsina( 'https://linux.cn/topic-commands.html','topic_title','topic_summary','https://dn-linuxcn.qbox.me/data/attachment/portal/201501/20/124218szlh1pn7f3zwu7f1.png') );" class="tsina_large"></a>
+<a href="javascript:void();" onmouseover="show_qrcode(event,'#qrcode', 'https://linux.cn/topic-commands.html');" onmouseout="show_qrcode(event,'#qrcode','');" class="weixin_large"></a>
+</div>
+</div>
+</div></div></div>
+</div>
+
+<!--[diy=diypage]--><div id="diypage" class="area"><div id="frame9dIFul" class="cl_frame_bm frame move-span cl frame-1-1-1"><div id="frame9dIFul_left" class="column frame-1-1-1-l"><div id="frame9dIFul_left_temp" class="move-span temp"></div><div id="portal_block_269" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">A</span></div><div id="portal_block_269_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4857-1.html" style="color:#E70;" title="[awk] 20分钟 Awk 入门" target="_blank" style="color:#E70;">[awk] 20分钟 Awk 入门</a></li><li><a href="http://linux.cn/article-2865-1.html" style="color:#07B;" title="[awk] 数据流处理命令" target="_blank" style="color:#07B;">[awk] 数据流处理命令</a></li><li><a href="http://linux.cn/article-3401-1.html" style="color:#E70;" title="[autojump] 自动补完不算什么，一键直达目录才是终极神器！" target="_blank" style="color:#E70;">[autojump] 自动补完不算什么，一键直达目录才是终极神器！</a></li><li><a href="http://linux.cn/article-3945-1.html" style="color:#0A0;" title="[awk] 如何在Linux中使用awk命令" target="_blank" style="color:#0A0;">[awk] 如何在Linux中使用awk命令</a></li><li><a href="http://linux.cn/article-4042-1.html" style="color:#E70;" title="[advcp] 命令行基础工具的更佳替代品" target="_blank" style="color:#E70;">[advcp] 命令行基础工具的更佳替代品</a></li><li><a href="http://linux.cn/article-4215-1.html" style="color:#0A0;" title="[ansible] Ansible ：一个配置管理和IT自动化工具" target="_blank" style="color:#0A0;">[ansible] Ansible ：一个配置管理和IT自动化工具</a></li><li><a href="http://linux.cn/article-4246-1.html" style="color:#E70;" title="[apt-fast] 极速蜗牛：apt-fast" target="_blank" style="color:#E70;">[apt-fast] 极速蜗牛：apt-fast</a></li><li><a href="http://linux.cn/article-4323-1.html" style="color:#0A0;" title="[avconv] 在 Linux 中使用&quot;avconv&quot;工具录制计算机桌" target="_blank" style="color:#0A0;">[avconv] 在 Linux 中使用&quot;avconv&quot;工具录制计算机桌</a></li><li><a href="http://linux.cn/article-4552-1.html" style="color:#0A0;" title="[attic] Attic——删除重复数据的备份程序" target="_blank" style="color:#0A0;">[attic] Attic——删除重复数据的备份程序</a></li></ul>
+</div></div></div><div id="portal_block_270" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">B</span></div><div id="portal_block_270_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-3671-1.html" style="color:#0A0;" title="[badblocks] 检查linux中硬盘损坏的扇区和区块" target="_blank" style="color:#0A0;">[badblocks] 检查linux中硬盘损坏的扇区和区块</a></li><li><a href="http://linux.cn/article-3947-1.html" style="color:#0A0;" title="[brctl] Linux有问必答：如何显示Linux网桥的MAC学习表" target="_blank" style="color:#0A0;">[brctl] Linux有问必答：如何显示Linux网桥的MAC学习表</a></li><li><a href="http://linux.cn/article-4734-1.html" style="color:#0A0;" title="[blkid] 用 Linux blkid 命令查找块设备详情" target="_blank" style="color:#0A0;">[blkid] 用 Linux blkid 命令查找块设备详情</a></li><li><a href="http://linux.cn/article-4489-1.html" style="color:#0A0;" title="[bash] Shell 脚本基础 - 使用 if 语句进行条件检测" target="_blank" style="color:#0A0;">[bash] Shell 脚本基础 - 使用 if 语句进行条件检测</a></li><li><a href="http://linux.cn/article-4585-1.html" style="color:#E70;" title="[bash] 一大波有用的 bash 别名和函数" target="_blank" style="color:#E70;">[bash] 一大波有用的 bash 别名和函数</a></li><li><a href="http://linux.cn/article-4586-1.html" style="color:#0A0;" title="[backup-manager] Linux 上使用 backup-manager 进行系统备份" target="_blank" style="color:#0A0;">[backup-manager] Linux 上使用 backup-manager 进行系统备份</a></li><li><a href="http://linux.cn/article-4370-1.html" style="color:#E70;" title="[bc] 怎么样称得上是Linux下优秀的命令行计算器" target="_blank" style="color:#E70;">[bc] 怎么样称得上是Linux下优秀的命令行计算器</a></li></ul>
+</div></div></div><div id="portal_block_271" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">C</span></div><div id="portal_block_271_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4741-1.html" style="color:#E70;" title="[cv] 一个可以显示Linux命令运行进度的伟大工具" target="_blank" style="color:#E70;">[cv] 一个可以显示Linux命令运行进度的伟大工具</a></li><li><a href="http://linux.cn/article-4742-1.html" style="color:#E70;" title="[cpulimit] 使用 nice、cpulimit 和 cgroups 限制 cpu 占用率" target="_blank" style="color:#E70;">[cpulimit] 使用 nice、cpulimit 和 cgroups 限制 cpu 占用率</a></li><li><a href="http://linux.cn/article-2479-1.html" style="color:#0A0;" title="[cd] 实例学习 Linux 的 cd 命令，及对内部命令的解释" target="_blank" style="color:#0A0;">[cd] 实例学习 Linux 的 cd 命令，及对内部命令的解释</a></li><li><a href="http://linux.cn/article-2687-1.html" style="color:#E70;" title="[cp] Linux cp 命令的15个示例 - 创建文件和目录的副本" target="_blank" style="color:#E70;">[cp] Linux cp 命令的15个示例 - 创建文件和目录的副本</a></li><li><a href="http://linux.cn/article-2830-1.html" style="color:#0A0;" title="[collectl] Linux系统监控神器--Collectl" target="_blank" style="color:#0A0;">[collectl] Linux系统监控神器--Collectl</a></li><li><a href="http://linux.cn/article-3068-1.html" style="color:#0A0;" title="[chroot] Linux / Unix：chroot 命令实例讲解" target="_blank" style="color:#0A0;">[chroot] Linux / Unix：chroot 命令实例讲解</a></li><li><a href="http://linux.cn/article-3154-1.html" style="color:#0A0;" title="[collectl] Collectl: Linux 性能监控的全能冠军" target="_blank" style="color:#0A0;">[collectl] Collectl: Linux 性能监控的全能冠军</a></li><li><a href="http://linux.cn/article-3422-1.html" style="color:#0A0;" title="[cd] Linux 目录导航技巧" target="_blank" style="color:#0A0;">[cd] Linux 目录导航技巧</a></li><li><a href="http://linux.cn/article-3494-1.html" style="color:#0A0;" title="[cp] 在 Linux 中怎样使用cp命令合并目录树" target="_blank" style="color:#0A0;">[cp] 在 Linux 中怎样使用cp命令合并目录树</a></li><li><a href="http://linux.cn/article-3760-1.html" style="color:#E70;" title="[cheat] Cheat—— 给Linux初学者和管理员一个终极命令行&quot;备忘单&quot;" target="_blank" style="color:#E70;">[cheat] Cheat—— 给Linux初学者和管理员一个终极命令行&quot;备忘单&quot;</a></li></ul>
+</div></div></div><div id="portal_block_272" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">D</span></div><div id="portal_block_272_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4788-1.html" style="color:#07B;" title="[df] 在 Linux 下你所不知道的 df 命令的那些功能" target="_blank" style="color:#07B;">[df] 在 Linux 下你所不知道的 df 命令的那些功能</a></li><li><a href="http://linux.cn/article-2406-1.html" style="color:#0A0;" title="[date] Linux date命令 - 显示和设置系统日期与时间" target="_blank" style="color:#0A0;">[date] Linux date命令 - 显示和设置系统日期与时间</a></li><li><a href="http://linux.cn/article-3215-1.html" style="color:#0A0;" title="[dstat] Linux终端下 dstat 监控工具" target="_blank" style="color:#0A0;">[dstat] Linux终端下 dstat 监控工具</a></li><li><a href="http://linux.cn/article-3473-1.html" style="color:#0A0;" title="[du] Linux基础：如何在命令行中查看目录的大小" target="_blank" style="color:#0A0;">[du] Linux基础：如何在命令行中查看目录的大小</a></li><li><a href="http://linux.cn/article-3587-1.html" style="color:#0A0;" title="[dmesg] Linux系统中‘dmesg’命令处理故障和收集系统信息的7种用法" target="_blank" style="color:#0A0;">[dmesg] Linux系统中‘dmesg’命令处理故障和收集系统信息的7种用法</a></li><li><a href="http://linux.cn/article-3696-1.html" style="color:#0A0;" title="[dd] Linux系统中使用 DD 命令测试 USB 和 SSD 硬盘的读写速度" target="_blank" style="color:#0A0;">[dd] Linux系统中使用 DD 命令测试 USB 和 SSD 硬盘的读写速度</a></li><li><a href="http://linux.cn/article-4042-1.html" style="color:#E70;" title="[dfc] [dog] 命令行基础工具的更佳替代品" target="_blank" style="color:#E70;">[dfc] [dog] 命令行基础工具的更佳替代品</a></li><li><a href="http://linux.cn/article-4187-1.html" style="color:#0A0;" title="[date] Linux 有问必答：在 Linux 上如何通过命令行来更改日期和时间" target="_blank" style="color:#0A0;">[date] Linux 有问必答：在 Linux 上如何通过命令行来更改日期和时间</a></li></ul>
+</div></div></div><div id="portal_block_273" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">E</span></div><div id="portal_block_273_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-3592-1.html" style="color:#0A0;" title="[echo] Echo命令实例" target="_blank" style="color:#0A0;">[echo] Echo命令实例</a></li><li><a href="http://linux.cn/article-3948-1.html" style="color:#0A0;" title="[echo] Linux中的15个‘echo’ 命令实例" target="_blank" style="color:#0A0;">[echo] Linux中的15个‘echo’ 命令实例</a></li><li><a href="http://linux.cn/article-4373-1.html" style="color:#0A0;" title="[enscript] Linux 有问必答：在Linux上如何将文本文件" target="_blank" style="color:#0A0;">[enscript] Linux 有问必答：在Linux上如何将文本文件</a></li></ul>
+</div></div></div><div id="portal_block_274" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">F</span></div><div id="portal_block_274_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2443-1.html" style="color:#0A0;" title="[free] Linux free 命令 - 显示系统中空闲和已使用的内存" target="_blank" style="color:#0A0;">[free] Linux free 命令 - 显示系统中空闲和已使用的内存</a></li><li><a href="http://linux.cn/article-3129-1.html" style="color:#0A0;" title="[findmnt] findmnt-寻找挂载的文件系统" target="_blank" style="color:#0A0;">[findmnt] findmnt-寻找挂载的文件系统</a></li><li><a href="http://linux.cn/article-3135-1.html" style="color:#0A0;" title="[findmnt] findmnt 命令的八个应用实例" target="_blank" style="color:#0A0;">[findmnt] findmnt 命令的八个应用实例</a></li><li><a href="http://linux.cn/article-3274-1.html" style="color:#0A0;" title="[ffmpeg] 如何使用ffmpeg从视频中提取图片" target="_blank" style="color:#0A0;">[ffmpeg] 如何使用ffmpeg从视频中提取图片</a></li><li><a href="http://linux.cn/article-3380-1.html" style="color:#E70;" title="[fdisk] Linux下掌控磁盘分区的九大神器" target="_blank" style="color:#E70;">[fdisk] Linux下掌控磁盘分区的九大神器</a></li><li><a href="http://linux.cn/article-4243-1.html" style="color:#0A0;" title="[firewall-cmd] Linux有问必答：在CentOS或RHEL防火墙上开启端口" target="_blank" style="color:#0A0;">[firewall-cmd] Linux有问必答：在CentOS或RHEL防火墙上开启端口</a></li><li><a href="http://linux.cn/article-4425-1.html" style="color:#07B;" title="[firewall-cmd] 使用 FirewallD 构建动态防火墙" target="_blank" style="color:#07B;">[firewall-cmd] 使用 FirewallD 构建动态防火墙</a></li><li><a href="http://linux.cn/article-4603-1.html" style="color:#07B;" title="[fig] Docker 编排工具 Fig 介绍" target="_blank" style="color:#07B;">[fig] Docker 编排工具 Fig 介绍</a></li></ul>
+</div></div></div><div id="portal_block_275" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">G</span></div><div id="portal_block_275_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2782-1.html" style="color:#E70;" title="[glances] Linux 系统实时监控的瑞士军刀 —— Glances" target="_blank" style="color:#E70;">[glances] Linux 系统实时监控的瑞士军刀 —— Glances</a></li><li><a href="http://linux.cn/article-3007-1.html" style="color:#0A0;" title="[gnupg] GNU Privacy Guard加密指南" target="_blank" style="color:#0A0;">[gnupg] GNU Privacy Guard加密指南</a></li><li><a href="http://linux.cn/article-3204-1.html" style="color:#0A0;" title="[getopts] Bash Getopts - 让你的脚本支持命令行参数" target="_blank" style="color:#0A0;">[getopts] Bash Getopts - 让你的脚本支持命令行参数</a></li><li><a href="http://linux.cn/article-4046-1.html" style="color:#E70;" title="[git] Git Rebase教程： 用Git Rebase让时光倒流" target="_blank" style="color:#E70;">[git] Git Rebase教程： 用Git Rebase让时光倒流</a></li><li><a href="http://linux.cn/article-4082-1.html" style="color:#0A0;" title="[growisofs] Linux有问必答：如何在Linux命令行中刻录ISO或NRG镜像到DVD" target="_blank" style="color:#0A0;">[growisofs] Linux有问必答：如何在Linux命令行中刻录ISO或NRG镜像到DVD</a></li><li><a href="http://linux.cn/article-4302-1.html" style="color:#E70;" title="[gdb] 使用GDB命令行调试器调试C/C++程序" target="_blank" style="color:#E70;">[gdb] 使用GDB命令行调试器调试C/C++程序</a></li><li><a href="http://linux.cn/article-4378-1.html" style="color:#0A0;" title="[gnupg] 使用 GnuPG 加密签名来验证下载文件的可靠" target="_blank" style="color:#0A0;">[gnupg] 使用 GnuPG 加密签名来验证下载文件的可靠</a></li><li><a href="http://linux.cn/article-4704-1.html" style="color:#07B;" title="[git] Git 两分钟指南" target="_blank" style="color:#07B;">[git] Git 两分钟指南</a></li></ul>
+</div></div></div><div id="portal_block_276" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">H</span></div><div id="portal_block_276_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-3141-1.html" style="color:#E70;" title="[htop] 为什么 Linux 的 htop 命令完胜 top 命令" target="_blank" style="color:#E70;">[htop] 为什么 Linux 的 htop 命令完胜 top 命令</a></li><li><a href="http://linux.cn/article-3937-1.html" style="color:#0A0;" title="[hostnamectl] Linux有问必答：如何在CentOS或RHEL 7上修改主机名" target="_blank" style="color:#0A0;">[hostnamectl] Linux有问必答：如何在CentOS或RHEL 7上修改主机名</a></li><li><a href="http://linux.cn/article-4042-1.html" style="color:#E70;" title="[htop] 命令行基础工具的更佳替代品" target="_blank" style="color:#E70;">[htop] 命令行基础工具的更佳替代品</a></li><li><a href="http://linux.cn/article-4148-1.html" style="color:#E70;" title="[httpry] Linux 命令行下嗅探 HTTP 流量的工具：httpry" target="_blank" style="color:#E70;">[httpry] Linux 命令行下嗅探 HTTP 流量的工具：httpry</a></li></ul>
+</div></div></div><div id="portal_block_277" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">I</span></div><div id="portal_block_277_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2512-1.html" style="color:#0A0;" title="[id] Linux id 命令 - 显示用户id和组id信息" target="_blank" style="color:#0A0;">[id] Linux id 命令 - 显示用户id和组id信息</a></li><li><a href="http://linux.cn/article-3144-1.html" style="color:#E70;" title="[ip] 试试Linux下的ip命令，ifconfig已经过时了" target="_blank" style="color:#E70;">[ip] 试试Linux下的ip命令，ifconfig已经过时了</a></li><li><a href="http://linux.cn/article-4015-1.html" style="color:#0A0;" title="[iwconfig] 在命令行中管理 Wifi 连接" target="_blank" style="color:#0A0;">[iwconfig] 在命令行中管理 Wifi 连接</a></li><li><a href="http://linux.cn/article-4024-1.html" style="color:#0A0;" title="[iostat] 使用vmstat和iostat命令进行Linux性能监控" target="_blank" style="color:#0A0;">[iostat] 使用vmstat和iostat命令进行Linux性能监控</a></li><li><a href="http://linux.cn/article-4225-1.html" style="color:#0A0;" title="[iconv] Linux 有问必答：在 Linux 如何更改文本文" target="_blank" style="color:#0A0;">[iconv] Linux 有问必答：在 Linux 如何更改文本文</a></li><li><a href="http://linux.cn/article-4243-1.html" style="color:#0A0;" title="[iptables] Linux有问必答：在CentOS或RHEL防火墙上开启端口" target="_blank" style="color:#0A0;">[iptables] Linux有问必答：在CentOS或RHEL防火墙上开启端口</a></li><li><a href="http://linux.cn/article-4326-1.html" style="color:#E70;" title="[ip] iproute2 对决 net-tools" target="_blank" style="color:#E70;">[ip] iproute2 对决 net-tools</a></li><li><a href="http://linux.cn/article-4489-1.html" style="color:#0A0;" title="[if] Shell 脚本基础 - 使用 if 语句进行条件检测" target="_blank" style="color:#0A0;">[if] Shell 脚本基础 - 使用 if 语句进行条件检测</a></li></ul>
+</div></div></div></div><div id="frame9dIFul_center" class="column frame-1-1-1-c"><div id="frame9dIFul_center_temp" class="move-span temp"></div><div id="portal_block_278" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">J</span></div><div id="portal_block_278_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul></ul>
+</div></div></div><div id="portal_block_279" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">K</span></div><div id="portal_block_279_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2973-1.html" style="color:#0A0;" title="[killall] 五个你可能不了解的killall选项" target="_blank" style="color:#0A0;">[killall] 五个你可能不了解的killall选项</a></li></ul>
+</div></div></div><div id="portal_block_280" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">L</span></div><div id="portal_block_280_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-5349-1.html" style="color:#0A0;" title="[ls] 15 个‘ls’命令的面试问题（一）" target="_blank" style="color:#0A0;">[ls] 15 个‘ls’命令的面试问题（一）</a></li><li><a href="http://linux.cn/article-5109-1.html" style="color:#E70;" title="[ls] Linux中的15个基本‘ls’命令示例" target="_blank" style="color:#E70;">[ls] Linux中的15个基本‘ls’命令示例</a></li><li><a href="http://linux.cn/article-4740-1.html" style="color:#0A0;" title="[lspci][lshw] 如何在Ubuntu上找出可用的网络适配器" target="_blank" style="color:#0A0;">[lspci][lshw] 如何在Ubuntu上找出可用的网络适配器</a></li><li><a href="http://linux.cn/article-2448-1.html" style="color:#0A0;" title="[lsusb] Linux中显示系统中USB信息的lsusb命令" target="_blank" style="color:#0A0;">[lsusb] Linux中显示系统中USB信息的lsusb命令</a></li><li><a href="http://linux.cn/article-2535-1.html" style="color:#0A0;" title="[ls] ls命令的20个实用范例" target="_blank" style="color:#0A0;">[ls] ls命令的20个实用范例</a></li><li><a href="http://linux.cn/article-3609-1.html" style="color:#E70;" title="[ldd] Linux有问必答：如何查看Linux上程序或进程用到的库" target="_blank" style="color:#E70;">[ldd] Linux有问必答：如何查看Linux上程序或进程用到的库</a></li><li><a href="http://linux.cn/article-3804-1.html" style="color:#0A0;" title="[last] Linux有问必答：如何检查Linux系统的最后重启时间" target="_blank" style="color:#0A0;">[last] Linux有问必答：如何检查Linux系统的最后重启时间</a></li><li><a href="http://linux.cn/article-3823-1.html" style="color:#07B;" title="[ltrace] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;" target="_blank" style="color:#07B;">[ltrace] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;</a></li><li><a href="http://linux.cn/article-4734-1.html" style="color:#0A0;" title="[lsblk] 用 Linux blkid 命令查找块设备详情" target="_blank" style="color:#0A0;">[lsblk] 用 Linux blkid 命令查找块设备详情</a></li><li><a href="http://linux.cn/article-4081-1.html" style="color:#0A0;" title="[lsscsi] Linux有问必答：如何使用Linux命令行检测DVD刻录机的名字和读写速度" target="_blank" style="color:#0A0;">[lsscsi] Linux有问必答：如何使用Linux命令行检测DVD刻录机的名字和读写速度</a></li></ul>
+</div></div></div><div id="portal_block_281" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">M</span></div><div id="portal_block_281_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2424-1.html" style="color:#0A0;" title="[mpstat] Linux mpstat 命令- 报告处理器的相关统计信息" target="_blank" style="color:#0A0;">[mpstat] Linux mpstat 命令- 报告处理器的相关统计信息</a></li><li><a href="http://linux.cn/article-2688-1.html" style="color:#0A0;" title="[mv] Linux 移动或重命名文件/目录－mv 的10个实用例子" target="_blank" style="color:#0A0;">[mv] Linux 移动或重命名文件/目录－mv 的10个实用例子</a></li><li><a href="http://linux.cn/article-4028-1.html" style="color:#0A0;" title="[mpstat] Sysstat性能监控工具包中20个实用命令" target="_blank" style="color:#0A0;">[mpstat] Sysstat性能监控工具包中20个实用命令</a></li><li><a href="http://linux.cn/article-4042-1.html" style="color:#E70;" title="[mtr] 命令行基础工具的更佳替代品" target="_blank" style="color:#E70;">[mtr] 命令行基础工具的更佳替代品</a></li></ul>
+</div></div></div><div id="portal_block_282" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">N</span></div><div id="portal_block_282_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4742-1.html" style="color:#E70;" title="[nice] 使用 nice、cpulimit 和 cgroups 限制 cpu 占用率" target="_blank" style="color:#E70;">[nice] 使用 nice、cpulimit 和 cgroups 限制 cpu 占用率</a></li><li><a href="http://linux.cn/article-2434-1.html" style="color:#0A0;" title="[netstat] netstat 的10个基本用法" target="_blank" style="color:#0A0;">[netstat] netstat 的10个基本用法</a></li><li><a href="http://linux.cn/article-2561-1.html" style="color:#0A0;" title="[nmap] 给Linux系统/网络管理员的nmap的29个实用例子" target="_blank" style="color:#0A0;">[nmap] 给Linux系统/网络管理员的nmap的29个实用例子</a></li><li><a href="http://linux.cn/article-2808-1.html" style="color:#E70;" title="[nethogs] NetHogs——Linux下按进程实时统计网络带宽利用率" target="_blank" style="color:#E70;">[nethogs] NetHogs——Linux下按进程实时统计网络带宽利用率</a></li><li><a href="http://linux.cn/article-2871-1.html" style="color:#0A0;" title="[nload] 在 Linux/UNIX 终端下使用 nload 实时监控网络流量和带宽使用" target="_blank" style="color:#0A0;">[nload] 在 Linux/UNIX 终端下使用 nload 实时监控网络流量和带宽使用</a></li><li><a href="http://linux.cn/article-3205-1.html" style="color:#0A0;" title="[ngxtop] ngxtop：在命令行实时监控 Nginx 的神器" target="_blank" style="color:#0A0;">[ngxtop] ngxtop：在命令行实时监控 Nginx 的神器</a></li><li><a href="http://linux.cn/article-3482-1.html" style="color:#0A0;" title="[ncdu] ncdu – 基于ncurses库的磁盘使用分析器" target="_blank" style="color:#0A0;">[ncdu] ncdu – 基于ncurses库的磁盘使用分析器</a></li><li><a href="http://linux.cn/article-3807-1.html" style="color:#0A0;" title="[netstat] 使用netstat检测及监测网络连接" target="_blank" style="color:#0A0;">[netstat] 使用netstat检测及监测网络连接</a></li><li><a href="http://linux.cn/article-4082-1.html" style="color:#0A0;" title="[nrg2iso] Linux有问必答：如何在Linux命令行中刻录ISO或NRG镜像到DVD" target="_blank" style="color:#0A0;">[nrg2iso] Linux有问必答：如何在Linux命令行中刻录ISO或NRG镜像到DVD</a></li><li><a href="http://linux.cn/article-4469-1.html" style="color:#0A0;" title="[n2n] 使用n2n配置二层点对点VPN" target="_blank" style="color:#0A0;">[n2n] 使用n2n配置二层点对点VPN</a></li></ul>
+</div></div></div><div id="portal_block_283" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">O</span></div><div id="portal_block_283_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul></ul>
+</div></div></div><div id="portal_block_284" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">P</span></div><div id="portal_block_284_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4743-1.html" style="color:#0A0;" title="[ps] 10个重要的Linux ps命令实战" target="_blank" style="color:#0A0;">[ps] 10个重要的Linux ps命令实战</a></li><li><a href="http://linux.cn/article-3422-1.html" style="color:#0A0;" title="[pwd] Linux 目录导航技巧" target="_blank" style="color:#0A0;">[pwd] Linux 目录导航技巧</a></li><li><a href="http://linux.cn/article-4028-1.html" style="color:#0A0;" title="[pidstat] Sysstat性能监控工具包中20个实用命令" target="_blank" style="color:#0A0;">[pidstat] Sysstat性能监控工具包中20个实用命令</a></li><li><a href="http://linux.cn/article-4042-1.html" style="color:#E70;" title="[plowshare] 命令行基础工具的更佳替代品" target="_blank" style="color:#E70;">[plowshare] 命令行基础工具的更佳替代品</a></li><li><a href="http://linux.cn/article-4257-1.html" style="color:#0A0;" title="[pidstat] pidstat - 监控并统计Linux进程的数据" target="_blank" style="color:#0A0;">[pidstat] pidstat - 监控并统计Linux进程的数据</a></li><li><a href="http://linux.cn/article-4356-1.html" style="color:#0A0;" title="[pwd] 菜鸟教程：全面学习 pwd 命令" target="_blank" style="color:#0A0;">[pwd] 菜鸟教程：全面学习 pwd 命令</a></li><li><a href="http://linux.cn/article-4373-1.html" style="color:#0A0;" title="[ps2pdf] Linux 有问必答：在Linux上如何将文本文件" target="_blank" style="color:#0A0;">[ps2pdf] Linux 有问必答：在Linux上如何将文本文件</a></li></ul>
+</div></div></div><div id="portal_block_285" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">Q</span></div><div id="portal_block_285_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul></ul>
+</div></div></div><div id="portal_block_286" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">R</span></div><div id="portal_block_286_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4503-1.html" style="color:#0A0;" title="[rsync] 如何在Linux下使用rsync" target="_blank" style="color:#0A0;">[rsync] 如何在Linux下使用rsync</a></li><li><a href="http://linux.cn/article-4504-1.html" style="color:#0A0;" title="[rsync] Linux中使用rsync——文件和目录排除列表" target="_blank" style="color:#0A0;">[rsync] Linux中使用rsync——文件和目录排除列表</a></li></ul>
+</div></div></div></div><div id="frame9dIFul_right" class="column frame-1-1-1-r"><div id="frame9dIFul_right_temp" class="move-span temp"></div><div id="portal_block_287" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">S</span></div><div id="portal_block_287_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="https://linux.cn/article-5372-1.html" style="color:#0A0;" title="[sort] Linux 的 ‘sort’命令的14个有用的范例（一）" target="_blank" style="color:#0A0;">[sort] Linux 的 ‘sort’命令的14个有用的范例（一）</a></li><li><a href="http://linux.cn/article-2865-1.html" style="color:#07B;" title="[sed] 数据流处理命令" target="_blank" style="color:#07B;">[sed] 数据流处理命令</a></li><li><a href="http://linux.cn/article-2933-1.html" style="color:#0A0;" title="[ssh] 10个 ssh 简单命令选项" target="_blank" style="color:#0A0;">[ssh] 10个 ssh 简单命令选项</a></li><li><a href="http://linux.cn/article-3195-1.html" style="color:#0A0;" title="[script] Linux script命令 —— 终端里的记录器" target="_blank" style="color:#0A0;">[script] Linux script命令 —— 终端里的记录器</a></li><li><a href="http://linux.cn/article-3702-1.html" style="color:#0A0;" title="[slabtop] Linux slabtop命令——显示内核片缓存信息" target="_blank" style="color:#0A0;">[slabtop] Linux slabtop命令——显示内核片缓存信息</a></li><li><a href="http://linux.cn/article-3719-1.html" style="color:#0A0;" title="[systemctl] Linux Systemd——在RHEL/CentOS 7中启动/停止/重启服务" target="_blank" style="color:#0A0;">[systemctl] Linux Systemd——在RHEL/CentOS 7中启动/停止/重启服务</a></li><li><a href="http://linux.cn/article-3823-1.html" style="color:#07B;" title="[strace] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;" target="_blank" style="color:#07B;">[strace] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;</a></li><li><a href="http://linux.cn/article-3858-1.html" style="color:#0A0;" title="[ssh] Linux 下 SSH 命令实例指南" target="_blank" style="color:#0A0;">[ssh] Linux 下 SSH 命令实例指南</a></li><li><a href="http://linux.cn/article-3935-1.html" style="color:#E70;" title="[strace] 使用 Linux 的 strace 命令跟踪/调试程序的常用选项" target="_blank" style="color:#E70;">[strace] 使用 Linux 的 strace 命令跟踪/调试程序的常用选项</a></li><li><a href="http://linux.cn/article-4028-1.html" style="color:#0A0;" title="[sar] Sysstat性能监控工具包中20个实用命令" target="_blank" style="color:#0A0;">[sar] Sysstat性能监控工具包中20个实用命令</a></li></ul>
+</div></div></div><div id="portal_block_288" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">T</span></div><div id="portal_block_288_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://www.linux.cn/article-4814-1.html" style="color:#0A0;" title="[tar] 如何解压 tar 文件到不同的目录中" target="_blank" style="color:#0A0;">[tar] 如何解压 tar 文件到不同的目录中</a></li><li><a href="http://linux.cn/article-2740-1.html" style="color:#E70;" title="[touch] Linux touch 命令 - 为什么我们需要改变时间戳？" target="_blank" style="color:#E70;">[touch] Linux touch 命令 - 为什么我们需要改变时间戳？</a></li><li><a href="http://linux.cn/article-3528-1.html" style="color:#07B;" title="[tripwire] tripwire-文件指纹" target="_blank" style="color:#07B;">[tripwire] tripwire-文件指纹</a></li><li><a href="http://linux.cn/article-3823-1.html" style="color:#07B;" title="[truss] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;" target="_blank" style="color:#07B;">[truss] 使用truss、strace或ltrace诊断软件的&quot;疑难杂症&quot;</a></li><li><a href="http://linux.cn/article-3952-1.html" style="color:#E70;" title="[tmux] 如何使用Tmux提高终端环境下的效率" target="_blank" style="color:#E70;">[tmux] 如何使用Tmux提高终端环境下的效率</a></li><li><a href="http://linux.cn/article-3967-1.html" style="color:#0A0;" title="[tcpdump] Linux有问必答：如何使用tcpdump来捕获TCP SYN，ACK和FIN包" target="_blank" style="color:#0A0;">[tcpdump] Linux有问必答：如何使用tcpdump来捕获TCP SYN，ACK和FIN包</a></li><li><a href="http://linux.cn/article-4260-1.html" style="color:#0A0;" title="[timedatectl] 如何在 systemd 下管理Linux系统的时间和日期" target="_blank" style="color:#0A0;">[timedatectl] 如何在 systemd 下管理Linux系统的时间和日期</a></li><li><a href="http://linux.cn/article-4263-1.html" style="color:#0A0;" title="[transmission-cli] 如何在命令行下使用 BitTorrent 下载 ISO 镜像" target="_blank" style="color:#0A0;">[transmission-cli] 如何在命令行下使用 BitTorrent 下载 ISO 镜像</a></li></ul>
+</div></div></div><div id="portal_block_289" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">U</span></div><div id="portal_block_289_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4213-1.html" style="color:#0A0;" title="[utmpdump] 使用 utmpdump 监控 CentOS 用户登录历史" target="_blank" style="color:#0A0;">[utmpdump] 使用 utmpdump 监控 CentOS 用户登录历史</a></li></ul>
+</div></div></div><div id="portal_block_290" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">V</span></div><div id="portal_block_290_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2472-1.html" style="color:#0A0;" title="[vmstat] Linux vmstat 命令 - 报告虚拟内存统计的工具" target="_blank" style="color:#0A0;">[vmstat] Linux vmstat 命令 - 报告虚拟内存统计的工具</a></li><li><a href="http://linux.cn/article-4024-1.html" style="color:#0A0;" title="[vmstat] 使用vmstat和iostat命令进行Linux性能监控" target="_blank" style="color:#0A0;">[vmstat] 使用vmstat和iostat命令进行Linux性能监控</a></li><li><a href="http://linux.cn/article-4669-1.html" style="color:#E70;" title="[vim] 一些不起眼但非常有用的 Vim 命令" target="_blank" style="color:#E70;">[vim] 一些不起眼但非常有用的 Vim 命令</a></li></ul>
+</div></div></div><div id="portal_block_291" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">W</span></div><div id="portal_block_291_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-2427-1.html" style="color:#0A0;" title="[whoami] Linux系统 whoami 命令 – 知晓当前登录用户" target="_blank" style="color:#0A0;">[whoami] Linux系统 whoami 命令 – 知晓当前登录用户</a></li><li><a href="http://linux.cn/article-2437-1.html" style="color:#0A0;" title="[who] Linux who 命令 – 显示系统登录者" target="_blank" style="color:#0A0;">[who] Linux who 命令 – 显示系统登录者</a></li><li><a href="http://linux.cn/article-2459-1.html" style="color:#0A0;" title="[watch] Linux 基础命令 – watch" target="_blank" style="color:#0A0;">[watch] Linux 基础命令 – watch</a></li><li><a href="http://linux.cn/article-4088-1.html" style="color:#0A0;" title="[wc] Linux终端的乐趣之把玩字词计数" target="_blank" style="color:#0A0;">[wc] Linux终端的乐趣之把玩字词计数</a></li><li><a href="http://linux.cn/article-4129-1.html" style="color:#0A0;" title="[wget] wget 命令实例" target="_blank" style="color:#0A0;">[wget] wget 命令实例</a></li><li><a href="http://linux.cn/article-4312-1.html" style="color:#0A0;" title="[wget] Linux 有问必答：如何在wget中禁用HTTP转发" target="_blank" style="color:#0A0;">[wget] Linux 有问必答：如何在wget中禁用HTTP转发</a></li></ul>
+</div></div></div><div id="portal_block_292" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">X</span></div><div id="portal_block_292_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4212-1.html" style="color:#0A0;" title="[xargs] 如何在Linux里使用xargs命令" target="_blank" style="color:#0A0;">[xargs] 如何在Linux里使用xargs命令</a></li></ul>
+</div></div></div><div id="portal_block_293" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">Y</span></div><div id="portal_block_293_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul></ul>
+</div></div></div><div id="portal_block_294" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">Z</span></div><div id="portal_block_294_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4193-1.html" style="color:#0A0;" title="[zypper] SUSE Linux – Zypper 命令示例" target="_blank" style="color:#0A0;">[zypper] SUSE Linux – Zypper 命令示例</a></li></ul>
+</div></div></div><div id="portal_block_295" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">#</span></div><div id="portal_block_295_content" class="dxb_bc"><div class="module cl xl xl1">
+<ul><li><a href="http://linux.cn/article-4676-1.html" style="color:#0A0;" title="[7z] Linux有问必答：Linux 中如何安装 7zip" target="_blank" style="color:#0A0;">[7z] Linux有问必答：Linux 中如何安装 7zip</a></li></ul>
+</div></div></div></div></div></div><!--[/diy]-->
+
+<div style="margin-right:15px;">
+<div id="add_comment" class="bm">
+<div class="bm_h cl">
+<h3>发表评论</h3>
+</div>
+<div class="bm_c pbn">
+<form id="cform" name="cform" action="portal.php?mod=portalcp&amp;ac=comment" method="post" autocomplete="off">
+<div class="tedt">
+<div class="area">
+<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+</div>
+</div>
+
+<div class="mtm z"><span id="seccode_cSGwe412"></span>		
+<script type="text/javascript" reload="1">updateseccode('cSGwe412', '<sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div>', 'portal::topic');</script>
+<script type="text/javascript">
+(function($){
+$("#cform").submit(function(e) {
+if ($("#checksec_none_cSGwe412").length>0) {
+alert("请输入验证码");
+return false;
+} else if ($("#checksec_error_cSGwe412").length>0) {
+alert("验证码输入错误，请重新输入");
+return false;
+} else if ($("#checksec_loading_cSGwe412").length>0) {
+alert("验证码验证中……");
+return false;
+}
+});
+})(jQuery);
+</script>
+</div>
+<input type="hidden" name="referer" value="https://linux.cn/topic-commands.html#comment" />
+<input type="hidden" name="topicid" value="6">
+<input id="reppid" type="hidden" name="reppid" value="">
+<input type="hidden" name="formhash" value="4f8870df">
+<input type="hidden" name="replysubmit" value="true">
+<input type="hidden" name="commentsubmit" value="true" />
+<p class="mtm z"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>评论</strong></button></p>
+<br class="clear" />
+</form>
+</div>
+</div>
+</div>
+<div id="comment" class="bm" style="margin-right:15px;">
+<div class="bm_h cl">
+<h3 class="z"><a name="comment"></a>最新评论</h3>
+<h3 class="y"><a href="javascript:void(0);" class="y" style="color:#C00;" onclick="$('message').focus();">我也要发表评论</a></h3>
+</div>
+<div id="comment_ul" class="bm_c"><a name="comment_anchor_34841"></a>
+<dl id="comment_34841_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/25467/" class="xi2 xw1 vm" c="1" target="_blank">莫炎_67288 [Firefox 40.0|Windows 10]</a>
+<span class="xg1 xw0 vm">2015-9-4 13:37</span>
+</dt>
+<dd>
+tks</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=34841&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_34841').innerHTML ? $('review_support_34841').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_34841"></span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(34841, '6');">回复</a> --><a id="reply_34841" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=34841&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_34068"></a>
+<dl id="comment_34068_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/26694/" class="xi2 xw1 vm" c="1" target="_blank">Bigben</a>
+<span class="xg1 xw0 vm">2015-7-21 12:22</span>
+</dt>
+<dd>
+好全！</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=34068&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_34068').innerHTML ? $('review_support_34068').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_34068"></span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(34068, '6');">回复</a> --><a id="reply_34068" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=34068&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_33136"></a>
+<dl id="comment_33136_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/21712/" class="xi2 xw1 vm" c="1" target="_blank">Yaso-T</a>
+<span class="xg1 xw0 vm">2015-5-17 20:42</span>
+</dt>
+<dd>
+谢谢你的辛苦~学习中~~</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=33136&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_33136').innerHTML ? $('review_support_33136').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_33136">1</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(33136, '6');">回复</a> --><a id="reply_33136" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=33136&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_33126"></a>
+<dl id="comment_33126_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/23817/" class="xi2 xw1 vm" c="1" target="_blank">我的哈欠</a>
+<span class="xg1 xw0 vm">2015-5-16 22:26</span>
+</dt>
+<dd>
+赞！解释很详细，多来这里看看，能学到很多东西</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=33126&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_33126').innerHTML ? $('review_support_33126').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_33126">6</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(33126, '6');">回复</a> --><a id="reply_33126" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=33126&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_25736"></a>
+<dl id="comment_25736_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/18975/" class="xi2 xw1 vm" c="1" target="_blank">bbs_ld</a>
+<span class="xg1 xw0 vm">2015-2-9 16:44</span>
+</dt>
+<dd>
+mark！！</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=25736&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_25736').innerHTML ? $('review_support_25736').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_25736"></span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(25736, '6');">回复</a> --><a id="reply_25736" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=25736&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_25206"></a>
+<dl id="comment_25206_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/6599/" class="xi2 xw1 vm" c="1" target="_blank">netb2c</a>
+<span class="xg1 xw0 vm">2015-2-3 16:32</span>
+</dt>
+<dd>
+<!--24832--> 
+<blockquote id="replist_25206_24832" class="replist"  ><div class="info">
+<div class="count">1</div><a href="space/18145/" class="xi2 xw1" c="1" target="_blank">linlover</a> 发表于 2015-1-30 15:04 的评论：
+</div>
+<div class="msg">网站是否能提供收藏专题功能了？期待！！！！！！</div>
+<div id="opt_25206_24832" class="opt"><a href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=24832&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_24832').innerHTML ? $('review_support_24832').innerHTML : 0) + ' 人 赞'" >赞 <span name="review_support_rep_24832">5</span></a><a id="reply_24832" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=24832&amp;aid=6&amp;idtype=topicid" onclick="showWindow('comment', this.href, 'get', 0);">回复</a></div>
+</blockquote>我都是收藏到浏览器里啦！^_^</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=25206&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_25206').innerHTML ? $('review_support_25206').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_25206">1</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(25206, '6');">回复</a> --><a id="reply_25206" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=25206&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_24832"></a>
+<dl id="comment_24832_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/18145/" class="xi2 xw1 vm" c="1" target="_blank">linlover</a>
+<span class="xg1 xw0 vm">2015-1-30 15:04</span>
+</dt>
+<dd>
+网站是否能提供收藏专题功能了？期待！！！！！！</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=topicid&amp;tid=6&amp;pid=24832&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_24832').innerHTML ? $('review_support_24832').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_24832">5</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(24832, '6');">回复</a> --><a id="reply_24832" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=24832&amp;aid=6&amp;idtype=topicid">回复</a> </span>
+</dd>
+</dl><div class="ptm pbm cl">
+</div>
+</div>
+</div>
+</div>	</div>
+
+
+    <div id="footer">
+        <p>
+            <span>Linux.CN &copy; 2003-2015 Linux中国</span>
+            <span class="line">|</span>
+            <span>Powered by <strong>DX</strong> | 图片存储于<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a></span>
+        </p>
+        <p>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备05083684号-1</a>            京公网安备110105001595
+        </p>
+        <p>
+        <a href="//linux.cn/article-3-1.html">服务条款</a> |
+        除特别申明外，本站原创内容版权遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank">CC-BY-NC-SA 协议规定</a></p>
+        <p>
+        <a href="https://linux.cn/"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_mini.png" align="absmiddle" /></a>
+        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/cc.png" align="absmiddle" /></a>
+        </p>
+<p>
+</p>
+</div>
+
+<div id="ft" class="cl"></div>
+<div id="scrolltop">
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa" ><b>返回顶部</b></a></span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });</script>
+<div id="qrcode">
+<p>分享到微信朋友圈</p>
+<div id="canvas"></div>
+<p><em>打开微信，点击底部的“发现”，<br />
+使用“扫一扫”将网页分享至朋友圈。</em></p></div>
+</body>
+</html>

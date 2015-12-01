@@ -1,0 +1,660 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Systemd 专题</title>
+ 
+<meta name="keywords" content="systemd,init,sysvinit,Linux 启动" />
+<meta name="description" content="近年来，Linux 的 init 系统经历了重大演进，传统的 sysvinit 已经淡出历史舞台，新的 init 系统 Systemd 被越来越多的 Linux 发行版采纳了。不管你喜不喜欢，它已经扑面而来，作为系统管理员，无论是工作需要，还是为了积极反对，都应该深入学习和掌握它。 ,Linux.中国 - 开源社区" />
+<meta name="copyright" content="2005-2015 Linux.cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="referrer" content="always">
+<base href="https://linux.cn/" /><link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_common.css?g08" />
+<link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_portal_topic.css?g08" />
+<link href="https://dn-linuxcn.qbox.me/static/css/responsive.css?g08" rel="stylesheet">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f219a1d7ae00e99bdc4410080f3a6ef7";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">var STYLEID = '1', STATICURL = 'https://dn-linuxcn.qbox.me/static/', IMGDIR = 'https://dn-linuxcn.qbox.me/static/image/common', VERHASH = 'g08', charset = 'utf-8', discuz_uid = '0', cookiepre = 'dx_516d_', cookiedomain = '.linux.cn', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = '', creditnotice = '1|经验|,2|L币|,3|贡献|', defaultstyle = '', REPORTURL = 'aHR0cDovL2xpbnV4LmNuL3RvcGljLXN5c3RlbWQuaHRtbA==', SITEURL = 'https://linux.cn/', JSPATH = 'https://dn-linuxcn.qbox.me/static/js/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/common.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery.plugins.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/bootstrap.min.js?g08" type="text/javascript"></script>
+<link rel="alternate" type="application/rss+xml" title="Linux.中国 - 开源社区 RSS" href="/rss.xml" />
+<link rel="shortcut icon" href="https://dn-linuxcn.qbox.me/favicon.ico"  sizes="32x32" />
+<script src="https://dn-linuxcn.qbox.me/static/js/portal.js?g08" type="text/javascript"></script>
+</head>
+
+<body id="nv_portal" class="pg_topic" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<div id="toptb" class="cl">
+<div class="wp">
+<div class="z"><a href="//linux.cn/rss.xml" target="_blank" >RSS</a><a href="//linux.cn/tag/" >TAG</a><a href="//mail.qq.com/cgi-bin/bookcol?colid=20274" >邮件列表</a></div>
+<div class="y">
+<a href="//linux.cn/article-1-1.html" >关于我们/About</a><a href="//linux.cn/article-2-1.html" >广告合作/AD</a></div>
+</div>
+</div>
+
+
+<div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2 style="padding:5px 20px 5px 0;"><a href="./" title="Linux.中国 - 开源社区"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_230x80_ani2.gif" alt="Linux.中国 - 开源社区" border="0" /></a></h2><div class="y"><script src="https://dn-linuxcn.qbox.me/static/js/logging.js?g08" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="pwmd5('ls_password');return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td><label for="ls_username">帐号</label></td>
+<td><input type="text" name="username" id="ls_username" class="px vm xg1"  value="用户名/Email" onfocus="if(this.value == '用户名/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = '用户名/Email';this.className = 'px vm xg1';}" tabindex="901" /></td>
+<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label></td>
+<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password">密码</label></td>
+<td><input type="password" name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" /></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904"><em>登录</em></button></td>
+<td>&nbsp;<a href="member.php?mod=knight" class="xi2 xw1">骑士注册</a></td>
+</tr>
+</table>
+<input type="hidden" name="quickforward" value="yes" />
+<input type="hidden" name="handlekey" value="ls" />
+</div>
+
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="http://linux.cn/connect.php?mod=login&op=init&referer=portal.php%3Fmod%3Dtopic%26topic%3Dsystemd&statfrom=login_simple"><img src="https://dn-linuxcn.qbox.me/static/image/common/qq_login.gif" class="vm" alt="QQ登录" /></a></p>
+<p><a href="xwb.php?m=xwbAuth.login"><img src="https://dn-linuxcn.qbox.me/static/image/common/sina_login.gif" class="vm" style="padding: 2px 0;" alt="微博登录" /></a></p>
+</div>
+
+<script>
+try{
+(function(){
+var node = document.getElementById("lsform").firstChild;
+var i = 1;
+while(i < 3 && node.nodeType!=1){
+node=node.nextSibling;
+i++;
+}
+node.style.width = 'auto';
+})();
+}catch(e){}
+</script>
+</div>
+</form>
+
+<script src="https://dn-linuxcn.qbox.me/static/js/md5.js?g08" type="text/javascript" reload="1"></script>
+</div>
+<h2 style="padding:5px 20px;float:right;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/gxj" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/174706fggg6h6axtxsh087.jpg" height="80" width="100%" border="0"></a></div></div>
+</h2>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="topmenu_wrapper">
+<div id="topmenu">
+<div id="nv">
+<ul><li id="mn_N6666" ><a href="/" hidefocus="true"   style="font-weight: bold;">首页</a></li><li id="mn_P3" onmouseover="navShow('P3')"><a href="https://linux.cn/tech/" hidefocus="true"   style="color: #FFFAE5;">技术 ◆ 学习</a></li><li id="mn_P1" ><a href="https://linux.cn/news/" hidefocus="true"   style="color: #FFFAE5;">新闻 ◆ 快讯</a></li><li id="mn_P4" ><a href="https://linux.cn/talk/" hidefocus="true"   style="color: #FFFAE5;">观点 ◆ 热议</a></li><li id="mn_P8" onmouseover="navShow('P8')"><a href="https://linux.cn/share/" hidefocus="true"   style="color: #FFFAE5;">软件 ◆ 分享</a></li><li id="mn_N9be8" onmouseover="navShow('N9be8')"><a href="/forum/" hidefocus="true" target="_blank"   style="color: cyan;">论坛</a></li><li id="mn_Ne749" ><a href="/forum.php?mod=post&action=newthread&fid=119" hidefocus="true" target="_blank"   style="color: red;">投稿</a></li></ul>
+</div>
+<div id="mu" class="cl">
+<ul class="cl " id="snav_mn_P3" style="display:none;">
+<li><a href="https://linux.cn/tech/desktop/" hidefocus="true" >桌面应用</a></li><li><a href="https://linux.cn/tech/sa/" hidefocus="true" >系统运维</a></li><li><a href="https://linux.cn/tech/program/" hidefocus="true" >软件开发</a></li></ul>
+<ul class="cl " id="snav_mn_P8" style="display:none;">
+<li><a href="https://linux.cn/share/distro/" hidefocus="true" >Linux 发行版</a></li></ul>
+<ul class="cl " id="snav_mn_N9be8" style="display:none;">
+<li><a href="/thread/" hidefocus="true"  style="color: blue;">全部话题</a></li><li><a href="javascript:showWindow('nav', 'forum.php?mod=misc&action=nav&special=0');" hidefocus="true"  style="color: red;">发新帖</a></li><li><a href="javascript:void();" hidefocus="true" >|</a></li><li><a href="/forum/news/" hidefocus="true" >新闻杂谈</a></li><li><a href="/forum/sa/" hidefocus="true" >系统运维</a></li><li><a href="/forum/program/" hidefocus="true" >编程开发</a></li></ul>
+<ul class="cl " id="snav_mn_N39f5" style="display:none;">
+<li><a href="/space.php" hidefocus="true" >首页</a></li><li><a href="/home.php?mod=space&do=home" hidefocus="true" >动态</a></li><li><a href="/home.php?mod=space&do=doing" hidefocus="true" >记录</a></li><li><a href="/home.php?mod=space&do=blog" hidefocus="true" >博客</a></li><li><a href="/home.php?mod=space&do=album" hidefocus="true" >相册</a></li><li><a href="/home.php?mod=space&do=favorite" hidefocus="true" >收藏</a></li><li><a href="/home.php?mod=space&do=friend" hidefocus="true" >好友</a></li><li><a href="/home.php?mod=spacecp&ac=invite" hidefocus="true" >邀请</a></li></ul>
+<ul class="cl " id="snav_mn_userapp" style="display:none;">
+</ul>
+</div></div>
+</div>
+<div id="scbar" class="cl">
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+<input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="4f8870df" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="0" />
+<input type="hidden" name="srhlocality" value="portal::topic" />
+<table id="scbar_table" cellspacing="0" cellpadding="0" style="float:right;">
+<tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="请注册后再搜索" autocomplete="off" speech /></td>
+<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+</div>
+</td>
+</tr>
+</table>
+</form>
+<span class="z titletext" style="padding: 0 10px 0 20px;">❏ <a href="http://locez.com" target="_blank">Locez</a> 新手指南：</span>
+<ul class="cl mutag z">
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-4130-1.html">下载 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-5893-1.html">安装 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6042-1.html">安装软件 »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6160-1.html">基础命令 »</a></li>
+
+</ul>
+</div>
+<br class="clear" />
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="search">全站</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar', '');
+</script>
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+$("#topmenu").affix({offset : {
+top : $("#topmenu").offset().top,
+bottom: 218}});
+$("#topmenu").width($('.hdc').width());
+$('#topmenu_wrapper').height($("#topmenu").height());
+
+$("#search_more").affix({offset : {
+top: 1000}});
+})
+})(jQuery);
+</script>
+
+</div>
+</div>
+<div id="wp" class="wp">
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="./" class="nvhm" title="首页">Linux.中国 - 开源社区</a> <em>&rsaquo;</em> Systemd 专题</div>
+</div>
+<link id="style_css" rel="stylesheet" type="text/css" href="static/topic/t1/style.css">
+<style id="diy_style" type="text/css">#portal_block_260 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:20px !important;margin-left:0px !important;}#portal_block_261 {  background-color:#fff !important;background-image:none !important;border:#ccc 1px solid !important;margin-top:0px !important;margin-right:0px !important;margin-bottom:20px !important;margin-left:4px !important;}#frameUFdVpX {  background-color:transparent !important;background-image:none !important;}#portal_block_262 {  border:#cccccc 1px solid !important;margin-top:0px !important;margin-right:4px !important;margin-bottom:10px !important;margin-left:0px !important;background-color:#fff !important;background-image:none !important;}</style>
+<div id="widgets">
+</div>
+<div class="wp">
+<div class="bm vw">
+<div class="h hm">
+<h1 class="ph" id="topic_title">Systemd 专题</h1>
+<p class="xg1">
+2014-12-28<span class="pipe">|</span>
+查看: <em id="_viewnum">8692</em><span class="pipe">|</span>
+评论: 0</p>
+</div>
+</div>
+    <div class="cl_frame_bm move-span cl frame-1-2">
+    	<div class="column frame-1-2-l"><div class=" frame move-span cl frame-1"><div class="column frame-1-c"><div class="move-span"><div class="dxb_bc">
+    		<div id="indexCarousel" class="carousel slide">  
+   				<div class="carousel-inner"><div class="item active">
+         			<a href="https://linux.cn/topic-systemd.html" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/portal/201412/28/003610v8yasinkiy8nn2iy.png" alt="Systemd 专题"></a>
+         			<div class="carousel-caption"><a href="https://linux.cn/topic-systemd.html" target="_blank">Systemd 专题</a></div>
+      			</div></div>
+</div> 
+</div></div></div></div></div>
+<div class="column frame-1-2-r"><div class="cl_frame_bm move-span cl frame-1"><div class="column frame-1-c">
+<div class="xbs_1 move-span topic_summary">
+<div class="dxb_bc" id="topic_summary">
+<p>近年来，Linux 的 init 系统经历了重大演进，传统的 sysvinit 已经淡出历史舞台，新的 init 系统 Systemd 被越来越多的 Linux 发行版采纳了。Systemd 使用 socket 和 D-Bus 来开启服务，提供基于守护进程的按需启动策略，保留了 Linux cgroups 的进程追踪功能，支持快照和系统状态恢复，维护挂载和自挂载点，实现了各服务间基于从属关系的一个更为精细的逻辑控制，拥有前卫的并行性能。Systemd 无需经过任何修改便可以替代 sysvinit 。</p>
+<br />
+<p>Systemd 因其复杂性而饱受 Unix 哲学（做一件事并做好）拥护者的鞭笞，批评者为此发起了抵制 Systemd 的运动。Systemd 是目前为止在 Linux 平台上最有争议的项目之一。它到底有多大的争议？它的争议大到 Systemd 的开发者之一 Lennart Poettering 声称有人使用比特币雇佣职业杀手要干掉他。</p>
+<br />
+<p>不管你喜不喜欢，它已经扑面而来，作为系统管理员，无论是工作需要，还是为了积极反对，都应该深入学习和掌握它。</p></div>
+</div>
+<div class="move-span">
+<div class="hm">
+<a title="分享到新浪微博" href="javascript:void( share_tsina( 'https://linux.cn/topic-systemd.html','topic_title','topic_summary','https://dn-linuxcn.qbox.me/data/attachment/portal/201412/28/003610v8yasinkiy8nn2iy.png') );" class="tsina_large"></a>
+<a href="javascript:void();" onmouseover="show_qrcode(event,'#qrcode', 'https://linux.cn/topic-systemd.html');" onmouseout="show_qrcode(event,'#qrcode','');" class="weixin_large"></a>
+</div>
+</div>
+</div></div></div>
+</div>
+
+<!--[diy=diypage]--><div id="diypage" class="area"><div id="frameUFdVpX" class="cl_frame_bm frame move-span cl frame-1-1"><div id="frameUFdVpX_left" class="column frame-1-1-l"><div id="frameUFdVpX_left_temp" class="move-span temp"></div><div id="portal_block_260" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">新闻与争议</span></div><div id="portal_block_260_content" class="dxb_bc"><ul class="article-list leftpic"><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/talk/" target="_blank">观点</a>]</span>
+       <span class="title"><a href="article-4336-1.html" style="color:#E70;" title="Systemd这个有争议的项目正在接管你身边的Linux"  target="_blank" id="nt_4336"> Systemd这个有争议的项目正在接管你身边的Linux</a></span>
+       <span class="heat-1">火</span> <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-4336-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201411/30/100852jyzrby2g62bc666c.jpg.thumb.jpg"></a></div>
+    <p id="ns_4336">Systemd 是目前为止在Linux平台上最有争议的项目之一。它到底有多大的争议？它的争议大到systemd的开发者之一Lennart Poettering 声称有人使用比特币雇佣职业杀手要干掉他。但是还是有比较理智的做法的，有一个抵制systemd网站在技术角度上提出了抵制systemd的原因。
+
+如此强烈的抵制也反映了systemd的成功。它已经被或将要被Fedroa、OpenSUSE、Ubuntu、Debian、Arch Linux等众多发行版采用。随着时间推移，GNOME越来越依赖它，Deb</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4336-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4336-1.html','nt_4336','ns_4336') );" class="tsina"></a></span>
+      2014-11-30      
+      <span id="na_4336"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/talk/" target="_blank">观点</a>]</span>
+       <span class="title"><a href="article-3656-1.html" style="color:#E70;" title="为什么systemd会被如此迅速的采用？"  target="_blank" id="nt_3656"> 为什么systemd会被如此迅速的采用？</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-3656-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201408/22/002547bg9gg5fngrgmrgq8.jpg.thumb.jpg"></a></div>
+    <p id="ns_3656">如果这是一个有争议的技术，为什么systemd会被如此迅速的采用。我不是在问这是否是一个好的技术，我们在这方面已经进行了太多的讨论了。
+我所好奇的是为什么这样一个有争议的技术可以得到这么广泛的应用。从根本来讲大多数发行版已经、将要使用这个技术（来自维基百科），尽管开源社区和大多数人认为这并不是个好方案。根据我的经验，让一个发行版在所有方面都得到一致同意是几乎不可能的事情，更别说这是一个很多人讨厌的技术。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3656-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3656-1.html','nt_3656','ns_3656') );" class="tsina"></a></span>
+      2014-08-22      
+      <span id="na_3656"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-3979-1.html" style="color:#07B;" title="Systemd 217将引入新的控制台守护程序"  target="_blank" id="nt_3979"> Systemd 217将引入新的控制台守护程序</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-3979-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/09/145105vech9ce83c09agtq.jpg.thumb.jpg"></a></div>
+    <p id="ns_3979">即将发布的Systemd 217将引入新的控制台守护程序，替代内核控制台守护程序。
+
+开发者David Herrmann过去几周的努力让新的用户空间控制台守护程序变成现实。这一功能仍然是实验性的。除此之外，Systemd 217还包括光标呈现支持，键盘映射支持，屏幕渲染器，DRM后端和输入接口等。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3979-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3979-1.html','nt_3979','ns_3979') );" class="tsina"></a></span>
+      2014-10-09      
+      <span id="na_3979"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/talk/" target="_blank">观点</a>]</span>
+       <span class="title"><a href="article-3978-1.html" style="color:#E70;" title="systemd 开发者在 G+ 喷 Linus 中英对照版"  target="_blank" id="nt_3978"> systemd 开发者在 G+ 喷 Linus 中英对照版</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-3978-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/09/102131iegguioiti4g2ieo.jpg.thumb.jpg"></a></div>
+    <p id="ns_3978">主页君按：这两天开源圈子爆发一场口水战，本站昨天发过新闻快递。@openSUSE娘 将引爆这场争吵的帖子用传神笔法飨于大家，而且她已经搬了小板凳前去围观了：“systemd 开发者跟 Linus 撕逼大战了？真是开源圈年度大戏啊！the 1st kernel vs. the 2nd kernel”。大家同去同去~</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3978-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3978-1.html','nt_3978','ns_3978') );" class="tsina"></a></span>
+      2014-10-09      
+      <span id="na_3978"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/talk/" target="_blank">观点</a>]</span>
+       <span class="title"><a href="article-3970-1.html" style="color:#E70;" title="systemd作者抨击开源和Linux社区"  target="_blank" id="nt_3970"> systemd作者抨击开源和Linux社区</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-3970-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/08/154411ul99v8zh8wuv85m5.jpg.thumb.jpg"></a></div>
+    <p id="ns_3970">systemd是一个备受争议的初始化系统，而它的作者Lennart Poettering也是一位备受争议的人。
+
+
+
+他在Google+上发了一篇帖子，抨击了开源和Linux社区，其中包括Linux作者 Linus Torvalds 。
+
+Lennart声称开源的世界是一个病态的世界，充斥了混帐之人，而他则可能是最主要的攻击目标之一。他举例说：收到过恐吓信，反对者不断发起请求他停止工作的请愿，征集比特币雇佣杀手杀他，抵制丑化更是不绝于耳，而在IRC上他也经常收到各种信息</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3970-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3970-1.html','nt_3970','ns_3970') );" class="tsina"></a></span>
+      2014-10-08      
+      <span id="na_3970"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-3877-1.html" style="color:#07B;" title="抗议者创建Systemd分支Uselessd"  target="_blank" id="nt_3877"> 抗议者创建Systemd分支Uselessd</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-3877-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201409/22/204026r4uoz4ot3wn44o33.png.thumb.jpg"></a></div>
+    <p id="ns_3877">Systemd因其复杂性而饱受Unix哲学（做一件事并做好）拥护者的鞭笞，批评者为此发起了抵制Systemd的运动，呼吁抵制使用Systemd的Linux发行版。
+
+现在，抗议者更进一步的创建了Systemd分支Uselessd，以求简化Systemd的功能。
+
+
+
+开发者表示，Uselessd不仅仅是一种政治抗议，他们的目标是创造出Systemd的可靠替代。Uselessd是基于systemd 208 ，剥离被认为与初始化系统无关的功能如systemd journal和udev。Systemd只支持Linux，而Usel</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3877-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3877-1.html','nt_3877','ns_3877') );" class="tsina"></a></span>
+      2014-09-22      
+      <span id="na_3877"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/talk/" target="_blank">观点</a>]</span>
+       <span class="title"><a href="article-3852-1.html" style="color:#07B;" title="Linus Torvalds 对 Systemd没有看法"  target="_blank" id="nt_3852"> Linus Torvalds 对 Systemd没有看法</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-3852-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201409/18/224045gowho0gs0xx4nllz.jpg.thumb.jpg"></a></div>
+    <p id="ns_3852">
+Linux作者Linus Torvalds在许多事情上以其鲜明的立场著称，但对于颇受争议的初始化系统Systemd，Torvalds的立场却是中立的。Torvalds说，他对Systemd没有特别的看法，事实上他的笔记本和台式机都运行Systemd。Torvalds指出，传统的Unix哲学“程序应该只关注一个目标，并尽可能把它做好”并不是现实的反映，除非工作是流水线式的，复杂系统很早就不采用“做一件事而且把它做得很好”的Unix模型。Unix的简化哲学在某种程度上仍然有</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3852-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3852-1.html','nt_3852','ns_3852') );" class="tsina"></a></span>
+      2014-09-19      
+      <span id="na_3852"></span> 
+    </p>
+  </li></ul></div></div><div id="portal_block_262" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">Debian 和 Systemd 的那些事</span></div><div id="portal_block_262_content" class="dxb_bc"><ul class="article-list leftpic"><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-2555-1.html" style="color:#07B;" title="Debian技术委员会倾向采用Systemd"  target="_blank" id="nt_2555"> Debian技术委员会倾向采用Systemd</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-2555-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201402/10/221554j39cchjjle3azj32.png.thumb.jpg"></a></div>
+    <p id="ns_2555">Debian技术委员会主席Bdale Garbee再次呼吁成员就Debian下一个版本（代号Jessie）默认使用的init系统进行投票，投票选项仍然与上一次投票相同：systemd，upstart，openrc，sysvinit(不作改动)，需要更多讨论。
+
+根据目前邮件列表上投票结果，systemd占优，Garbee本人也投了systemd一票。systemd被认为在技术上比upstart更优秀，但尚不成熟，而upstart因为受到 Canonical的大力支持而遭到社区的敌视。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-2555-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-2555-1.html','nt_2555','ns_2555') );" class="tsina"></a></span>
+      2014-02-10      
+      <span id="na_2555"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-3925-1.html" style="color:#07B;" title="systemd争议或催生新Debian分支"  target="_blank" id="nt_3925"> systemd争议或催生新Debian分支</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-3925-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201409/30/092158l11i5megmsy4ffe7.png.thumb.jpg"></a></div>
+    <p id="ns_3925">systemd诞生以来争议不断，一个原因是它的复杂性，另一个原因是它只支持Linux。
+
+不满的人甚至发起了抵制systemd（http://boycottsystemd.org/）的运动，呼吁抵制使用systemd的Linux发行版——这意味着抵制绝大多数主流发行版，包括Arch Linux、openSUSE、Fedora，以及即将到来的Debian GNU/Linux及其衍生版本Ubuntu。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3925-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3925-1.html','nt_3925','ns_3925') );" class="tsina"></a></span>
+      2014-09-30      
+      <span id="na_3925"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-4039-1.html" style="color:#E70;" title="Debian再次展开Systemd的讨论"  target="_blank" id="nt_4039"> Debian再次展开Systemd的讨论</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-4039-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/19/211347m3siahxb2gqzfqb3.jpg.thumb.jpg"></a></div>
+    <p id="ns_4039">今年初，Debian技术委员会在下一代Debian 8 Jessie初始化系统的投票中选择了Systemd，但Systemd备受争议，连带着Debian社区也是争论不休。
+
+开发者现在又展开了Systemd的讨论。资深Debian开发者 Ian Jackson想要一个共同的决议，让每一位Debian开发者投票作出决定，而不是少数几位Debian技术委员会的委员。他的提议已经获得许多人的支持。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4039-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4039-1.html','nt_4039','ns_4039') );" class="tsina"></a></span>
+      2014-10-19      
+      <span id="na_4039"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-4240-1.html" style="color:#E70;" title="Debian 的 systemd 维护者因持续受攻击辞职"  target="_blank" id="nt_4240"> Debian 的 systemd 维护者因持续受攻击辞职</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-4240-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201411/17/113123c3sk0mpmkdzrk5oo.jpg.thumb.jpg"></a></div>
+    <p id="ns_4240">Debian资深开发者、systemd维护团队成员Tollef Fog Heen在邮件列表上宣布辞去systemd的维护工作，原因是持续受到攻击。
+
+systemd在社区备受争议，部分反对者还发起了反systemd运动，而 Debian Jessie在宣布采用systemd作为默认的初始化系统之后也在Debian社区内外引发了激烈的争议。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4240-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4240-1.html','nt_4240','ns_4240') );" class="tsina"></a></span>
+      2014-11-17      
+      <span id="na_4240"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-4256-1.html" style="color:#E70;" title="这是一场战争！Debian技术委员会已经八去其"  target="_blank" id="nt_4256"> 这是一场战争！Debian技术委员会已经八去其</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-4256-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201411/19/222801leeotwqzto1vzw4t.jpg.thumb.jpg"></a></div>
+    <p id="ns_4256">围绕Debian选择初始化系统systemd所引发的争论让三名资深成员先后宣布从Debian技术委员会辞职。Russ Allbery和Colin Watson在Debian邮件列表上宣布了辞职声明。紧接着，资深Debian开发者 Ian Jackson也宣布了他的辞职申明。
+
+选择systemd的决定最早是由技术委员会作出的，Russ Allbery说，委员会几乎每一个决策的决定都受到巨大的压力，他感到没有精力能处理这些事情，他也觉得自己在技术委员会的工作对整个项目没什么帮助。之前另</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4256-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4256-1.html','nt_4256','ns_4256') );" class="tsina"></a></span>
+      2014-11-19      
+      <span id="na_4256"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/news/" target="_blank">新闻</a>]</span>
+       <span class="title"><a href="article-4335-1.html" style="color:#E70;" title="DebianFork 将发布没有 systemd 的 Debian "  target="_blank" id="nt_4335"> DebianFork 将发布没有 systemd 的 Debian </a></span>
+       <span class="heat-1">火</span> <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-4335-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201411/29/010211lt44nnckfkzakd4m.png.thumb.jpg"></a></div>
+    <p id="ns_4335">Debian 8 Jessie的 init 系统默认使用 systemd，这一选择在社区引发了大量争议，导致了技术委员会的多名成员辞职。现在，“老兵 Unix 管理员”宣布要创建一个新的不使用 sytemd 的 Debian 分支。这群 Unix 哲学拥护者们请求外界捐赠支持他们的新使命。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4335-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4335-1.html','nt_4335','ns_4335') );" class="tsina"></a></span>
+      2014-11-29      
+      <span id="na_4335"></span> 
+    </p>
+  </li></ul></div></div></div><div id="frameUFdVpX_center" class="column frame-1-1-r"><div id="frameUFdVpX_center_temp" class="move-span temp"></div><div id="portal_block_261" class="xbs_1 block move-span"><div class="blocktitle title"><span class="titletext" style="float:;margin-left:px;font-size:;color: !important;">技术解析</span></div><div id="portal_block_261_content" class="dxb_bc"><ul class="article-list leftpic"><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-3352-1.html" style="color:#07B;" title="Systemd服务简介"  target="_blank" id="nt_3352"> Systemd服务简介</a></span>
+        
+    </h2>
+    <div class="icon"><a href="article-3352-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201407/09/200524ugtzzvkv3tkwirap.jpg.thumb.jpg"></a></div>
+    <p id="ns_3352">systemd 是 Linux 下一个与 SysV 和 LSB 初始化脚本兼容的系统和服务管理器。systemd 使用 socket 和 D-Bus 来开启服务，提供基于守护进程的按需启动策略，保留了 Linux cgroups 的进程追踪功能，支持快照和系统状态恢复，维护挂载和自挂载点，实现了各服务间基于从属关系的一个更为精细的逻辑控制，拥有前卫的并行性能。systemd 无需经过任何修改便可以替代 sysvinit 。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3352-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3352-1.html','nt_3352','ns_3352') );" class="tsina"></a></span>
+      2014-07-09      
+      <span id="na_3352"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-3801-1.html" style="color:#0A0;" title="真的超赞！用systemd命令来管理linux系统！"  target="_blank" id="nt_3801"> 真的超赞！用systemd命令来管理linux系统！</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-3801-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201409/11/233311balrocncrmapmyo8.jpg.thumb.jpg"></a></div>
+    <p id="ns_3801">Systemd是一种新的linux系统服务管理器。
+
+它替换了init系统，能够管理系统的启动过程和一些系统服务，一旦启动起来，就将监管整个系统。在本文中，我们用的是安装有 systemd 216 版本的centos 7.0，其最新版本可以从 freedesktop.org 下载得到。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3801-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3801-1.html','nt_3801','ns_3801') );" class="tsina"></a></span>
+      2014-09-12      
+      <span id="na_3801"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-4424-1.html" style="color:#E70;" title="浅析 Linux 初始化 init 系统: Systemd"  target="_blank" id="nt_4424"> 浅析 Linux 初始化 init 系统: Systemd</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-4424-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201412/11/114531gc5c47h7j452zhgq.jpg.thumb.jpg"></a></div>
+    <p id="ns_4424">Systemd 是 Linux 系统中最新的初始化系统（init），它主要的设计目标是克服 sysvinit 固有的缺点，提高系统的启动速度。systemd 和 ubuntu 的 upstart 是竞争对手，预计会取代 UpStart，实际上在作者写作本文时，已经有消息称 Ubuntu 也将采用 systemd 作为其标准的系统初始化系统。
+
+
+
+Systemd 的很多概念来源于苹果 Mac OS 操作系统上的 launchd，不过 launchd 专用于苹果系统，因此长期未能获得应有的广泛关注。Systemd 借鉴了</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4424-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4424-1.html','nt_4424','ns_4424') );" class="tsina"></a></span>
+      2014-12-12      
+      <span id="na_4424"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-3794-1.html" style="color:#E70;" title="systemd 与 sysVinit 彩版对照表"  target="_blank" id="nt_3794"> systemd 与 sysVinit 彩版对照表</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-3794-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201409/11/001000j4dhq7ydd4hs7hfd.jpg.thumb.jpg"></a></div>
+    <p id="ns_3794">systemd 是一种新型init系统「译者注：每个操作系统都有一个启动程序，而Linux init是Linux系统操作中不可缺少的程序之一。所谓的init进程，它是一个由内核启动的用户级进程。内核自行启动（已经被载入内存，开始运行，并已初始化所有的设备驱动程序和数据结构等）之后，就通过启动一个用户级程序init的方式，完成引导进程。所以init始终是第一个进程（其进程编号始终为1）」，最早在Fedora中使用「译者注：据维基百科资料：http:/</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3794-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3794-1.html','nt_3794','ns_3794') );" class="tsina"></a></span>
+      2014-09-11      
+      <span id="na_3794"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-3719-1.html" style="color:#0A0;" title="Linux Systemd——在RHEL/CentOS 7中启动/停止/重启服务"  target="_blank" id="nt_3719"> Linux Systemd——在RHEL/CentOS 7中启动/停止/重启服务</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-3719-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201408/29/173235jrrhehuyu43fgi74.jpg.thumb.jpg"></a></div>
+    <p id="ns_3719">RHEL/CentOS 7.0中一个最主要的改变，就是切换到了systemd。它用于替代红帽企业版Linux前任版本中的SysV和Upstart，对系统和服务进行管理。systemd兼容SysV和Linux标准组的启动脚本。
+
+Systemd是一个Linux操作系统下的系统和服务管理器。它被设计成向后兼容SysV启动脚本，并提供了大量的特性，如开机时平行启动系统服务，按需启动守护进程，支持系统状态快照，或者基于依赖的服务控制逻辑。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3719-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3719-1.html','nt_3719','ns_3719') );" class="tsina"></a></span>
+      2014-08-29      
+      <span id="na_3719"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/sa/" target="_blank">系统运维</a>]</span>
+       <span class="title"><a href="article-4505-1.html" style="color:#0A0;" title="systemd的运行级别与服务管理命令简介"  target="_blank" id="nt_4505"> systemd的运行级别与服务管理命令简介</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-4505-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201412/23/121925qvuuuzd9t4udjuvo.png.thumb.jpg"></a></div>
+    <p id="ns_4505">从很久很久以前我们就在使用静态运行级别。而systemd提供了更为动态灵活的机制，来管控你的系统。
+
+在开始介绍systemd命令前，让我们先简单的回顾一下历史。在Linux世界里，有一个很奇怪的现象，一方面Linux和自由软件（FOSS）在不断的向前推进，另一方面人们对这些变化却不断的抱怨。这就是为什么我要在此稍稍提及那些反对systemd所引起的争论的原因，因为我依然记得历史上有不少类似的争论</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4505-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4505-1.html','nt_4505','ns_4505') );" class="tsina"></a></span>
+      2014-12-23      
+      <span id="na_4505"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/sa/" target="_blank">系统运维</a>]</span>
+       <span class="title"><a href="http://linux.cn/article-4678-1.html" style="color:#0A0;" title="systemd-nspawn 快速指南"  target="_blank" id="nt_4678"> systemd-nspawn 快速指南</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="http://linux.cn/article-4678-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201501/16/092003t2uj2ofoct2mg1e0.jpg.thumb.jpg"></a></div>
+    <p id="ns_4678">我目前已从 chroot（译者注：chroot可以构建类似沙盒的环境，建议各位同学先了解chroot） 迁移到 systemd-nspawn，同时我写了一篇快速指南。简单的说，我强烈建议正在使用 systemd 的用户从 chroot 转为 systemd-nspawn，因为只要你的内核配置正确的话，它几乎没有什么缺点。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4678-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/http://linux.cn/article-4678-1.html','nt_4678','ns_4678') );" class="tsina"></a></span>
+      2015-01-16      
+      <span id="na_4678"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-3994-1.html" style="color:#0A0;" title="在 Debian 上使用 systemd 管理系统"  target="_blank" id="nt_3994"> 在 Debian 上使用 systemd 管理系统</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-3994-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/11/222742dj4vgydxdwwn4wv0.png.thumb.jpg"></a></div>
+    <p id="ns_3994">人类已经无法阻止 systemd 占领全世界的 Linux 系统了，唯一阻止它的方法是在你自己的机器上手动卸载它。到目前为止，systemd 已经创建了比任何软件都多的技术问题、感情问题和社会问题。这一点从“Linux 初始化软件之战”上就能看出，这场争论在 Debian 开发者之间持续了好几个月。当 Debian 技术委员会最终决定将 systemd 放到 Debian 8（代号 Jessie）的发行版里面时，其反对者试图通过多种努力来取代这项决议，甚至有人扬言要</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3994-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3994-1.html','nt_3994','ns_3994') );" class="tsina"></a></span>
+      2014-10-11      
+      <span id="na_3994"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-4422-1.html" style="color:#E70;" title="浅析 Linux 初始化 init 系统: sysvinit"  target="_blank" id="nt_4422"> 浅析 Linux 初始化 init 系统: sysvinit</a></span>
+       <span class="heat-1">火</span> 
+    </h2>
+    <div class="icon"><a href="article-4422-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201412/11/112140i68477i8o9sxr8n4.png.thumb.jpg"></a></div>
+    <p id="ns_4422">近年来，Linux 系统的 init 进程经历了两次重大的演进，传统的 sysvinit 已经淡出历史舞台，新的 init 系统 UpStart 和 systemd 各有特点，而越来越多的 Linux 发行版采纳了 systemd。本系列简要介绍了这三种 init 系统的使用和原理，每个 Linux 系统管理员和系统软件开发者都应该了解它们，以便更好地管理系统和开发应用。本文是系列的第一部分，主要讲述 sysvinit 的特点和使用。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4422-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4422-1.html','nt_4422','ns_4422') );" class="tsina"></a></span>
+      2014-12-11      
+      <span id="na_4422"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/desktop/" target="_blank">桌面应用</a>]</span>
+       <span class="title"><a href="article-3996-1.html" style="color:#0A0;" title="如何使用 systemd 中的定时器"  target="_blank" id="nt_3996"> 如何使用 systemd 中的定时器</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-3996-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201410/11/235019zlcvleb3xu3zmkk9.png.thumb.jpg"></a></div>
+    <p id="ns_3996">我最近在写一些执行备份工作的脚本，我决定使用systemd timers而不是对我而已更熟悉的cron jobs来管理它们。
+
+在我使用时，出现了很多问题需要我去各个地方找资料，这个过程非常麻烦。因此，我想要把我目前所做的记录下来，方便自己的记忆，也方便读者不必像我这样，满世界的找资料了。
+
+
+
+在我下面提到的步骤中有其他的选择，但是这里是最简单的方法。在此之前，请查看systemd.service, systemd.timer,和systemd.target的帮助页面</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-3996-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-3996-1.html','nt_3996','ns_3996') );" class="tsina"></a></span>
+      2014-10-12      
+      <span id="na_3996"></span> 
+    </p>
+  </li><li >
+    <h2>
+       <span class="y cat">[<a href="http://linux.cn/tech/" target="_blank">技术</a>]</span>
+       <span class="title"><a href="article-4260-1.html" style="color:#0A0;" title="如何在 systemd 下管理Linux系统的时间和日"  target="_blank" id="nt_4260"> 如何在 systemd 下管理Linux系统的时间和日</a></span>
+        <span class="original">原</span>
+    </h2>
+    <div class="icon"><a href="article-4260-1.html"  target="_blank" ><img src="http://img.linux.net.cn/data/attachment/album/201411/20/130447i44433k0h2vz1cj3.jpg.thumb.jpg"></a></div>
+    <p id="ns_4260">timedatectl是用来查询和修改系统时间和配置的Linux应用程序。它是systemd 系统服务管理的一部分，并且允许你检查和修改系统时钟的配置。
+
+在这篇文章中，我们将涉及该小巧但十分重要应用程序的所有方面。</p>
+    <p class="info"><span class="function">        
+      <a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-4260-1-qr.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a><a title="分享到新浪微博" href="javascript:void( share_tsina('https://linux.cn/article-4260-1.html','nt_4260','ns_4260') );" class="tsina"></a></span>
+      2014-11-20      
+      <span id="na_4260"></span> 
+    </p>
+  </li></ul></div></div></div></div></div><!--[/diy]-->
+<div style="margin-right:15px;">
+<div id="add_comment" class="bm">
+<div class="bm_h cl">
+<h3>发表评论</h3>
+</div>
+<div class="bm_c pbn">
+<form id="cform" name="cform" action="portal.php?mod=portalcp&amp;ac=comment" method="post" autocomplete="off">
+<div class="tedt">
+<div class="area">
+<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+</div>
+</div>
+
+<div class="mtm z"><span id="seccode_cSGwe412"></span>		
+<script type="text/javascript" reload="1">updateseccode('cSGwe412', '<sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div>', 'portal::topic');</script>
+<script type="text/javascript">
+(function($){
+$("#cform").submit(function(e) {
+if ($("#checksec_none_cSGwe412").length>0) {
+alert("请输入验证码");
+return false;
+} else if ($("#checksec_error_cSGwe412").length>0) {
+alert("验证码输入错误，请重新输入");
+return false;
+} else if ($("#checksec_loading_cSGwe412").length>0) {
+alert("验证码验证中……");
+return false;
+}
+});
+})(jQuery);
+</script>
+</div>
+<input type="hidden" name="referer" value="https://linux.cn/topic-systemd.html#comment" />
+<input type="hidden" name="topicid" value="4">
+<input id="reppid" type="hidden" name="reppid" value="">
+<input type="hidden" name="formhash" value="4f8870df">
+<input type="hidden" name="replysubmit" value="true">
+<input type="hidden" name="commentsubmit" value="true" />
+<p class="mtm z"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>评论</strong></button></p>
+<br class="clear" />
+</form>
+</div>
+</div>
+</div>
+<div id="comment" class="bm" style="margin-right:15px;">
+<div class="bm_h cl">
+<h3 class="z"><a name="comment"></a>最新评论</h3>
+<h3 class="y"><a href="javascript:void(0);" class="y" style="color:#C00;" onclick="$('message').focus();">我也要发表评论</a></h3>
+</div>
+<div id="comment_ul" class="bm_c"></div>
+</div>
+</div>	</div>
+
+
+    <div id="footer">
+        <p>
+            <span>Linux.CN &copy; 2003-2015 Linux中国</span>
+            <span class="line">|</span>
+            <span>Powered by <strong>DX</strong> | 图片存储于<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a></span>
+        </p>
+        <p>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备05083684号-1</a>            京公网安备110105001595
+        </p>
+        <p>
+        <a href="//linux.cn/article-3-1.html">服务条款</a> |
+        除特别申明外，本站原创内容版权遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank">CC-BY-NC-SA 协议规定</a></p>
+        <p>
+        <a href="https://linux.cn/"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_mini.png" align="absmiddle" /></a>
+        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/cc.png" align="absmiddle" /></a>
+        </p>
+<p>
+</p>
+</div>
+
+<div id="ft" class="cl"></div>
+<script src="home.php?mod=misc&ac=sendmail&rand=1445349917" type="text/javascript"></script>
+<div id="scrolltop">
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa" ><b>返回顶部</b></a></span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });</script>
+<div id="qrcode">
+<p>分享到微信朋友圈</p>
+<div id="canvas"></div>
+<p><em>打开微信，点击底部的“发现”，<br />
+使用“扫一扫”将网页分享至朋友圈。</em></p></div>
+</body>
+</html>

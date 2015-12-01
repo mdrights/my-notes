@@ -1,0 +1,819 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>RHCSA 系列（二）: 如何进行文件和目录管理-技术 ◆ 学习|Linux.中国-开源社区</title>
+ 
+<meta name="keywords" content="RHCSA 系列（二）: 如何进行文件和目录管理" />
+<meta name="description" content="在本篇中，我们将回顾一些系统管理员日常任务需要的技能。  RHCSA： 运行文件以及进行文件夹管理 - 第二部分 创建、删除、复制和移动文件及目录 文件和目录管理是每一个系统管理员都应该掌握的必备技能。它包括了从头开始的创建、删除文本文件（每个程序的核心配置）以及目录（你用来组织文件和其它目录），以及识别已有文件的类型。 touch 命令 不仅仅能用来创建空文件，还能用来更新已有文件的访问时间和修改时间。  touch 命令示例 你可以使用 file 来判断一个文件的类型 (在你用文本编辑器编辑之前，判断类型将会更方便编辑)。  file " />
+<meta name="copyright" content="2005-2015 Linux.cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="referrer" content="always">
+<base href="https://linux.cn/" /><link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_common.css?g08" />
+<link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_portal_view.css?g08" />
+<link href="https://dn-linuxcn.qbox.me/static/css/responsive.css?g08" rel="stylesheet">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f219a1d7ae00e99bdc4410080f3a6ef7";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">var STYLEID = '1', STATICURL = 'https://dn-linuxcn.qbox.me/static/', IMGDIR = 'https://dn-linuxcn.qbox.me/static/image/common', VERHASH = 'g08', charset = 'utf-8', discuz_uid = '0', cookiepre = 'dx_516d_', cookiedomain = '.linux.cn', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = '', creditnotice = '1|经验|,2|L币|,3|贡献|', defaultstyle = '', REPORTURL = 'aHR0cDovL2xpbnV4LmNuL2FydGljbGUtNjE1NS0xLmh0bWw=', SITEURL = 'https://linux.cn/', JSPATH = 'https://dn-linuxcn.qbox.me/static/js/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/common.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery.plugins.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/bootstrap.min.js?g08" type="text/javascript"></script>
+<link rel="alternate" type="application/rss+xml" title="Linux.中国 - 开源社区 RSS" href="/rss.xml" />
+<link rel="shortcut icon" href="https://dn-linuxcn.qbox.me/favicon.ico"  sizes="32x32" />
+<link rel="canonical" href="https://linux.cn/article-6155-1.html" /><script src="https://dn-linuxcn.qbox.me/static/js/portal.js?g08" type="text/javascript"></script>
+</head>
+
+<body id="nv_portal" class="pg_view" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<div id="toptb" class="cl">
+<div class="wp">
+<div class="z"><a href="//linux.cn/rss.xml" target="_blank" >RSS</a><a href="//linux.cn/tag/" >TAG</a><a href="//mail.qq.com/cgi-bin/bookcol?colid=20274" >邮件列表</a></div>
+<div class="y">
+<a href="//linux.cn/article-1-1.html" >关于我们/About</a><a href="//linux.cn/article-2-1.html" >广告合作/AD</a></div>
+</div>
+</div>
+
+
+<div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2 style="padding:5px 20px 5px 0;"><a href="./" title="Linux.中国 - 开源社区"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_230x80_ani2.gif" alt="Linux.中国 - 开源社区" border="0" /></a></h2><div class="y"><script src="https://dn-linuxcn.qbox.me/static/js/logging.js?g08" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="pwmd5('ls_password');return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td><label for="ls_username">帐号</label></td>
+<td><input type="text" name="username" id="ls_username" class="px vm xg1"  value="用户名/Email" onfocus="if(this.value == '用户名/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = '用户名/Email';this.className = 'px vm xg1';}" tabindex="901" /></td>
+<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label></td>
+<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password">密码</label></td>
+<td><input type="password" name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" /></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904"><em>登录</em></button></td>
+<td>&nbsp;<a href="member.php?mod=knight" class="xi2 xw1">骑士注册</a></td>
+</tr>
+</table>
+<input type="hidden" name="quickforward" value="yes" />
+<input type="hidden" name="handlekey" value="ls" />
+</div>
+
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="http://linux.cn/connect.php?mod=login&op=init&referer=portal.php%3Fmod%3Dview%26aid%3D6155%26page%3D1%26ref%3D&statfrom=login_simple"><img src="https://dn-linuxcn.qbox.me/static/image/common/qq_login.gif" class="vm" alt="QQ登录" /></a></p>
+<p><a href="xwb.php?m=xwbAuth.login"><img src="https://dn-linuxcn.qbox.me/static/image/common/sina_login.gif" class="vm" style="padding: 2px 0;" alt="微博登录" /></a></p>
+</div>
+
+<script>
+try{
+(function(){
+var node = document.getElementById("lsform").firstChild;
+var i = 1;
+while(i < 3 && node.nodeType!=1){
+node=node.nextSibling;
+i++;
+}
+node.style.width = 'auto';
+})();
+}catch(e){}
+</script>
+</div>
+</form>
+
+<script src="https://dn-linuxcn.qbox.me/static/js/md5.js?g08" type="text/javascript" reload="1"></script>
+</div>
+<h2 style="padding:5px 20px;float:right;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/gxb" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/142644s4ff31fa3gg313my.jpg" height="80" width="100%" border="0"></a></div></div>
+</h2>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="topmenu_wrapper">
+<div id="topmenu">
+<div id="nv">
+<ul><li id="mn_N6666" ><a href="/" hidefocus="true"   style="font-weight: bold;">首页</a></li><li id="mn_P3" onmouseover="navShow('P3')"><a href="https://linux.cn/tech/" hidefocus="true"   style="color: #FFFAE5;">技术 ◆ 学习</a></li><li id="mn_P1" ><a href="https://linux.cn/news/" hidefocus="true"   style="color: #FFFAE5;">新闻 ◆ 快讯</a></li><li id="mn_P4" ><a href="https://linux.cn/talk/" hidefocus="true"   style="color: #FFFAE5;">观点 ◆ 热议</a></li><li id="mn_P8" onmouseover="navShow('P8')"><a href="https://linux.cn/share/" hidefocus="true"   style="color: #FFFAE5;">软件 ◆ 分享</a></li><li id="mn_N9be8" onmouseover="navShow('N9be8')"><a href="/forum/" hidefocus="true" target="_blank"   style="color: cyan;">论坛</a></li><li id="mn_Ne749" ><a href="/forum.php?mod=post&action=newthread&fid=119" hidefocus="true" target="_blank"   style="color: red;">投稿</a></li></ul>
+</div>
+<div id="mu" class="cl">
+<ul class="cl " id="snav_mn_P3" style="display:none;">
+<li><a href="https://linux.cn/tech/desktop/" hidefocus="true" >桌面应用</a></li><li><a href="https://linux.cn/tech/sa/" hidefocus="true" >系统运维</a></li><li><a href="https://linux.cn/tech/program/" hidefocus="true" >软件开发</a></li></ul>
+<ul class="cl " id="snav_mn_P8" style="display:none;">
+<li><a href="https://linux.cn/share/distro/" hidefocus="true" >Linux 发行版</a></li></ul>
+<ul class="cl " id="snav_mn_N9be8" style="display:none;">
+<li><a href="/thread/" hidefocus="true"  style="color: blue;">全部话题</a></li><li><a href="javascript:showWindow('nav', 'forum.php?mod=misc&action=nav&special=0');" hidefocus="true"  style="color: red;">发新帖</a></li><li><a href="javascript:void();" hidefocus="true" >|</a></li><li><a href="/forum/news/" hidefocus="true" >新闻杂谈</a></li><li><a href="/forum/sa/" hidefocus="true" >系统运维</a></li><li><a href="/forum/program/" hidefocus="true" >编程开发</a></li></ul>
+<ul class="cl " id="snav_mn_N39f5" style="display:none;">
+<li><a href="/space.php" hidefocus="true" >首页</a></li><li><a href="/home.php?mod=space&do=home" hidefocus="true" >动态</a></li><li><a href="/home.php?mod=space&do=doing" hidefocus="true" >记录</a></li><li><a href="/home.php?mod=space&do=blog" hidefocus="true" >博客</a></li><li><a href="/home.php?mod=space&do=album" hidefocus="true" >相册</a></li><li><a href="/home.php?mod=space&do=favorite" hidefocus="true" >收藏</a></li><li><a href="/home.php?mod=space&do=friend" hidefocus="true" >好友</a></li><li><a href="/home.php?mod=spacecp&ac=invite" hidefocus="true" >邀请</a></li></ul>
+<ul class="cl " id="snav_mn_userapp" style="display:none;">
+</ul>
+</div></div>
+</div>
+<div id="scbar" class="cl">
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+<input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="4f8870df" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="0" />
+<input type="hidden" name="srhlocality" value="portal::view" />
+<table id="scbar_table" cellspacing="0" cellpadding="0" style="float:right;">
+<tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="请注册后再搜索" autocomplete="off" speech /></td>
+<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+</div>
+</td>
+</tr>
+</table>
+</form>
+<span class="z titletext" style="padding: 0 10px 0 20px;">❏ <a href="http://locez.com" target="_blank">Locez</a> 新手指南：</span>
+<ul class="cl mutag z">
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-4130-1.html">下载 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-5893-1.html">安装 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6042-1.html">安装软件 »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6160-1.html">基础命令 »</a></li>
+
+</ul>
+</div>
+<br class="clear" />
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="search">全站</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar', '');
+</script>
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+$("#topmenu").affix({offset : {
+top : $("#topmenu").offset().top,
+bottom: 218}});
+$("#topmenu").width($('.hdc').width());
+$('#topmenu_wrapper').height($("#topmenu").height());
+
+$("#search_more").affix({offset : {
+top: 1000}});
+})
+})(jQuery);
+</script>
+
+</div>
+</div>
+<div id="wp" class="wp">
+<script src="https://dn-linuxcn.qbox.me/static/js/forum_viewthread.js?g08" type="text/javascript"></script>
+<script type="text/javascript">zoomstatus = parseInt(1), imagemaxwidth = '700', aimgcount = new Array();</script>
+
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/g2n" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/16/155441fnb69sbn0cvpdssb.jpg" height="120" width="100%" border="0"></a></div></div>
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="./" class="nvhm" title="首页">Linux.中国 - 开源社区</a> <em>&rsaquo;</em><a href="https://linux.cn/tech/">技术 ◆ 学习</a> <em>&rsaquo;</em>
+查看内容
+</div>
+</div>
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+<div id="ct" class="ct2 wp cl">
+<div class="mn">
+<div style="margin-bottom:5px;">
+    </div>
+<div class="vw">
+<div class="h hm">
+<h1 class="ph" id="article_title">RHCSA 系列（二）: 如何进行文件和目录管理 </h1>
+<p class="xg1">
+2015-9-6 09:30&nbsp;&nbsp;&nbsp;
+评论: <a href="portal.php?mod=comment&id=6155&idtype=aid" title="查看全部评论"><em id="_commentnum">2</em></a>&nbsp;收藏: <em id="_favtimes">8</em>&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://www.tecmint.com/file-and-directory-management-in-linux/" target="_blank">http://www.tecmint.com/file-and-directory-management-in-linux/</a></span>
+    		    		<span class="y">作者： Gabriel Cánepa</span>    		<br class="clear" />
+    	    	<span class="z">译文：<a href="http://lctt.github.io/" target=_blank>LCTT</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6155-1.html" target="_blank">https://linux.cn/article-6155-1.html</a></span>
+            			<span class="y">译者： xiqingongzi</span>    		<br class="clear" />
+    	</p>
+
+</div>
+
+<!--[diy=diysummarytop]--><div id="diysummarytop" class="area"></div><!--[/diy]-->
+
+
+<!--[diy=diysummarybottom]--><div id="diysummarybottom" class="area"></div><!--[/diy]-->
+
+<div class="d">
+
+<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+
+<div id="article_content"><p>在本篇中，我们将回顾一些系统管理员日常任务需要的技能。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013356u0ow1qg1go5wc1d0.png" alt="RHCSA: Perform File and Directory Management &ndash; Part 2" /></p>
+<p><em>RHCSA： 运行文件以及进行文件夹管理 - 第二部分</em></p>
+<h3 id="toc_1">创建、删除、复制和移动文件及目录</h3>
+<p>文件和目录管理是每一个系统管理员都应该掌握的必备技能。它包括了从头开始的创建、删除文本文件（每个程序的核心配置）以及目录（你用来组织文件和其它目录），以及识别已有文件的类型。</p>
+<p><a href="https://linux.cn/article-2740-1.html"><code>touch</code> 命令</a> 不仅仅能用来创建空文件，还能用来更新已有文件的访问时间和修改时间。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013356wxotbox68gpvyx8d.png" alt="touch command example" /></p>
+<p><em>touch 命令示例</em></p>
+<p>你可以使用 <code>file [filename]</code>来判断一个文件的类型 (在你用文本编辑器编辑之前，判断类型将会更方便编辑)。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013356es3rm4kn6nlxnnlf.png" alt="file command example" /></p>
+<p><em>file 命令示例</em></p>
+<p>使用<code>rm [filename]</code> 可以删除文件。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013357nfyt1h21f2ixpt5f.png" alt="Linux rm command examples" /></p>
+<p><em>rm 命令示例</em></p>
+<p>对于目录，你可以使用<code>mkdir [directory]</code>在已经存在的路径中创建目录，或者使用 <code>mkdir -p [/full/path/to/directory]</code>带全路径创建文件夹。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013357pwzrczafjjfd8zb6.png" alt="mkdir command example" /></p>
+<p><em>mkdir 命令示例</em></p>
+<p>当你想要去删除目录时，在你使用<code>rmdir [directory]</code> 前，你需要先确保目录是空的，或者使用更加强力的命令(小心使用它！)<code>rm -rf [directory]</code>。后者会强制删除<code>[directory]</code>以及它的内容，所以使用这个命令存在一定的风险。</p>
+<h3 id="toc_2">输入输出重定向以及管道</h3>
+<p>命令行环境提供了两个非常有用的功能：允许重定向命令的输入和输出为另一个文件，以及发送命令的输出到另一个命令，这分别称为重定向和管道。</p>
+<p>为了理解这两个重要概念，我们首先需要理解三个最重要的字符输入输出流类型，以 *nix 的话来说，它们实际上是特殊的文件。</p>
+<ul>
+<li>标准输入 (即 stdin)，默认连接到键盘。 换句话说，键盘是输入命令到命令行的标准输入设备。</li>
+<li>标准输出 (即 stdout)，默认连接到屏幕。 找个设备&ldquo;接受&rdquo;命令的输出，并展示到屏幕上。</li>
+<li>标准错误 (即 stderr)，默认是命令的状态消息出现的地方，它也是屏幕。</li>
+</ul>
+<p>在下面的例子中，<code>ls /var</code>的结果被发送到stdout(屏幕展示)，ls /tecmint 的结果也一样。但在后一种情况下，它显示在标准错误输出上。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013358i0jhq211hjvh1pv2.png" alt="Linux input output redirect" /></p>
+<p><em>输入和输出命令实例</em></p>
+<p>为了更容易识别这些特殊文件，每个文件都被分配有一个文件描述符，这是用于访问它们的抽象标识。主要要理解的是，这些文件就像其它的一样，可以被重定向。这就意味着你可以从一个文件或脚本中捕获输出，并将它传送到另一个文件、命令或脚本中。这样你就可以在磁盘上存储命令的输出结果，用于稍后的分析。</p>
+<p>要重定向 stdin (fd 0)、 stdout (fd 1) 或 stderr (fd 2)，可以使用如下操作符。</p>
+<table border="1" cellspacing="0" cellpadding="4">
+<tbody>
+<tr>
+<td style="border: 1px solid #000000;" align="CENTER" bgcolor="#999999" height="24"><strong><span style="font-size: medium;">转向操作</span></strong></td>
+<td style="border: 1px solid #000000;" align="CENTER" bgcolor="#999999"><strong><span style="font-size: medium;">效果</span></strong></td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">重定向标准输出到一个文件。如果目标文件存在，内容就会被重写。</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">&gt;&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">添加标准输出到文件尾部。</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">2&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">重定向标准错误输出到一个文件。如果目标文件存在，内容就会被重写。</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">2&gt;&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">添加标准错误输出到文件尾部。</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">&amp;&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">重定向标准错误和标准输出到一个文件。如果目标文件存在，内容就会被重写。</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">&lt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">使用特定的文件做标准输入。</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="CENTER" height="18"><strong><span style="font-family: Courier New;">&lt;&gt;</span></strong></td>
+<td style="border: 1px solid #000000;" align="LEFT">使用特定的文件做标准输入和标准输出。</td>
+</tr>
+</tbody>
+</table>
+<p>与重定向相比，管道是通过在命令后和另外一个命令前之间添加一个竖杠<code>(|)</code>。</p>
+<p>记得:</p>
+<ul>
+<li><em>重定向</em>是用来定向命令的输出到一个文件，或把一个文件发送作为到一个命令的输入。</li>
+<li><em>管道</em>是用来将命令的输出转发到另一个命令作为其输入。</li>
+</ul>
+<h4 id="toc_3">重定向和管道的使用实例</h4>
+<p><strong>例1：将一个命令的输出到文件</strong></p>
+<p>有些时候，你需要遍历一个文件列表。要做到这样，你可以先将该列表保存到文件中，然后再按行读取该文件。虽然你可以直接遍历ls的输出，不过这个例子是用来说明重定向。</p>
+<pre class="prettyprint linenums"><code># ls -1 /var/mail &gt; mail.txt
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013358el0mtmngtvmw0lum.png" alt="Redirect output of command tot a file" /></p>
+<p><em>将一个命令的输出重定向到文件</em></p>
+<p><strong>例2：重定向stdout和stderr到/dev/null</strong></p>
+<p>如果不想让标准输出和标准错误展示在屏幕上，我们可以把这两个文件描述符重定向到 <code>/dev/null</code>。请注意对于同样的命令，重定向是如何改变了输出。</p>
+<pre class="prettyprint linenums"><code># ls /var /tecmint
+# ls /var/ /tecmint &amp;&gt; /dev/null
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013359kaqee60etd2dmsmd.png" alt="Redirecting stdout and stderr ouput to /dev/null" /></p>
+<p><em>重定向stdout和stderr到/dev/null</em></p>
+<p><strong>例3：使用一个文件作为命令的输入</strong></p>
+<p><a href="http://www.tecmint.com/13-basic-cat-command-examples-in-linux/">cat 命令</a>的经典用法如下</p>
+<pre class="prettyprint linenums"><code># cat [file(s)]
+</code></pre>
+<p>您还可以使用正确的重定向操作符发送一个文件作为输入。</p>
+<pre class="prettyprint linenums"><code># cat &lt; mail.txt
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013359c3sl69zj6tl9quda.png" alt="Linux cat command examples" /></p>
+<p><em>cat 命令实例</em></p>
+<p><strong>例4：发送一个命令的输出作为另一个命令的输入</strong></p>
+<p>如果你有一个较大的目录或进程列表，并且想快速定位，你或许需要将列表通过管道传送给grep。</p>
+<p>接下来我们会在下面的命令中使用管道，第一个管道是查找所需的关键词，第二个管道是除去产生的 <code>grep command</code>。这个例子列举了所有与apache用户有关的进程：</p>
+<pre class="prettyprint linenums"><code># ps -ef | grep apache | grep -v grep
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013400vaaxeuq8qsglggxh.png" alt="Send output of command as input to another" /></p>
+<p><em>发送一个命令的输出作为另一个命令的输入</em></p>
+<h3 id="toc_4">归档，压缩，解包，解压文件</h3>
+<p>如果你需要传输、备份、或者通过邮件发送一组文件，你可以使用一个存档（或打包）工具，如 <a href="http://www.tecmint.com/18-tar-command-examples-in-linux/">tar</a>，通常与gzip，bzip2，或 xz 等压缩工具配合使用。</p>
+<p>您选择的压缩工具每一个都有自己不同的压缩速度和压缩率。这三种压缩工具，gzip是最古老和可以较小压缩的工具，bzip2提供经过改进的压缩，以及xz是最新的而且压缩最大。通常情况下，使用这些压缩工具压缩的文件的扩展名依次是.gz、.bz2或.xz。</p>
+<table border="1" cellspacing="0" cellpadding="4">
+<tbody>
+<tr>
+<td style="border: 1px solid #000000;" align="CENTER" bgcolor="#999999" height="24"><strong><span style="font-size: medium;">命令</span></strong></td>
+<td style="border: 1px solid #000000;" align="CENTER" bgcolor="#999999"><strong><span style="font-size: medium;">缩写</span></strong></td>
+<td style="border: 1px solid #000000;" align="CENTER" bgcolor="#999999"><strong><span style="font-size: medium;">描述</span></strong></td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;create</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">c</td>
+<td style="border: 1px solid #000000;" align="LEFT">创建一个tar归档</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;concatenate</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">A</td>
+<td style="border: 1px solid #000000;" align="LEFT">添加tar归档到另外一个归档中</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;append</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">r</td>
+<td style="border: 1px solid #000000;" align="LEFT">添加非tar归档到另外一个归档中</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;update</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">u</td>
+<td style="border: 1px solid #000000;" align="LEFT">添加比归档中的文件更新的文件</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;diff or &ndash;compare</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">d</td>
+<td style="border: 1px solid #000000;" align="LEFT">将归档中的文件和硬盘的文件进行对比</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000000;" align="LEFT" height="20"><span style="font-family: Courier New;"> &ndash;list</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">t</td>
+<td style="border: 1px solid #000000;" align="LEFT">列举一个tar压缩包的内容</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000000;" align="LEFT" height="18"><span style="font-family: Courier New;"> &ndash;extract or &ndash;get</span></td>
+<td style="border: 1px solid #000000;" align="LEFT">x</td>
+<td style="border: 1px solid #000000;" align="LEFT">从归档中提取文件</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<table border="1" cellspacing="0" cellpadding="4">
+<tbody>
+<tr>
+<td style="border: 1px solid #000001;" align="CENTER" bgcolor="#999999" height="24"><strong><span style="font-size: medium;">操作参数</span></strong></td>
+<td style="border: 1px solid #000001;" align="CENTER" bgcolor="#999999"><strong><span style="font-size: medium;">缩写</span></strong></td>
+<td style="border: 1px solid #000001;" align="CENTER" bgcolor="#999999"><strong><span style="font-size: medium;">描述</span></strong></td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;">&mdash;</span>directory dir</td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> C</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">在执行操作前更改目录</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;">&mdash;</span>same-permissions and <span style="font-family: Courier New;">&mdash;</span>same-owner</td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> p</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">分别保留权限和所有者信息</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;"> &ndash;verbose</span></td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> v</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">列举所有读取或提取的文件，如果和 --list 参数一起使用，也会显示文件的大小、所有权和时间戳</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;">&mdash;</span>exclude file</td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> &mdash;</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">从存档中排除文件。在这种情况下，文件可以是一个实际的文件或匹配模式。</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;">&mdash;</span>gzip or <span style="font-family: Courier New;">&mdash;</span>gunzip</td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> z</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">使用gzip压缩归档</td>
+</tr>
+<tr>
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;"> &ndash;bzip2</span></td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> j</span></td>
+<td style="border: 1px solid #000001;" align="LEFT" height="24">使用bzip2压缩归档</td>
+</tr>
+<tr class="alt">
+<td style="border: 1px solid #000001;" align="LEFT" height="24"><span style="font-family: Courier New;"> &ndash;xz</span></td>
+<td style="border: 1px solid #000001;" align="LEFT"><span style="font-family: Courier New;"> J</span></td>
+<td style="border: 1px solid #000001;" align="LEFT">使用xz压缩归档</td>
+</tr>
+</tbody>
+</table>
+<p><strong>例5：创建一个tar文件，然后使用三种压缩工具压缩</strong></p>
+<p>在决定使用这个还是那个工具之前，您可能想比较每个工具的压缩效率。请注意压缩小文件或几个文件，结果可能不会有太大的差异，但可能会给你看出它们的差异。</p>
+<pre class="prettyprint linenums"><code># tar cf ApacheLogs-$(date +%Y%m%d).tar /var/log/httpd/*        # Create an ordinary tarball
+# tar czf ApacheLogs-$(date +%Y%m%d).tar.gz /var/log/httpd/*    # Create a tarball and compress with gzip
+# tar cjf ApacheLogs-$(date +%Y%m%d).tar.bz2 /var/log/httpd/*   # Create a tarball and compress with bzip2
+# tar cJf ApacheLogs-$(date +%Y%m%d).tar.xz /var/log/httpd/*    # Create a tarball and compress with xz
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013402keqtllkeww2227hz.png" alt="Linux tar command examples" /></p>
+<p><em>tar 命令实例</em></p>
+<p><strong>例6：归档时同时保存原始权限和所有权</strong></p>
+<p>如果你正在从用户的主目录创建备份，你需要要存储的个人文件与原始权限和所有权，而不是通过改变它们的用户帐户或守护进程来执行备份。下面的命令可以在归档时保留文件属性。</p>
+<pre class="prettyprint linenums"><code># tar cJf ApacheLogs-$(date +%Y%m%d).tar.xz /var/log/httpd/* --same-permissions --same-owner
+</code></pre>
+<h3 id="toc_5">创建软连接和硬链接</h3>
+<p>在Linux中，有2种类型的链接文件：硬链接和软（也称为符号）链接。因为硬链接文件只是现存文件的另一个名字，使用相同的 inode 号，它指向实际的数据；而符号链接只是指向的文件名。</p>
+<p>此外，硬链接不占用磁盘上的空间，而符号链接则占用少量的空间来存储的链接本身的文本。硬链接的缺点就是要求它们必须在同一个文件系统内，因为 inode 在一个文件系统内是唯一的。而符号链接没有这个限制，它们通过文件名而不是 inode 指向其它文件或目录，所以可以跨文件系统。</p>
+<p>创建链接的基本语法看起来是相似的：</p>
+<pre class="prettyprint linenums"><code># ln TARGET LINK_NAME               #从LINK_NAME到Target的硬链接
+# ln -s TARGET LINK_NAME            #从LINK_NAME到Target的软链接
+</code></pre>
+<p><strong>例7：创建硬链接和软链接</strong></p>
+<p>没有更好的方式来形象的说明一个文件和一个指向它的硬链接或符号链接的关系，而不是创建这些链接。在下面的截图中你会看到文件和指向它的硬链接共享相同的inode，都是使用了相同的466个字节的磁盘。</p>
+<p>另一方面，在别的磁盘创建一个硬链接将占用5个字节，这并不是说你将耗尽存储容量，而是这个例子足以说明一个硬链接和软链接之间的区别。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013402rshusshsnn360an8.png" alt="Difference between a hard link and a soft link" /></p>
+<p><em>软连接和硬链接之间的不同</em></p>
+<p>在Linux系统上符号链接的典型用法是指向一个带版本的文件。假设有几个程序需要访问文件fooX.Y，但麻烦是版本经常变化（像图书馆一样）。每次版本更新时我们都需要更新指向 fooX.Y 的单一引用，而更安全、更快捷的方式是，我们可以让程序寻找名为 foo 的符号链接，它实际上指向 fooX.Y。</p>
+<p>这样的话，当你的X和Y发生变化后，你只需更新符号链接 foo 到新的目标文件，而不用跟踪每个对目标文件的使用并更新。</p>
+<h3 id="toc_6">总结</h3>
+<p>在这篇文章中，我们回顾了一些基本的文件和目录管理技能，这是每个系统管理员的工具集的一部分。请确保阅读了本系列的其它部分，并将这些主题与本教程所涵盖的内容相结合。</p>
+<p>如果你有任何问题或意见，请随时告诉我们。我们总是很高兴从读者那获取反馈.</p>
+<hr />
+<p>via: <a href="http://www.tecmint.com/file-and-directory-management-in-linux/">http://www.tecmint.com/file-and-directory-management-in-linux/</a></p>
+<p>作者：<a href="http://www.tecmint.com/author/gacanepa/">Gabriel C&aacute;nepa</a> 译者：<a href="https://github.com/xiqingongzi">xiqingongzi</a> 校对：<a href="https://github.com/wxy">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject">LCTT</a> 原创翻译，<a href="https://linux.cn/">Linux中国</a> 荣誉推出</p>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://www.tecmint.com/file-and-directory-management-in-linux/" target="_blank">http://www.tecmint.com/file-and-directory-management-in-linux/</a></span>
+    		    		<span class="y">作者： Gabriel Cánepa</span>    		<br class="clear" />
+    	    	<span class="z">译文：<a href="http://lctt.github.io/" target=_blank>LCTT</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6155-1.html" target="_blank">https://linux.cn/article-6155-1.html</a></span>
+            			<span class="y">译者： xiqingongzi</span>    		<br class="clear" />
+    	</p>
+
+  				
+</div>
+</div>
+<div class="b">
+<div class="hm">
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6155-shareweibo.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013356u0ow1qg1go5wc1d0.png.large.jpg') );" class="tsina_large"></a>
+<a href="javascript:void();" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6155-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');" class="weixin_large"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6155&amp;handlekey=favoritearticlehk_6155" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="fav_large" title="收藏"></a>
+</div>
+<div class="copyright">
+    	    		<span>本文由 LCTT 原创翻译，<a href="https://linux.cn/article-6155-1.html">Linux中国首发</a>。也想加入译者行列，为开源做一些自己的贡献么？欢迎加入 <a href="http://lctt.github.io/" target=_blank>LCTT</a>！<br />翻译工作和译文发表仅用于学习和交流目的，翻译工作遵照 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>，如果我们的工作有侵犯到您的权益，请及时联系我们。</span>
+    		    		<br class="clear" />
+    		<span style="color:red;">欢迎遵照<a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>转载，敬请在正文中标注并保留原文/译文链接和作者/译者等信息。</span>
+                		<br class="clear" />
+    	    	<span>文章仅代表作者的知识和看法，如有不同观点，请楼下排队<a href="javascript:void(0);" onclick="$('message').focus();">吐槽</a> :D</span>
+    	<br class="clear" />
+    </div>
+
+
+<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+
+<script src="https://dn-linuxcn.qbox.me/static/js/home.js?g08" type="text/javascript"></script>
+<div id="click_div"><table cellpadding="0" cellspacing="0" class="atd">
+<tr></tr>
+</table>
+<script type="text/javascript">
+function errorhandle_clickhandle(message, values) {
+if(values['id']) {
+showCreditPrompt();
+show_click(values['idtype'], values['id'], values['clickid']);
+}
+}
+</script>
+
+</div>
+
+<!--[diy=diycontentclickbottom]--><div id="diycontentclickbottom" class="area"></div><!--[/diy]-->
+
+<script type="text/javascript">
+var menudata = [{"title":"\u521b\u5efa\u3001\u5220\u9664\u3001\u590d\u5236\u548c\u79fb\u52a8\u6587\u4ef6\u53ca\u76ee\u5f55","level":3,"position":333,"child":[],"page":1},{"title":"\u8f93\u5165\u8f93\u51fa\u91cd\u5b9a\u5411\u4ee5\u53ca\u7ba1\u9053","level":3,"position":2250,"child":[{"title":"\u91cd\u5b9a\u5411\u548c\u7ba1\u9053\u7684\u4f7f\u7528\u5b9e\u4f8b","level":4,"position":6780,"child":[],"page":1}],"page":1},{"title":"\u5f52\u6863\uff0c\u538b\u7f29\uff0c\u89e3\u5305\uff0c\u89e3\u538b\u6587\u4ef6","level":3,"position":9396,"child":[],"page":1},{"title":"\u521b\u5efa\u8f6f\u8fde\u63a5\u548c\u786c\u94fe\u63a5","level":3,"position":17523,"child":[],"page":1},{"title":"\u603b\u7ed3","level":3,"position":19779,"child":[],"page":1}];
+menuAnchor(menudata);
+</script>
+<div class="o cl ptm pbm">
+<a href="home.php?mod=spacecp&amp;ac=share&amp;type=article&amp;id=6155&amp;handlekey=sharearticlehk_6155" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" title="站内分享" class="siteshare z"></a>
+<a href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6155&amp;handlekey=favoritearticlehk_6155" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite z" title="收藏"></a>
+<a href="misc.php?mod=invite&amp;action=article&amp;id=6155" id="a_invite" onclick="showWindow('invite', this.href, 'get', 0);" class="invite z" title="邀请"></a>
+				
+</div>
+<div class="pren pbm cl">
+<em>上一篇：<a href="https://linux.cn/article-6152-1.html">Linux 小技巧：Chrome 小游戏，让文字说话，计划作业，重复执行命令</a></em><em>下一篇：<a href="https://linux.cn/article-6160-1.html">新手指南： Linux 新手应该知道的 26 个命令</a></em></div>
+</div>
+</div>
+
+<!--[diy=diycontentrelatetop]--><div id="diycontentrelatetop" class="area"></div><!--[/diy]-->
+
+<!--[diy=diycontentrelate]--><div id="diycontentrelate" class="area"></div><!--[/diy]-->
+
+<div style="margin-right:15px;">
+<div id="add_comment" class="bm">
+<div class="bm_h cl">
+<h3>发表评论</h3>
+</div>
+<div class="bm_c pbn">
+<form id="cform" name="cform" action="portal.php?mod=portalcp&ac=comment" method="post" autocomplete="off">
+<div class="tedt">
+<div class="area">
+<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+</div>
+</div>
+
+<div class="mtm z"><span id="seccode_cSGwe412"></span>		
+<script type="text/javascript" reload="1">updateseccode('cSGwe412', '<sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div>', 'portal::view');</script>
+<script type="text/javascript">
+(function($){
+$("#cform").submit(function(e) {
+if ($("#checksec_none_cSGwe412").length>0) {
+alert("请输入验证码");
+return false;
+} else if ($("#checksec_error_cSGwe412").length>0) {
+alert("验证码输入错误，请重新输入");
+return false;
+} else if ($("#checksec_loading_cSGwe412").length>0) {
+alert("验证码验证中……");
+return false;
+}
+});
+})(jQuery);
+</script>
+</div>
+<input type="hidden" name="portal_referer" value="https://linux.cn/article-6155-1.html#comment">
+<input type="hidden" name="referer" value="https://linux.cn/article-6155-1.html#comment" />
+<input type="hidden" name="id" value="0" />
+<input type="hidden" name="idtype" value="" />
+<input type="hidden" name="aid" value="6155">
+<input id="reppid" type="hidden" name="reppid" value="">
+<input type="hidden" name="formhash" value="4f8870df">
+<input type="hidden" name="replysubmit" value="true">
+<input type="hidden" name="commentsubmit" value="true" />
+<p class="mtm z"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>评论</strong></button></p>
+<br class="clear" />
+</form>
+</div>
+</div>
+</div>
+<div id="comment" class="bm" style="margin-right:15px;">
+<div class="bm_h cl">
+<h3 class="z"><a name="comment"></a>最新评论</h3>
+<h3 class="y"><a href="javascript:void(0);" class="y" style="color:#C00;" onclick="$('message').focus();">我也要发表评论</a></h3>
+</div>
+<div id="comment_ul" class="bm_c"><a name="comment_anchor_35252"></a>
+<dl id="comment_35252_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/26937/" class="xi2 xw1 vm" c="1" target="_blank">mefirst_love [Internet Explorer 11.0|Windows 8.1]</a>
+<span class="xg1 xw0 vm">2015-9-24 17:23</span>
+</dt>
+<dd>
+把英文版全能翻译到这个地步，不错，辛苦了</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6155&amp;pid=35252&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_35252').innerHTML ? $('review_support_35252').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_35252">2</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(35252, '6155');">回复</a> --><a id="reply_35252" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=35252&amp;aid=6155&amp;idtype=">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_34871"></a>
+<dl id="comment_34871_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/27664/" class="xi2 xw1 vm" c="1" target="_blank">妙正灰 [Chrome 45.0|Windows 10]</a>
+<span class="xg1 xw0 vm">2015-9-6 13:45</span>
+</dt>
+<dd>
+还是这篇比较好</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6155&amp;pid=34871&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_34871').innerHTML ? $('review_support_34871').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_34871">2</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(34871, '6155');">回复</a> --><a id="reply_34871" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=34871&amp;aid=6155&amp;idtype=">回复</a> </span>
+</dd>
+</dl><div class="ptm pbm cl">
+</div>
+</div>
+</div>
+
+<!--[diy=diycontentcomment]--><div id="diycontentcomment" class="area"></div><!--[/diy]-->
+</div>
+<div class="sd pph">
+
+
+<div class="drag">
+<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
+</div>
+
+<!--jobs招聘-->
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/geh" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/17/224804fp51lp1fj4fp5rp1.jpg" height="100" width="350" border="0"></a></div></div>
+
+<!--jobs招聘-->
+
+<!--热门评论-->
+<div id="hot_comment" class="bm">
+<div class="bm_h cl">
+<h2>热点评论</h2>
+</div>
+<div class="bm_c">
+<div class="xl cl"><dl class="ptm pbm bbda cl">
+<dt class="mbm">
+<a class="xi2 xw1 vm" href="">mefirst_love [Internet Explorer 11.0|Windows 8.1]</a>
+<span class="xg1 xw0 vm">2015-9-24 17:23</span>
+</dt>
+<dd>把英文版全能翻译到这个地步，不错，辛苦了</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="forum.php?mod=misc&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6155&amp;pid=35252&amp;hash=4f8870df"  onclick="showWindow('login', this.href)">赞 <span name="review_support_rep_35252">2</span></a> 
+</span>
+</dd>
+</dl>
+<dl class="ptm pbm bbda cl">
+<dt class="mbm">
+<a class="xi2 xw1 vm" href="">妙正灰 [Chrome 45.0|Windows 10]</a>
+<span class="xg1 xw0 vm">2015-9-6 13:45</span>
+</dt>
+<dd>还是这篇比较好</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="forum.php?mod=misc&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6155&amp;pid=34871&amp;hash=4f8870df"  onclick="showWindow('login', this.href)">赞 <span name="review_support_rep_34871">2</span></a> 
+</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="experience" class="bm">
+<div class="bm_h cl">
+<h3>体验环境</h3>
+</div>
+<div class="bm_c">
+<ul><li><a href="http://linux.cn/go/7m2" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/exp_centos7.png" /></a></li>
+</ul>
+<br class="clear" />
+</div>
+</div>
+
+<div style="margin-bottom:5px;"></div>
+
+<div id="right_affix" style="width:350px;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/2s3" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/124649rz6vo2skyprmycsi.png" height="150" width="100%" border="0"></a></div></div>
+<div id="inner_nav" class="bm">
+<div class="bm_h cl">
+<h3>本文导航</h3>
+</div>
+<div class="bm_c inner_menu">
+<ul class='xl cl'><li><span class="folder">-</span><a href="article-6155-1.html#3_333">创建、删除、复制和移动文件及目录</a></li><li><span class="folder"><a href="javascript:void(0);" onclick="menuFolder(this);">-</a></span><a href="article-6155-1.html#3_2250">输入输出重定向以及管道</a></li><ul class='xl cl'><li><span class="folder">-</span><a href="article-6155-1.html#4_6780">重定向和管道的使用实例</a></li></ul><li><span class="folder">-</span><a href="article-6155-1.html#3_9396">归档，压缩，解包，解压文件</a></li><li><span class="folder">-</span><a href="article-6155-1.html#3_17523">创建软连接和硬链接</a></li><li><span class="folder">-</span><a href="article-6155-1.html#3_19779">总结</a></li></ul></div>
+</div>
+
+<div class="bm block">
+<div class="bm_h cl">
+<h3>相关阅读</h3>
+</div>
+<div class="bm_c pbn" id="related_tag">
+<ul class="xl xl2 cl bbs pbm" id="tag"><li><a href="tag-RHCSA.html">RHCSA</a></li>
+</ul>
+</div>
+<div class="bm_c xl xl1 cl" id="related_article">
+<ul><li><em>2015-9-2</em><a href="https://linux.cn/article-6133-1.html" target="_blank">RHCSA 系列（一）: 回顾基础命令及系统文档</a> </li>
+<li><em>2015-9-22</em><a href="article-6263-1-rel.html" target="_blank">RHCSA 系列（七）: 使用 ACL（访问控制列表) 和挂载 Samba/NFS 共享</a> </li>
+<li><em>2015-9-23</em><a href="article-6266-1-rel.html" target="_blank">RHCSA 系列（八）: 加固 SSH，设定主机名及启用网络服务</a> </li>
+<li><em>2015-9-24</em><a href="article-6286-1-rel.html" target="_blank">RHCSA 系列（九）: 安装、配置及加固一个 Web 和 FTP 服务器</a> </li>
+<li><em>2015-9-26</em><a href="article-6300-1-rel.html" target="_blank">RHCSA 系列（十）: Yum 包管理、Cron 自动任务计划和监控系统日志</a> </li>
+<li><em>2015-9-29</em><a href="article-6315-1-rel.html" target="_blank">RHCSA 系列（十一）: 使用 firewalld 和 iptables 来控制网络流量</a> </li>
+</ul>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+// 顶部固顶菜单高度
+affix_topmenu = 35;
+// 可见窗口的高度
+window_height = $(window).height();
+
+// 右侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+affix_rtop = $("#right_affix").offset().top - affix_topmenu;
+// 右侧固顶区的底部固顶条件，当滚动至此时，本区域以底部固顶
+affix_rbottom = $('body').height() - $('#comment').offset().top - $('#comment').height() - 2;
+// 右侧固顶区的高度
+affix_rheight = $("#right_affix").height();
+if (window_height >= affix_topmenu + affix_rheight) {
+// 可见窗口可以见到全部的右侧固顶区域时，使用顶部和底部固顶条件
+affix_roffset = {top : affix_rtop, bottom: affix_rbottom};
+} else {
+// 否则，只使用顶部固顶条件（如果也设置了底部固顶条件，或导致闪烁）
+affix_roffset = {top : affix_rtop};
+}
+
+$("#right_affix").affix({offset : affix_roffset});
+
+// 左侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+//affix_ltop = $("#add_comment").offset().top - affix_topmenu;
+//affix_loffset = {top : affix_ltop};
+
+//$("#add_comment").affix({offset : affix_loffset});
+
+// 文章内插图及注释
+
+var max_width = $("#article_content").width();
+var imgp = $("#article_content P IMG").parent("P");
+imgp.each(function(){
+// 如果有图片描述
+var desc = $(this).next("P");
+var img = $(this).children("IMG");
+if (desc.contents().length == 1 && desc.contents().first().is("em") ) {
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+} else {
+var desc_txt = img.attr("title") || img.attr("alt");
+if (desc_txt != '') {
+$(this).after("<p><em>" + desc_txt + "</em></p>");
+var desc = $(this).next("P");
+
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+}
+}
+var max_width = $("#article_content").width() - 60;
+if (img.attr("width") > max_width) {
+img.attr("width",'');
+img.attr("height",'');
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+} else if (img.width() > max_width) {
+img.css("height",parseInt(img.height() * (max_width / img.attr("width"))));
+img.css("width",max_width);
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+}
+});
+var re_sitelink = /^https?:\/\/(www.)?linux(.net)?.cn\//i;
+$("#article_content a").map(function(){
+if (re_sitelink.test(this.href)) {
+if ($(this).text() == 'Linux中国') $(this).attr('href',$(location).attr('href'));
+} else {
+$(this).addClass("ext").attr("rel","external nofollow");
+}
+});
+})
+})(jQuery);
+</script>
+<div class="drag">
+<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+
+
+</div>
+</div>
+
+
+<div class="wp mtn">
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<input type="hidden" id="portalview" value="1">
+
+<link rel="stylesheet" href="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.css?g08" type="text/css" />
+<script src="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.min.js?g08" type="text/javascript"></script>
+<script type="text/javascript">
+var sourceBaseUrl = "https://dn-linuxcn.qbox.me/static/js/tinymce/plugins/prettify";
+prettyPrint();
+</script>	</div>
+
+
+    <div id="footer">
+        <p>
+            <span>Linux.CN &copy; 2003-2015 Linux中国</span>
+            <span class="line">|</span>
+            <span>Powered by <strong>DX</strong> | 图片存储于<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a></span>
+        </p>
+        <p>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备05083684号-1</a>            京公网安备110105001595
+        </p>
+        <p>
+        <a href="//linux.cn/article-3-1.html">服务条款</a> |
+        除特别申明外，本站原创内容版权遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank">CC-BY-NC-SA 协议规定</a></p>
+        <p>
+        <a href="https://linux.cn/"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_mini.png" align="absmiddle" /></a>
+        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/cc.png" align="absmiddle" /></a>
+        </p>
+<p>
+</p>
+</div>
+
+<div id="ft" class="cl"></div>
+<div id="scrolltop">
+<span>
+<a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6155-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a>
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6155-1.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201509/06/013356u0ow1qg1go5wc1d0.png.large.jpg') );" class="tsina"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6155&amp;handlekey=favoritearticlehk_6155" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite" title="收藏"></a>
+</span>
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa" ><b>返回顶部</b></a></span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });</script>
+<div id="qrcode">
+<p>分享到微信朋友圈</p>
+<div id="canvas"></div>
+<p><em>打开微信，点击底部的“发现”，<br />
+使用“扫一扫”将网页分享至朋友圈。</em></p></div>
+</body>
+</html>

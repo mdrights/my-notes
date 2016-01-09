@@ -1,0 +1,69 @@
+How to disable WebRTC in Firefox?
+
+In short: Set "media.peerconnection.enabled" to "false" in "about:config".
+
+Explained:
+
+    Enter "about:config" in the firefox address bar and press enter.
+    Press the button "I'll be careful, I promise!"
+    Search for "media.peerconnection.enabled"
+    Double click the entry, the column "Value" should now be "false"
+    Done. Do the WebRTC leak test again.
+
+If you want to make sure every single WebRTC related setting is really disabled change these settings:
+
+    media.peerconnection.turn.disable = true
+    media.peerconnection.use_document_iceservers = false
+    media.peerconnection.video.enabled = false
+    media.peerconnection.identity.timeout = 1
+
+Now you can be 100% sure WebRTC is disabled.
+
+Firefox: Privacy Related "about:config" Tweaks
+This is a collection of privacy related about:config tweaks. We'll show you how to enhance the privacy of your Firefox browser.
+
+Preparation:
+
+    Enter "about:config" in the firefox address bar and press enter.
+    Press the button "I'll be careful, I promise!"
+    Follow the instructions below...
+
+Getting started:
+
+    privacy.trackingprotection.enabled = true
+        This is Mozilla’s new built in tracking protection.
+    geo.enabled = false
+        Disables geolocation.
+    browser.safebrowsing.enabled = false
+        Disable Google Safe Browsing and phishing protection. Security risk, but privacy improvement.
+    browser.safebrowsing.malware.enabled = false
+        Disable Google Safe Browsing malware checks. Security risk, but privacy improvement.
+    dom.event.clipboardevents.enabled = false
+        Disable that websites can get notifications if you copy, paste, or cut something from a web page, and it lets them know which part of the page had been selected.
+    network.cookie.cookieBehavior = 1
+        Disable cookies
+        0 = accept all cookies by default
+        1 = only accept from the originating site (block third party cookies)
+        2 = block all cookies by default
+    network.cookie.lifetimePolicy = 2
+        cookies are deleted at the end of the session
+        0 = Accept cookies normally
+        1 = Prompt for each cookie
+        2 = Accept for current session only
+        3 = Accept for N days
+    browser.cache.offline.enable = false
+        Disables offline cache.
+    browser.send_pings = false
+        The attribute would be useful for letting websites track visitors’ clicks. 
+    webgl.disabled = true
+        WebGL is a potential security risk. Source
+    dom.battery.enabled = false
+        Website owners can track the battery status of your device. Source
+    browser.sessionstore.max_tabs_undo = 0
+        Even with Firefox set to not remember history, your closed tabs are stored temporarily at Menu -> History -> Recently Closed Tabs.
+
+Related Information
+
+    mozillazine.org - Security and privacy-related preferences.
+    user.js Firefox hardening stuff - This is a user.js configuration file for Mozilla Firefox that's supposed to harden Firefox's settings and make it more secure.
+

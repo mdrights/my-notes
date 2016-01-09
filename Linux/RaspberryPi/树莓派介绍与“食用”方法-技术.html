@@ -1,0 +1,735 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>树莓派介绍与“食用”方法-技术 ◆ 学习|Linux.中国-开源社区</title>
+ 
+<meta name="keywords" content="树莓派介绍与“食用”方法" />
+<meta name="description" content="树莓派（Raspberry Pi）是 Raspberry Pi Foundation 推出的迷你电脑，它只有信用卡大小，但可以完成一台普通 PC 能完成的大部分工作，并且价格很便宜，是电脑爱好者的不二选择，如果你是一名 Linuxer 更应该拥有一台这样的迷你电脑。 发展 Raspberry Pi 自 2012 年发布以来，依次发布了 Raspberry Pi 1 A , Raspberry Pi 1 B ,Raspberry Pi 1 B+ ,Raspberry Pi 1 A+ ,Raspberry 2 B 五个版本，这些版本硬件上有不少变化，具体可以查阅 WikipediaRaspberry Pi，另外 Raspberry Pi 2 B 将支持 Windows 10 iot ，这对非 Linux 用户来说也是一 " />
+<meta name="copyright" content="2005-2015 Linux.cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="referrer" content="always">
+<base href="https://linux.cn/" /><link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_common.css?g08" />
+<link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_portal_view.css?g08" />
+<link href="https://dn-linuxcn.qbox.me/static/css/responsive.css?g08" rel="stylesheet">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f219a1d7ae00e99bdc4410080f3a6ef7";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">var STYLEID = '1', STATICURL = 'https://dn-linuxcn.qbox.me/static/', IMGDIR = 'https://dn-linuxcn.qbox.me/static/image/common', VERHASH = 'g08', charset = 'utf-8', discuz_uid = '0', cookiepre = 'dx_516d_', cookiedomain = '.linux.cn', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = '', creditnotice = '1|经验|,2|L币|,3|贡献|', defaultstyle = '', REPORTURL = 'aHR0cDovL2xpbnV4LmNuL2FydGljbGUtNjQwOS0xLmh0bWw/dXRtX3NvdXJjZT1pbmRleCZ1dG1fbWVkaXVtPW1vcmU=', SITEURL = 'https://linux.cn/', JSPATH = 'https://dn-linuxcn.qbox.me/static/js/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/common.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery.plugins.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/bootstrap.min.js?g08" type="text/javascript"></script>
+<link rel="alternate" type="application/rss+xml" title="Linux.中国 - 开源社区 RSS" href="/rss.xml" />
+<link rel="shortcut icon" href="https://dn-linuxcn.qbox.me/favicon.ico"  sizes="32x32" />
+<link rel="canonical" href="https://linux.cn/article-6409-1.html" /><script src="https://dn-linuxcn.qbox.me/static/js/portal.js?g08" type="text/javascript"></script>
+</head>
+
+<body id="nv_portal" class="pg_view" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<div id="toptb" class="cl">
+<div class="wp">
+<div class="z"><a href="//linux.cn/rss.xml" target="_blank" >RSS</a><a href="//linux.cn/tag/" >TAG</a><a href="//mail.qq.com/cgi-bin/bookcol?colid=20274" >邮件列表</a></div>
+<div class="y">
+<a href="//linux.cn/article-1-1.html" >关于我们/About</a><a href="//linux.cn/article-2-1.html" >广告合作/AD</a></div>
+</div>
+</div>
+
+
+<div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2 style="padding:5px 20px 5px 0;"><a href="./" title="Linux.中国 - 开源社区"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_230x80_ani2.gif" alt="Linux.中国 - 开源社区" border="0" /></a></h2><div class="y"><script src="https://dn-linuxcn.qbox.me/static/js/logging.js?g08" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="pwmd5('ls_password');return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td><label for="ls_username">帐号</label></td>
+<td><input type="text" name="username" id="ls_username" class="px vm xg1"  value="用户名/Email" onfocus="if(this.value == '用户名/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = '用户名/Email';this.className = 'px vm xg1';}" tabindex="901" /></td>
+<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label></td>
+<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password">密码</label></td>
+<td><input type="password" name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" /></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904"><em>登录</em></button></td>
+<td>&nbsp;<a href="member.php?mod=knight" class="xi2 xw1">骑士注册</a></td>
+</tr>
+</table>
+<input type="hidden" name="quickforward" value="yes" />
+<input type="hidden" name="handlekey" value="ls" />
+</div>
+
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="http://linux.cn/connect.php?mod=login&op=init&referer=portal.php%3Fmod%3Dview%26aid%3D6409%26page%3D1%26ref%3D%26utm_source%3Dindex%26utm_medium%3Dmore&statfrom=login_simple"><img src="https://dn-linuxcn.qbox.me/static/image/common/qq_login.gif" class="vm" alt="QQ登录" /></a></p>
+<p><a href="xwb.php?m=xwbAuth.login"><img src="https://dn-linuxcn.qbox.me/static/image/common/sina_login.gif" class="vm" style="padding: 2px 0;" alt="微博登录" /></a></p>
+</div>
+
+<script>
+try{
+(function(){
+var node = document.getElementById("lsform").firstChild;
+var i = 1;
+while(i < 3 && node.nodeType!=1){
+node=node.nextSibling;
+i++;
+}
+node.style.width = 'auto';
+})();
+}catch(e){}
+</script>
+</div>
+</form>
+
+<script src="https://dn-linuxcn.qbox.me/static/js/md5.js?g08" type="text/javascript" reload="1"></script>
+</div>
+<h2 style="padding:5px 20px;float:right;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/gxb" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/142644s4ff31fa3gg313my.jpg" height="80" width="100%" border="0"></a></div></div>
+</h2>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="topmenu_wrapper">
+<div id="topmenu">
+<div id="nv">
+<ul><li id="mn_N6666" ><a href="/" hidefocus="true"   style="font-weight: bold;">首页</a></li><li id="mn_P3" onmouseover="navShow('P3')"><a href="https://linux.cn/tech/" hidefocus="true"   style="color: #FFFAE5;">技术 ◆ 学习</a></li><li id="mn_P1" ><a href="https://linux.cn/news/" hidefocus="true"   style="color: #FFFAE5;">新闻 ◆ 快讯</a></li><li id="mn_P4" ><a href="https://linux.cn/talk/" hidefocus="true"   style="color: #FFFAE5;">观点 ◆ 热议</a></li><li id="mn_P8" onmouseover="navShow('P8')"><a href="https://linux.cn/share/" hidefocus="true"   style="color: #FFFAE5;">软件 ◆ 分享</a></li><li id="mn_N9be8" onmouseover="navShow('N9be8')"><a href="/forum/" hidefocus="true" target="_blank"   style="color: cyan;">论坛</a></li><li id="mn_Ne749" ><a href="/forum.php?mod=post&action=newthread&fid=119" hidefocus="true" target="_blank"   style="color: red;">投稿</a></li></ul>
+</div>
+<div id="mu" class="cl">
+<ul class="cl " id="snav_mn_P3" style="display:none;">
+<li><a href="https://linux.cn/tech/desktop/" hidefocus="true" >桌面应用</a></li><li><a href="https://linux.cn/tech/sa/" hidefocus="true" >系统运维</a></li><li><a href="https://linux.cn/tech/program/" hidefocus="true" >软件开发</a></li></ul>
+<ul class="cl " id="snav_mn_P8" style="display:none;">
+<li><a href="https://linux.cn/share/distro/" hidefocus="true" >Linux 发行版</a></li></ul>
+<ul class="cl " id="snav_mn_N9be8" style="display:none;">
+<li><a href="/thread/" hidefocus="true"  style="color: blue;">全部话题</a></li><li><a href="javascript:showWindow('nav', 'forum.php?mod=misc&action=nav&special=0');" hidefocus="true"  style="color: red;">发新帖</a></li><li><a href="javascript:void();" hidefocus="true" >|</a></li><li><a href="/forum/news/" hidefocus="true" >新闻杂谈</a></li><li><a href="/forum/sa/" hidefocus="true" >系统运维</a></li><li><a href="/forum/program/" hidefocus="true" >编程开发</a></li></ul>
+<ul class="cl " id="snav_mn_N39f5" style="display:none;">
+<li><a href="/space.php" hidefocus="true" >首页</a></li><li><a href="/home.php?mod=space&do=home" hidefocus="true" >动态</a></li><li><a href="/home.php?mod=space&do=doing" hidefocus="true" >记录</a></li><li><a href="/home.php?mod=space&do=blog" hidefocus="true" >博客</a></li><li><a href="/home.php?mod=space&do=album" hidefocus="true" >相册</a></li><li><a href="/home.php?mod=space&do=favorite" hidefocus="true" >收藏</a></li><li><a href="/home.php?mod=space&do=friend" hidefocus="true" >好友</a></li><li><a href="/home.php?mod=spacecp&ac=invite" hidefocus="true" >邀请</a></li></ul>
+<ul class="cl " id="snav_mn_userapp" style="display:none;">
+</ul>
+</div></div>
+</div>
+<div id="scbar" class="cl">
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+<input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="4f8870df" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="0" />
+<input type="hidden" name="srhlocality" value="portal::view" />
+<table id="scbar_table" cellspacing="0" cellpadding="0" style="float:right;">
+<tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="请注册后再搜索" autocomplete="off" speech /></td>
+<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+</div>
+</td>
+</tr>
+</table>
+</form>
+<span class="z titletext" style="padding: 0 10px 0 20px;">❏ <a href="http://locez.com" target="_blank">Locez</a> 新手指南：</span>
+<ul class="cl mutag z">
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-4130-1.html">下载 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-5893-1.html">安装 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6042-1.html">安装软件 »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6160-1.html">基础命令 »</a></li>
+
+</ul>
+</div>
+<br class="clear" />
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="search">全站</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar', '');
+</script>
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+$("#topmenu").affix({offset : {
+top : $("#topmenu").offset().top,
+bottom: 218}});
+$("#topmenu").width($('.hdc').width());
+$('#topmenu_wrapper').height($("#topmenu").height());
+
+$("#search_more").affix({offset : {
+top: 1000}});
+})
+})(jQuery);
+</script>
+
+</div>
+</div>
+<div id="wp" class="wp">
+<script src="https://dn-linuxcn.qbox.me/static/js/forum_viewthread.js?g08" type="text/javascript"></script>
+<script type="text/javascript">zoomstatus = parseInt(1), imagemaxwidth = '700', aimgcount = new Array();</script>
+
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/g2n" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/16/155441fnb69sbn0cvpdssb.jpg" height="120" width="100%" border="0"></a></div></div>
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="./" class="nvhm" title="首页">Linux.中国 - 开源社区</a> <em>&rsaquo;</em><a href="https://linux.cn/tech/">技术 ◆ 学习</a> <em>&rsaquo;</em>
+查看内容
+</div>
+</div>
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+<div id="ct" class="ct2 wp cl">
+<div class="mn">
+<div style="margin-bottom:5px;">
+    </div>
+<div class="vw">
+<div class="h hm">
+<h1 class="ph" id="article_title">树莓派介绍与“食用”方法 </h1>
+<p class="xg1">
+2015-10-16 10:05&nbsp;&nbsp;&nbsp;
+评论: <a href="portal.php?mod=comment&id=6409&idtype=aid" title="查看全部评论"><em id="_commentnum">2</em></a>&nbsp;收藏: <em id="_favtimes">8</em>&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://locez.com/Linux/respberry-pi/" target="_blank">http://locez.com/Linux/respberry-pi/</a></span>
+    		    		<span class="y">作者： @Locez</span>    		<br class="clear" />
+    	    	<span class="z">原创：<a href="https://linux.cn/" target=_blank>Linux中国</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6409-1.html" target="_blank">https://linux.cn/article-6409-1.html</a></span>
+            			    		<br class="clear" />
+    	</p>
+
+</div>
+
+<!--[diy=diysummarytop]--><div id="diysummarytop" class="area"></div><!--[/diy]-->
+
+
+<!--[diy=diysummarybottom]--><div id="diysummarybottom" class="area"></div><!--[/diy]-->
+
+<div class="d">
+
+<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+
+<div id="article_content"><p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/230711a38c36kbkb6to242.jpg" alt="" /></p>
+<p><ruby>树莓派<rp>（</rp><rt>Raspberry Pi</rt><rp>）</rp></ruby>是 Raspberry Pi Foundation 推出的迷你电脑，它只有信用卡大小，但可以完成一台普通 PC 能完成的大部分工作，并且价格很便宜，是电脑爱好者的不二选择，如果你是一名 Linuxer 更应该拥有一台这样的迷你电脑。</p>
+<h3 id="develop">发展</h3>
+<p>Raspberry Pi 自 2012 年发布以来，依次发布了 Raspberry Pi 1 A , Raspberry Pi 1 B ,Raspberry Pi 1 B+ ,Raspberry Pi 1 A+ ,Raspberry 2 B 五个版本，这些版本硬件上有不少变化，具体可以查阅 Wikipedia&nbsp;<a href="https://en.wikipedia.org/wiki/Raspberry_Pi" target="_blank" rel="external">Raspberry Pi</a>&nbsp;，另外 Raspberry Pi 2 B 将支持 Windows 10 iot ，这对非 Linux 用户来说也是一个福音，因为你可以完全把 Raspberry Pi 2 B 当成你的另一台 Windows PC ，详情可以查看&nbsp;<a href="http://ms-iot.github.io/content/en-US/Downloads.htm" target="_blank" rel="external">Raspberry Pi Windows 10 iot</a>。&nbsp;</p>
+<h3 id="usage">Raspberry Pi 的用途</h3>
+<p>Raspberry Pi 到底能拿来做什么呢？它的玩法多的数不清了，因为这取决于我们的创意，作为一块开发板，它给我们提供了很大的自由。</p>
+<ul>
+<li><a href="https://linux.cn/article-1402-1.html" target="_blank" rel="external">树莓派构建的超级计算机</a></li>
+<li><a href="https://linux.cn/article-4092-1.html" target="_blank" rel="external">作为家用服务器</a></li>
+<li><a href="https://linux.cn/article-1618-1.html" target="_blank" rel="external">我拿树莓派来做什么</a></li>
+<li><a href="https://linux.cn/article-681-1.html" target="_blank" rel="external">Raspberry Pi 五种有趣玩法</a></li>
+<li>微型个人电脑 （笔者也就只是当作个人微型电脑而已）</li>
+</ul>
+<p>下面是几张引用文章内的图：</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201305/31/100902rmu4rm3uemxruw55.jpg" alt="" /></p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201305/31/100904mgrbvrgafragqcfj.jpg" alt="" /></p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201311/07/230232hzveaaihvovvbbl8.jpg" alt="" /></p>
+<h3 id="op">操作系统的选择</h3>
+<p>由于 Raspberry Pi 几乎是为 Linux 而生的，所以 Raspberry Pi 的操作系统也是多样的，为此以下介绍几个操作系统。</p>
+<ul>
+<li><a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank" rel="external">Raspbian</a>&nbsp;基于 debian 的 Raspberry Pi 官方操作系统，如果是当开发板使用，最建议使用此系统</li>
+<li><a href="https://ubuntu-mate.org/raspberry-pi/" target="_blank" rel="external">Ubuntu Mate</a></li>
+<li><a href="https://developer.ubuntu.com/en/snappy/start/#snappy-raspi2" target="_blank" rel="external">Snappy Ubuntu Core</a></li>
+<li><a href="http://ms-iot.github.io/content/en-US/Downloads.htm" target="_blank" rel="external">Windows 10 Iot Core</a></li>
+<li><a href="http://openelec.tv/get-openelec" target="_blank" rel="external">OPENELEC</a></li>
+<li><a href="http://pinet.org.uk/" target="_blank" rel="external">PINET</a></li>
+<li><a href="https://www.riscosopen.org/content/downloads/raspberry-pi" target="_blank" rel="external">RISC OS</a></li>
+</ul>
+<p>以上操作系统都可以在&nbsp;<a href="https://www.raspberrypi.org/downloads/" target="_blank" rel="external">Raspberry Pi 主页</a>&nbsp;找到相关信息。</p>
+<ul>
+<li><a href="http://archlinuxarm.org/" target="_blank" rel="external">Arch Arm</a></li>
+<li><a href="https://www.gentoo.org/downloads/" target="_blank" rel="external">Gentoo Arm</a></li>
+</ul>
+<h3 id="mine">个人电脑</h3>
+<p>笔者只是将 Raspberry Pi 当成个人电脑使用而已，因此，未选择 Raspbian 而是选择了 Arch Arm。</p>
+<p>下面是我选择的配件</p>
+<ul>
+<li>Raspberry Pi 2 B</li>
+<li>8 G 闪迪内存卡</li>
+<li>USB Wi-Fi 模块（可选）</li>
+<li>亚克力外壳（可选）</li>
+<li>散热铝片或铜片</li>
+<li>电源线</li>
+<li>键盘鼠标（可选）</li>
+</ul>
+<h4 id="install">安装系统</h4>
+<p>首先参照&nbsp;<a href="http://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2" target="_blank" rel="external">Arch Arm Installation</a>&nbsp;安装系统。</p>
+<p>&nbsp;</p>
+<p><span class="line">为 SD 卡分区（用你 Linux 上的 sd 卡设备代替 sdX&nbsp;）：</span></p>
+<pre class="prettyprint linenums"><code>fdisk /dev/sdX</code></pre>
+<p><span class="line">第一步请先删除原来的分区并重新创建：</span></p>
+<ul>
+<li><span class="line">输入 o 清除所有分区。</span></li>
+<li><span class="line">输入 p 列出所有分区，此时应该没有分区。</span></li>
+<li><span class="line">输入 n ， 然后输入 p 选择主分区，<span class="number">1</span> 是第一个分区 ，输入 ENTER 确定第一个扇区，然后输入 +<span class="number">100</span>M 。</span></li>
+<li><span class="line">输入 t ， 然后输入 c 设置第一个分区类型为 W95 FAT32 (LBA)。</span></li>
+<li><span class="line">输入 n ， 然后输入 p 选择主分区, <span class="number">2</span> 是第二个分区, 直接输入 ENTER 确定默认的扇区和最后的扇区（剩下的所有容量作为第二个分区）</span></li>
+<li><span class="line">输入 w 写入分区表并退出。</span></li>
+</ul>
+<p><span class="line">创建和挂载 vfat 文件系统（用你 Linux 上的 sd 卡设备代替 sdX&nbsp;）:</span></p>
+<pre class="prettyprint linenums"><code>mkfs.vfat /dev/sdX1
+mkdir boot
+mount /dev/sdX1 boot</code></pre>
+<p><span class="line">创建个挂载 ext4 文件系统（用你 Linux 上的 sd 卡设备代替 sdX&nbsp;）:</span></p>
+<pre class="prettyprint linenums"><code>mkfs.ext4 /dev/sdX2
+mkdir root
+mount /dev/sdX2 root</code></pre>
+<p><span class="line">使用 root 用户下载和解压 根文件系统:</span></p>
+<pre class="prettyprint linenums"><code>wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+bsdtar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
+sync</code></pre>
+<p><span class="line">移动启动文件到第一分区:</span></p>
+<pre class="prettyprint linenums"><code>mv root/boot/* boot</code></pre>
+<p><span class="line">卸载挂载点:</span></p>
+<pre class="prettyprint linenums"><code>umount boot root</code></pre>
+<p><span class="line">将 SD 卡插入 Raspberry Pi ，连接以太网和 <span class="number">5</span>v 电源。</span></p>
+<h4><span class="line">使用 SSH 登录</span></h4>
+<p><span class="line">默认用户是 alarm 密码 alarm。（ssh 请先用此用户登录，再修改 ssh 配置允许 root 登录）</span></p>
+<p><span class="line">root 的默认密码是 root。</span></p>
+<p><strong>注意</strong>&nbsp;：以下用到&nbsp;<code>sudo</code>&nbsp;命令的，若你未配置&nbsp;<code>sudo</code>&nbsp;请直接用&nbsp;<code>root</code>&nbsp;用户执行。</p>
+<p>首次使用应该按如下格式&nbsp;<code>ssh</code>&nbsp;登录：</p>
+<pre class="prettyprint linenums"><code>$ ssh -p 22 alarm@地址</code></pre>
+<p>进去后使用&nbsp;<code>su</code>&nbsp;切换到&nbsp;<code>root</code>&nbsp;，并修改密码：</p>
+<pre class="prettyprint linenums"><code>$ sudo su - <br /># password</code></pre>
+<p>为了能使&nbsp;<code>root</code>&nbsp;通过&nbsp;<code>ssh</code>&nbsp;登录，编辑&nbsp;<code>/etc/ssh/sshd_config</code></p>
+<pre class="prettyprint linenums"><code>$ sudo nano /etc/ssh/sshd_config</code></pre>
+<p>将&nbsp;<code>#PermitRootLogin</code>&nbsp;这行去掉注释，并将值设置为&nbsp;<code>yes</code>&nbsp;：</p>
+<pre class="prettyprint linenums"><code>PermitRootLogin yes</code></pre>
+<h4 id="configmirrors">配置源与更新系统</h4>
+<p>编辑&nbsp;<code>/etc/pacman.d/mirrorlist</code></p>
+<pre class="prettyprint linenums"><code>$ sudo nano /etc/pacman.d/mirrorlist</code></pre>
+<p>在顶部增加以下代码，这是中科大的源</p>
+<pre class="prettyprint linenums"><code>## USTC
+Server = http://mirrors.ustc.edu.cn/archlinuxarm/armv7h/$repo</code></pre>
+<p>编辑好后按&nbsp;<code>ctrl +x</code>&nbsp;，然后按&nbsp;<code>y</code>&nbsp;保存，然后升级整个系统：</p>
+<pre class="prettyprint linenums"><code>$ sudo pacman -Syu</code></pre>
+<h4 id="desktop">桌面化 Raspberry Pi</h4>
+<p>首先安装&nbsp;<code>xorg</code></p>
+<pre class="prettyprint linenums"><code>$ sudo pacman -S xorg
+$ sudo pacman -S xorg-xinit</code></pre>
+<p>然后安装&nbsp;<code>lxqt</code>&nbsp;桌面：</p>
+<pre class="prettyprint linenums"><code>$ sudo pacman -S lxqt</code>&nbsp;</pre>
+<h4 id="vncviewer">使用 vncviewer 访问 Raspberry Pi</h4>
+<p>首先配置&nbsp;vncviewer，本机与 Raspberry Pi 都需要安装&nbsp;<code>tigervnc</code></p>
+<pre class="prettyprint linenums"><code>$ sudo pacman -S tigervnc</code></pre>
+<p>在 Raspberry Pi 中执行&nbsp;<code>vncserver</code></p>
+<pre class="prettyprint linenums"><code>$ vncserver 
+
+You will require a password to access your desktops.
+
+Password:
+Verify:
+Would you like to enter a view-only password (y/n)? n
+
+New 'ArchRaspi:1 (locez)' desktop is ArchRaspi:1
+
+Creating default startup script /home/locez/.vnc/xstartup
+Starting applications specified in /home/locez/.vnc/xstartup
+Log file is /home/locez/.vnc/ArchRaspi:1.log</code></pre>
+<p>然后编辑&nbsp;<code>~/.vnc/xstartup</code>&nbsp;,将原来的内容替换为以下内容，你也可以直接删除原文件，再新建一个同名文件：</p>
+<pre class="prettyprint linenums"><code>#!/bin/sh
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec startlxqt</code></pre>
+<p>然后杀掉 vnc 服务，并重启它：</p>
+<pre class="prettyprint linenums"><code>$ vncserver -kill :1
+Killing Xvnc process ID 400
+
+$ vncserver 
+
+New 'ArchRaspi:1 (locez)' desktop is ArchRaspi:1
+
+Starting applications specified in /home/locez/.vnc/xstartup
+Log file is /home/locez/.vnc/ArchRaspi:1.log</code></pre>
+<p>记住上面的&nbsp;<code>:1</code>&nbsp;可能根据实际情况不同，这个端口是你用&nbsp;<code>vncviewer</code>&nbsp;连接时用的端口。</p>
+<p>然后本机中执行：</p>
+<pre class="prettyprint linenums"><code>$ vncviewer address:port</code></pre>
+<p>然后输入密码就可以了</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/232811muvzziuutsrzvuz2.png" alt="小屏幕显示" width="700" height="382" /></p>
+<p>现在我们看见这个不是全屏的，但是可以在启动 vncserver 的时候增加参数，来指定分辨率：</p>
+<pre class="prettyprint linenums"><code>$ vncserver -kill :1
+$ vcnserver -geometry 1920x1000</code></pre>
+<p>这下就全屏了</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/232811u2lm290omldlel12.png" alt="全屏" width="700" height="382" /></p>
+<h3>其它用途</h3>
+<p>然后你可以在不另外配显示屏的情况下正常使用 Raspberry Pi ，将它配置成一个&nbsp;<code>samba</code>&nbsp;服务器，或者做成一个下载器，这仅仅取决于，你想将 Raspberry Pi 拿来干什么。</p>
+<p>笔者还尝试将 Raspberry Pi 直接连入手机 Wi-Fi ，把手机当成路由器使用，获取手机内网 IP 后，直接在手机上&nbsp;<code>ssh</code>&nbsp;内网登录，从而实现 Raspberry Pi 使用手机流量上网，并且不用借助路由器就可以连接 Raspberry Pi。</p>
+<p>这里笔者推荐的是&nbsp;<strong>juiceSSH</strong>&nbsp;，手机上简单实用的一款 ssh 工具。由于篇幅原因，此处不再详述如何使用手机直连 Raspberry Pi，动手能力强的同学可以参看上面我给的思路，自行折腾。</p>
+<p>后来笔者，买了键盘以后，又利用&nbsp;<code>tmux</code>&nbsp;将手机纯粹当屏幕使用。</p>
+<p>首先 手机先&nbsp;<code>ssh</code>&nbsp;登陆 Raspberry Pi，执行</p>
+<pre class="prettyprint linenums"><code>tmux
+</code></pre>
+<p>然后在看不见屏幕的情况下，使用键盘盲打输入&nbsp;<strong>用户名</strong>&nbsp;、&nbsp;<strong>密码</strong>&nbsp;进行登录，然后执行</p>
+<pre class="prettyprint linenums"><code>tmux attach</code></pre>
+<p>此时键盘与手机屏幕的输入已经是同步的，一台个人作品就此完成！</p>
+<h3 id="result">成果展示</h3>
+<p>下面几张图，是笔者在学校折腾的时候拍的：</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/232812aszabccsqyppspar.jpg" alt="" width="700" /></p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/232812yjsu5nkjub4u4d6n.jpg" alt="" width="700" /></p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/232813w8e86oazo66b5065.jpg" alt="" width="700" /></p>
+<h3 id="reference">参考资料</h3>
+<ul>
+<li><a href="https://linux.cn/" target="_blank" rel="external">Linux.中国</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Raspberry_Pi" target="_blank" rel="external">Wikipedia Raspberry Pi</a></li>
+<li><a href="https://www.raspberrypi.org/" target="_blank" rel="external">RaspberryPi</a></li>
+</ul>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://locez.com/Linux/respberry-pi/" target="_blank">http://locez.com/Linux/respberry-pi/</a></span>
+    		    		<span class="y">作者： @Locez</span>    		<br class="clear" />
+    	    	<span class="z">原创：<a href="https://linux.cn/" target=_blank>Linux中国</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6409-1.html" target="_blank">https://linux.cn/article-6409-1.html</a></span>
+            			    		<br class="clear" />
+    	</p>
+
+  				
+</div>
+</div>
+<div class="b">
+<div class="hm">
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6409-shareweibo.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/230711a38c36kbkb6to242.jpg.large.jpg') );" class="tsina_large"></a>
+<a href="javascript:void();" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6409-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');" class="weixin_large"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6409&amp;handlekey=favoritearticlehk_6409" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="fav_large" title="收藏"></a>
+</div>
+<div class="copyright">
+    	    		<span>本文由 LCTT 原创翻译，<a href="https://linux.cn/article-6409-1.html">Linux中国首发</a>。也想加入译者行列，为开源做一些自己的贡献么？欢迎加入 <a href="http://lctt.github.io/" target=_blank>LCTT</a>！<br />翻译工作和译文发表仅用于学习和交流目的，翻译工作遵照 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>，如果我们的工作有侵犯到您的权益，请及时联系我们。</span>
+    		    		<br class="clear" />
+    		<span style="color:red;">欢迎遵照<a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>转载，敬请在正文中标注并保留原文/译文链接和作者/译者等信息。</span>
+                		<br class="clear" />
+    	    	<span>文章仅代表作者的知识和看法，如有不同观点，请楼下排队<a href="javascript:void(0);" onclick="$('message').focus();">吐槽</a> :D</span>
+    	<br class="clear" />
+    </div>
+
+
+<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+
+<script src="https://dn-linuxcn.qbox.me/static/js/home.js?g08" type="text/javascript"></script>
+<div id="click_div"><table cellpadding="0" cellspacing="0" class="atd">
+<tr></tr>
+</table>
+<script type="text/javascript">
+function errorhandle_clickhandle(message, values) {
+if(values['id']) {
+showCreditPrompt();
+show_click(values['idtype'], values['id'], values['clickid']);
+}
+}
+</script>
+
+</div>
+
+<!--[diy=diycontentclickbottom]--><div id="diycontentclickbottom" class="area"></div><!--[/diy]-->
+
+<script type="text/javascript">
+var menudata = [{"title":"\u53d1\u5c55","level":3,"position":451,"child":[],"page":1},{"title":"Raspberry Pi \u7684\u7528\u9014","level":3,"position":1168,"child":[],"page":1},{"title":"\u64cd\u4f5c\u7cfb\u7edf\u7684\u9009\u62e9","level":3,"position":2333,"child":[],"page":1},{"title":"\u4e2a\u4eba\u7535\u8111","level":3,"position":3804,"child":[{"title":"\u5b89\u88c5\u7cfb\u7edf","level":4,"position":4233,"child":[],"page":1},{"title":"\u4f7f\u7528 SSH \u767b\u5f55","level":4,"position":6667,"child":[],"page":1},{"title":"\u914d\u7f6e\u6e90\u4e0e\u66f4\u65b0\u7cfb\u7edf","level":4,"position":7901,"child":[],"page":1},{"title":"\u684c\u9762\u5316 Raspberry Pi","level":4,"position":8492,"child":[],"page":1},{"title":"\u4f7f\u7528 vncviewer \u8bbf\u95ee Raspberry Pi","level":4,"position":8828,"child":[],"page":1}],"page":1},{"title":"\u5176\u5b83\u7528\u9014","level":3,"position":11051,"child":[],"page":1},{"title":"\u6210\u679c\u5c55\u793a","level":3,"position":12489,"child":[],"page":1},{"title":"\u53c2\u8003\u8d44\u6599","level":3,"position":12938,"child":[],"page":1}];
+menuAnchor(menudata);
+</script>
+<div class="o cl ptm pbm">
+<a href="home.php?mod=spacecp&amp;ac=share&amp;type=article&amp;id=6409&amp;handlekey=sharearticlehk_6409" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" title="站内分享" class="siteshare z"></a>
+<a href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6409&amp;handlekey=favoritearticlehk_6409" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite z" title="收藏"></a>
+<a href="misc.php?mod=invite&amp;action=article&amp;id=6409" id="a_invite" onclick="showWindow('invite', this.href, 'get', 0);" class="invite z" title="邀请"></a>
+				
+</div>
+<div class="pren pbm cl">
+<em>上一篇：<a href="https://linux.cn/article-6408-1.html">在 SSD 上使用 btrfs 文件系统的相关优化</a></em><em>下一篇：<a href="https://linux.cn/article-6410-1.html">pyinfo()：一个像 phpinfo 一样的 Python 脚本</a></em></div>
+</div>
+</div>
+
+<!--[diy=diycontentrelatetop]--><div id="diycontentrelatetop" class="area"></div><!--[/diy]-->
+
+<!--[diy=diycontentrelate]--><div id="diycontentrelate" class="area"></div><!--[/diy]-->
+
+<div style="margin-right:15px;">
+<div id="add_comment" class="bm">
+<div class="bm_h cl">
+<h3>发表评论</h3>
+</div>
+<div class="bm_c pbn">
+<form id="cform" name="cform" action="portal.php?mod=portalcp&ac=comment" method="post" autocomplete="off">
+<div class="tedt">
+<div class="area">
+<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+</div>
+</div>
+
+<div class="mtm z"><span id="seccode_cSGwe412"></span>		
+<script type="text/javascript" reload="1">updateseccode('cSGwe412', '<sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div>', 'portal::view');</script>
+<script type="text/javascript">
+(function($){
+$("#cform").submit(function(e) {
+if ($("#checksec_none_cSGwe412").length>0) {
+alert("请输入验证码");
+return false;
+} else if ($("#checksec_error_cSGwe412").length>0) {
+alert("验证码输入错误，请重新输入");
+return false;
+} else if ($("#checksec_loading_cSGwe412").length>0) {
+alert("验证码验证中……");
+return false;
+}
+});
+})(jQuery);
+</script>
+</div>
+<input type="hidden" name="portal_referer" value="https://linux.cn/article-6409-1.html#comment">
+<input type="hidden" name="referer" value="https://linux.cn/article-6409-1.html#comment" />
+<input type="hidden" name="id" value="0" />
+<input type="hidden" name="idtype" value="" />
+<input type="hidden" name="aid" value="6409">
+<input id="reppid" type="hidden" name="reppid" value="">
+<input type="hidden" name="formhash" value="4f8870df">
+<input type="hidden" name="replysubmit" value="true">
+<input type="hidden" name="commentsubmit" value="true" />
+<p class="mtm z"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>评论</strong></button></p>
+<br class="clear" />
+</form>
+</div>
+</div>
+</div>
+<div id="comment" class="bm" style="margin-right:15px;">
+<div class="bm_h cl">
+<h3 class="z"><a name="comment"></a>最新评论</h3>
+<h3 class="y"><a href="javascript:void(0);" class="y" style="color:#C00;" onclick="$('message').focus();">我也要发表评论</a></h3>
+</div>
+<div id="comment_ul" class="bm_c"><a name="comment_anchor_35613"></a>
+<dl id="comment_35613_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<span>来自四川成都的 Chrome 42.0|Windows 7 用户</span>
+<span class="xg1 xw0 vm">2015-10-16 23:56</span>
+</dt>
+<dd>
+我寝室的也这么搞过，，</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6409&amp;pid=35613&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_35613').innerHTML ? $('review_support_35613').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_35613">3</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(35613, '6409');">回复</a> --><a id="reply_35613" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=35613&amp;aid=6409&amp;idtype=">回复</a> </span>
+</dd>
+</dl><a name="comment_anchor_35605"></a>
+<dl id="comment_35605_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<a href="space/21767/" class="xi2 xw1 vm" c="1" target="_blank">Sephiroth [Firefox 41.0|Ubuntu]</a>
+<span class="xg1 xw0 vm">2015-10-16 13:07</span>
+</dt>
+<dd>
+那个手机貌似是魅族的魅蓝2 。。。。。</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6409&amp;pid=35605&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_35605').innerHTML ? $('review_support_35605').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_35605"></span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(35605, '6409');">回复</a> --><a id="reply_35605" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=35605&amp;aid=6409&amp;idtype=">回复</a> </span>
+</dd>
+</dl><div class="ptm pbm cl">
+</div>
+</div>
+</div>
+
+<!--[diy=diycontentcomment]--><div id="diycontentcomment" class="area"></div><!--[/diy]-->
+</div>
+<div class="sd pph">
+
+
+<div class="drag">
+<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
+</div>
+
+<!--jobs招聘-->
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/geh" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/17/224804fp51lp1fj4fp5rp1.jpg" height="100" width="350" border="0"></a></div></div>
+
+<!--jobs招聘-->
+
+<!--热门评论-->
+<div id="hot_comment" class="bm">
+<div class="bm_h cl">
+<h2>热点评论</h2>
+</div>
+<div class="bm_c">
+<div class="xl cl"><dl class="ptm pbm bbda cl">
+<dt class="mbm">
+<span>来自四川成都的 Chrome 42.0|Windows 7 用户</span>
+<span class="xg1 xw0 vm">2015-10-16 23:56</span>
+</dt>
+<dd>我寝室的也这么搞过，，</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="forum.php?mod=misc&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6409&amp;pid=35613&amp;hash=4f8870df"  onclick="showWindow('login', this.href)">赞 <span name="review_support_rep_35613">3</span></a> 
+</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div style="margin-bottom:5px;"></div>
+
+<div id="right_affix" style="width:350px;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/2s3" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/124649rz6vo2skyprmycsi.png" height="150" width="100%" border="0"></a></div></div>
+<div id="inner_nav" class="bm">
+<div class="bm_h cl">
+<h3>本文导航</h3>
+</div>
+<div class="bm_c inner_menu">
+<ul class='xl cl'><li><span class="folder">-</span><a href="article-6409-1.html#3_451">发展</a></li><li><span class="folder">-</span><a href="article-6409-1.html#3_1168">Raspberry Pi 的用途</a></li><li><span class="folder">-</span><a href="article-6409-1.html#3_2333">操作系统的选择</a></li><li><span class="folder"><a href="javascript:void(0);" onclick="menuFolder(this);">-</a></span><a href="article-6409-1.html#3_3804">个人电脑</a></li><ul class='xl cl'><li><span class="folder">-</span><a href="article-6409-1.html#4_4233">安装系统</a></li><li><span class="folder">-</span><a href="article-6409-1.html#4_6667">使用 SSH 登录</a></li><li><span class="folder">-</span><a href="article-6409-1.html#4_7901">配置源与更新系统</a></li><li><span class="folder">-</span><a href="article-6409-1.html#4_8492">桌面化 Raspberry Pi</a></li><li><span class="folder">-</span><a href="article-6409-1.html#4_8828">使用 vncviewer 访问 Raspberry Pi</a></li></ul><li><span class="folder">-</span><a href="article-6409-1.html#3_11051">其它用途</a></li><li><span class="folder">-</span><a href="article-6409-1.html#3_12489">成果展示</a></li><li><span class="folder">-</span><a href="article-6409-1.html#3_12938">参考资料</a></li></ul></div>
+</div>
+
+<div class="bm block">
+<div class="bm_h cl">
+<h3>相关阅读</h3>
+</div>
+<div class="bm_c pbn" id="related_tag">
+<ul class="xl xl2 cl bbs pbm" id="tag"><li><a href="tag-%E6%A0%91%E8%8E%93%E6%B4%BE.html">树莓派</a></li>
+</ul>
+</div>
+<div class="bm_c xl xl1 cl" id="related_article">
+<ul><li><em>2014-11-2</em><a href="article-4149-1-rel.html" target="_blank">Mozilla将移植Firefox OS到树莓派</a> </li>
+<li><em>2014-11-11</em><a href="article-4203-1-rel.html" target="_blank">树莓派 Model A+发布</a> </li>
+<li><em>2014-11-13</em><a href="article-4214-1-rel.html" target="_blank">给那些怀旧的游戏骨灰粉丝们：自制一台树莓派街机</a> </li>
+<li><em>2014-12-4</em><a href="article-4374-1-rel.html" target="_blank">如何让树莓派默认启动进入图形界面</a> </li>
+<li><em>2015-1-29</em><a href="article-4774-1-rel.html" target="_blank">送给开源好基友的最佳新年礼物</a> </li>
+<li><em>2015-2-7</em><a href="article-4842-1-rel.html" target="_blank">树莓派2上手：6倍性能+1GB内存</a> </li>
+</ul>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+// 顶部固顶菜单高度
+affix_topmenu = 35;
+// 可见窗口的高度
+window_height = $(window).height();
+
+// 右侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+affix_rtop = $("#right_affix").offset().top - affix_topmenu;
+// 右侧固顶区的底部固顶条件，当滚动至此时，本区域以底部固顶
+affix_rbottom = $('body').height() - $('#comment').offset().top - $('#comment').height() - 2;
+// 右侧固顶区的高度
+affix_rheight = $("#right_affix").height();
+if (window_height >= affix_topmenu + affix_rheight) {
+// 可见窗口可以见到全部的右侧固顶区域时，使用顶部和底部固顶条件
+affix_roffset = {top : affix_rtop, bottom: affix_rbottom};
+} else {
+// 否则，只使用顶部固顶条件（如果也设置了底部固顶条件，或导致闪烁）
+affix_roffset = {top : affix_rtop};
+}
+
+$("#right_affix").affix({offset : affix_roffset});
+
+// 左侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+//affix_ltop = $("#add_comment").offset().top - affix_topmenu;
+//affix_loffset = {top : affix_ltop};
+
+//$("#add_comment").affix({offset : affix_loffset});
+
+// 文章内插图及注释
+
+var max_width = $("#article_content").width();
+var imgp = $("#article_content P IMG").parent("P");
+imgp.each(function(){
+// 如果有图片描述
+var desc = $(this).next("P");
+var img = $(this).children("IMG");
+if (desc.contents().length == 1 && desc.contents().first().is("em") ) {
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+} else {
+var desc_txt = img.attr("title") || img.attr("alt");
+if (desc_txt != '') {
+$(this).after("<p><em>" + desc_txt + "</em></p>");
+var desc = $(this).next("P");
+
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+}
+}
+var max_width = $("#article_content").width() - 60;
+if (img.attr("width") > max_width) {
+img.attr("width",'');
+img.attr("height",'');
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+} else if (img.width() > max_width) {
+img.css("height",parseInt(img.height() * (max_width / img.attr("width"))));
+img.css("width",max_width);
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+}
+});
+var re_sitelink = /^https?:\/\/(www.)?linux(.net)?.cn\//i;
+$("#article_content a").map(function(){
+if (re_sitelink.test(this.href)) {
+if ($(this).text() == 'Linux中国') $(this).attr('href',$(location).attr('href'));
+} else {
+$(this).addClass("ext").attr("rel","external nofollow");
+}
+});
+})
+})(jQuery);
+</script>
+<div class="drag">
+<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+
+
+</div>
+</div>
+
+
+<div class="wp mtn">
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<input type="hidden" id="portalview" value="1">
+
+<link rel="stylesheet" href="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.css?g08" type="text/css" />
+<script src="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.min.js?g08" type="text/javascript"></script>
+<script type="text/javascript">
+var sourceBaseUrl = "https://dn-linuxcn.qbox.me/static/js/tinymce/plugins/prettify";
+prettyPrint();
+</script>	</div>
+
+
+    <div id="footer">
+        <p>
+            <span>Linux.CN &copy; 2003-2015 Linux中国</span>
+            <span class="line">|</span>
+            <span>Powered by <strong>DX</strong> | 图片存储于<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a></span>
+        </p>
+        <p>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备05083684号-1</a>            京公网安备110105001595
+        </p>
+        <p>
+        <a href="//linux.cn/article-3-1.html">服务条款</a> |
+        除特别申明外，本站原创内容版权遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank">CC-BY-NC-SA 协议规定</a></p>
+        <p>
+        <a href="https://linux.cn/"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_mini.png" align="absmiddle" /></a>
+        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/cc.png" align="absmiddle" /></a>
+        </p>
+<p>
+</p>
+</div>
+
+<div id="ft" class="cl"></div>
+<div id="scrolltop">
+<span>
+<a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6409-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a>
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6409-1.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201510/15/230711a38c36kbkb6to242.jpg.large.jpg') );" class="tsina"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6409&amp;handlekey=favoritearticlehk_6409" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite" title="收藏"></a>
+</span>
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa" ><b>返回顶部</b></a></span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });</script>
+<div id="qrcode">
+<p>分享到微信朋友圈</p>
+<div id="canvas"></div>
+<p><em>打开微信，点击底部的“发现”，<br />
+使用“扫一扫”将网页分享至朋友圈。</em></p></div>
+</body>
+</html>

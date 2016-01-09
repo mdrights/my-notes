@@ -1,0 +1,740 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>RHCSA 系列（四）: 编辑文本文件及分析文本-技术 ◆ 学习|Linux.中国-开源社区</title>
+ 
+<meta name="keywords" content="RHCSA 系列（四）: 编辑文本文件及分析文本" />
+<meta name="description" content="作为系统管理员的日常职责的一部分，每个系统管理员都必须处理文本文件，这包括编辑已有文件（大多可能是配置文件），或创建新的文件。有这样一个说法，假如你想在 Linux 世界中挑起一场圣战，你可以询问系统管理员们，什么是他们最喜爱的编辑器以及为什么。在这篇文章中，我们并不打算那样做，但我们将向你呈现一些技巧，这些技巧对使用两款在 RHEL 7 中最为常用的文本编辑器: nano（由于其简单和易用，特别是对于新手来说）和 vi/m（由于其自身的几个特色使得它不仅仅是一个简单的编辑器）来说都大有裨益。我确信你可以找到更多的理由来 " />
+<meta name="copyright" content="2005-2015 Linux.cn" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="referrer" content="always">
+<base href="https://linux.cn/" /><link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_common.css?g08" />
+<link rel="stylesheet" type="text/css" href="https://dn-linuxcn.qbox.me/data/cache/style_1_portal_view.css?g08" />
+<link href="https://dn-linuxcn.qbox.me/static/css/responsive.css?g08" rel="stylesheet">
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f219a1d7ae00e99bdc4410080f3a6ef7";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">var STYLEID = '1', STATICURL = 'https://dn-linuxcn.qbox.me/static/', IMGDIR = 'https://dn-linuxcn.qbox.me/static/image/common', VERHASH = 'g08', charset = 'utf-8', discuz_uid = '0', cookiepre = 'dx_516d_', cookiedomain = '.linux.cn', cookiepath = '/', showusercard = '1', attackevasive = '0', disallowfloat = '', creditnotice = '1|经验|,2|L币|,3|贡献|', defaultstyle = '', REPORTURL = 'aHR0cDovL2xpbnV4LmNuL2FydGljbGUtNjIyOS0xLmh0bWw=', SITEURL = 'https://linux.cn/', JSPATH = 'https://dn-linuxcn.qbox.me/static/js/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/common.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery.noConflict();</script>
+<script src="https://dn-linuxcn.qbox.me/static/js/jquery.plugins.js?g08" type="text/javascript"></script>
+<script src="https://dn-linuxcn.qbox.me/static/js/bootstrap.min.js?g08" type="text/javascript"></script>
+<link rel="alternate" type="application/rss+xml" title="Linux.中国 - 开源社区 RSS" href="/rss.xml" />
+<link rel="shortcut icon" href="https://dn-linuxcn.qbox.me/favicon.ico"  sizes="32x32" />
+<link rel="canonical" href="https://linux.cn/article-6229-1.html" /><script src="https://dn-linuxcn.qbox.me/static/js/portal.js?g08" type="text/javascript"></script>
+</head>
+
+<body id="nv_portal" class="pg_view" onkeydown="if(event.keyCode==27) return false;">
+<div id="append_parent"></div><div id="ajaxwaitid"></div>
+<div id="toptb" class="cl">
+<div class="wp">
+<div class="z"><a href="//linux.cn/rss.xml" target="_blank" >RSS</a><a href="//linux.cn/tag/" >TAG</a><a href="//mail.qq.com/cgi-bin/bookcol?colid=20274" >邮件列表</a></div>
+<div class="y">
+<a href="//linux.cn/article-1-1.html" >关于我们/About</a><a href="//linux.cn/article-2-1.html" >广告合作/AD</a></div>
+</div>
+</div>
+
+
+<div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2 style="padding:5px 20px 5px 0;"><a href="./" title="Linux.中国 - 开源社区"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_230x80_ani2.gif" alt="Linux.中国 - 开源社区" border="0" /></a></h2><div class="y"><script src="https://dn-linuxcn.qbox.me/static/js/logging.js?g08" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="pwmd5('ls_password');return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td><label for="ls_username">帐号</label></td>
+<td><input type="text" name="username" id="ls_username" class="px vm xg1"  value="用户名/Email" onfocus="if(this.value == '用户名/Email'){this.value = '';this.className = 'px vm';}" onblur="if(this.value == ''){this.value = '用户名/Email';this.className = 'px vm xg1';}" tabindex="901" /></td>
+<td class="fastlg_l"><label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label></td>
+<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password">密码</label></td>
+<td><input type="password" name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" /></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904"><em>登录</em></button></td>
+<td>&nbsp;<a href="member.php?mod=knight" class="xi2 xw1">骑士注册</a></td>
+</tr>
+</table>
+<input type="hidden" name="quickforward" value="yes" />
+<input type="hidden" name="handlekey" value="ls" />
+</div>
+
+<div class="fastlg_fm y" style="margin-right: 10px; padding-right: 10px">
+<p><a href="http://linux.cn/connect.php?mod=login&op=init&referer=portal.php%3Fmod%3Dview%26aid%3D6229%26page%3D1%26ref%3D&statfrom=login_simple"><img src="https://dn-linuxcn.qbox.me/static/image/common/qq_login.gif" class="vm" alt="QQ登录" /></a></p>
+<p><a href="xwb.php?m=xwbAuth.login"><img src="https://dn-linuxcn.qbox.me/static/image/common/sina_login.gif" class="vm" style="padding: 2px 0;" alt="微博登录" /></a></p>
+</div>
+
+<script>
+try{
+(function(){
+var node = document.getElementById("lsform").firstChild;
+var i = 1;
+while(i < 3 && node.nodeType!=1){
+node=node.nextSibling;
+i++;
+}
+node.style.width = 'auto';
+})();
+}catch(e){}
+</script>
+</div>
+</form>
+
+<script src="https://dn-linuxcn.qbox.me/static/js/md5.js?g08" type="text/javascript" reload="1"></script>
+</div>
+<h2 style="padding:5px 20px;float:right;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/gxj" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/174706fggg6h6axtxsh087.jpg" height="80" width="100%" border="0"></a></div></div>
+</h2>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="topmenu_wrapper">
+<div id="topmenu">
+<div id="nv">
+<ul><li id="mn_N6666" ><a href="/" hidefocus="true"   style="font-weight: bold;">首页</a></li><li id="mn_P3" onmouseover="navShow('P3')"><a href="https://linux.cn/tech/" hidefocus="true"   style="color: #FFFAE5;">技术 ◆ 学习</a></li><li id="mn_P1" ><a href="https://linux.cn/news/" hidefocus="true"   style="color: #FFFAE5;">新闻 ◆ 快讯</a></li><li id="mn_P4" ><a href="https://linux.cn/talk/" hidefocus="true"   style="color: #FFFAE5;">观点 ◆ 热议</a></li><li id="mn_P8" onmouseover="navShow('P8')"><a href="https://linux.cn/share/" hidefocus="true"   style="color: #FFFAE5;">软件 ◆ 分享</a></li><li id="mn_N9be8" onmouseover="navShow('N9be8')"><a href="/forum/" hidefocus="true" target="_blank"   style="color: cyan;">论坛</a></li><li id="mn_Ne749" ><a href="/forum.php?mod=post&action=newthread&fid=119" hidefocus="true" target="_blank"   style="color: red;">投稿</a></li></ul>
+</div>
+<div id="mu" class="cl">
+<ul class="cl " id="snav_mn_P3" style="display:none;">
+<li><a href="https://linux.cn/tech/desktop/" hidefocus="true" >桌面应用</a></li><li><a href="https://linux.cn/tech/sa/" hidefocus="true" >系统运维</a></li><li><a href="https://linux.cn/tech/program/" hidefocus="true" >软件开发</a></li></ul>
+<ul class="cl " id="snav_mn_P8" style="display:none;">
+<li><a href="https://linux.cn/share/distro/" hidefocus="true" >Linux 发行版</a></li></ul>
+<ul class="cl " id="snav_mn_N9be8" style="display:none;">
+<li><a href="/thread/" hidefocus="true"  style="color: blue;">全部话题</a></li><li><a href="javascript:showWindow('nav', 'forum.php?mod=misc&action=nav&special=0');" hidefocus="true"  style="color: red;">发新帖</a></li><li><a href="javascript:void();" hidefocus="true" >|</a></li><li><a href="/forum/news/" hidefocus="true" >新闻杂谈</a></li><li><a href="/forum/sa/" hidefocus="true" >系统运维</a></li><li><a href="/forum/program/" hidefocus="true" >编程开发</a></li></ul>
+<ul class="cl " id="snav_mn_N39f5" style="display:none;">
+<li><a href="/space.php" hidefocus="true" >首页</a></li><li><a href="/home.php?mod=space&do=home" hidefocus="true" >动态</a></li><li><a href="/home.php?mod=space&do=doing" hidefocus="true" >记录</a></li><li><a href="/home.php?mod=space&do=blog" hidefocus="true" >博客</a></li><li><a href="/home.php?mod=space&do=album" hidefocus="true" >相册</a></li><li><a href="/home.php?mod=space&do=favorite" hidefocus="true" >收藏</a></li><li><a href="/home.php?mod=space&do=friend" hidefocus="true" >好友</a></li><li><a href="/home.php?mod=spacecp&ac=invite" hidefocus="true" >邀请</a></li></ul>
+<ul class="cl " id="snav_mn_userapp" style="display:none;">
+</ul>
+</div></div>
+</div>
+<div id="scbar" class="cl">
+<form id="scbar_form" method="post" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="search.php?searchsubmit=yes" target="_blank">
+<input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="4f8870df" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="0" />
+<input type="hidden" name="srhlocality" value="portal::view" />
+<table id="scbar_table" cellspacing="0" cellpadding="0" style="float:right;">
+<tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td"><input type="text" name="srchtxt" id="scbar_txt" value="请注册后再搜索" autocomplete="off" speech /></td>
+<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+</div>
+</td>
+</tr>
+</table>
+</form>
+<span class="z titletext" style="padding: 0 10px 0 20px;">❏ <a href="http://locez.com" target="_blank">Locez</a> 新手指南：</span>
+<ul class="cl mutag z">
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-4130-1.html">下载 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-5893-1.html">安装 Linux »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6042-1.html">安装软件 »</a></li>
+<li><a class="hidefocus" hidefocus="true" href="https://linux.cn/article-6160-1.html">基础命令 »</a></li>
+
+</ul>
+</div>
+<br class="clear" />
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="search">全站</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar', '');
+</script>
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+$("#topmenu").affix({offset : {
+top : $("#topmenu").offset().top,
+bottom: 218}});
+$("#topmenu").width($('.hdc').width());
+$('#topmenu_wrapper').height($("#topmenu").height());
+
+$("#search_more").affix({offset : {
+top: 1000}});
+})
+})(jQuery);
+</script>
+
+</div>
+</div>
+<div id="wp" class="wp">
+<script src="https://dn-linuxcn.qbox.me/static/js/forum_viewthread.js?g08" type="text/javascript"></script>
+<script type="text/javascript">zoomstatus = parseInt(1), imagemaxwidth = '700', aimgcount = new Array();</script>
+
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/g2n" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/16/155441fnb69sbn0cvpdssb.jpg" height="120" width="100%" border="0"></a></div></div>
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="./" class="nvhm" title="首页">Linux.中国 - 开源社区</a> <em>&rsaquo;</em><a href="https://linux.cn/tech/">技术 ◆ 学习</a> <em>&rsaquo;</em>
+查看内容
+</div>
+</div>
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+<div id="ct" class="ct2 wp cl">
+<div class="mn">
+<div style="margin-bottom:5px;">
+    </div>
+<div class="vw">
+<div class="h hm">
+<h1 class="ph" id="article_title">RHCSA 系列（四）: 编辑文本文件及分析文本 </h1>
+<p class="xg1">
+2015-9-16 10:11&nbsp;&nbsp;&nbsp;
+评论: <a href="portal.php?mod=comment&id=6229&idtype=aid" title="查看全部评论"><em id="_commentnum">1</em></a>&nbsp;收藏: <em id="_favtimes">4</em>&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/" target="_blank">http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/</a></span>
+    		    		<span class="y">作者： Gabriel Cánepa</span>    		<br class="clear" />
+    	    	<span class="z">译文：<a href="http://lctt.github.io/" target=_blank>LCTT</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6229-1.html" target="_blank">https://linux.cn/article-6229-1.html</a></span>
+            			<span class="y">译者： FSSlc</span>    		<br class="clear" />
+    	</p>
+
+</div>
+
+<!--[diy=diysummarytop]--><div id="diysummarytop" class="area"></div><!--[/diy]-->
+
+
+<!--[diy=diysummarybottom]--><div id="diysummarybottom" class="area"></div><!--[/diy]-->
+
+<div class="d">
+
+<!--[diy=diycontenttop]--><div id="diycontenttop" class="area"></div><!--[/diy]-->
+
+<div id="article_content"><p>作为系统管理员的日常职责的一部分，每个系统管理员都必须处理文本文件，这包括编辑已有文件（大多可能是配置文件），或创建新的文件。有这样一个说法，假如你想在 Linux 世界中挑起一场圣战，你可以询问系统管理员们，什么是他们最喜爱的编辑器以及为什么。在这篇文章中，我们并不打算那样做，但我们将向你呈现一些技巧，这些技巧对使用两款在 RHEL 7 中最为常用的文本编辑器: nano（由于其简单和易用，特别是对于新手来说）和 vi/m（由于其自身的几个特色使得它不仅仅是一个简单的编辑器）来说都大有裨益。我确信你可以找到更多的理由来使用其中的一个或另一个，或许其他的一些编辑器如 emacs 或 pico。这完全取决于你自己。</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231442zmaexaxjqn7exmzn.png" alt="学习 Nano 和 vi 编辑器" /></p>
+<p><em>RHCSA: 使用 Nano 和 Vim 编辑文本文件 &ndash; Part 4</em></p>
+<h3 id="toc_1">使用 Nano 编辑器来编辑文件</h3>
+<p>要启动 nano，你可以在命令提示符下输入 <code>nano</code>，或可选地跟上一个文件名（在这种情况下，若文件存在，它将在编辑模式中被打开）。若文件不存在，或我们省略了文件名， nano 也将在编辑模式下开启，但将为我们开启一个空白屏以便开始输入：</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231442f8q5dqolq6jqwmye.png" alt="Nano 编辑器" /></p>
+<p><em>Nano 编辑器</em></p>
+<p>正如你在上一张图片中所见的那样， nano 在屏幕的底部呈现出一些可以通过指定的快捷键来触发的功能（^，即插入记号，代指 Ctrl 键)。它们中的一些是：</p>
+<ul>
+<li>Ctrl + G: 触发一个帮助菜单，带有一个关于功能和相应的描述的完整列表；</li>
+</ul>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231443h7sqt9ddauamimmj.png" alt="Nano 编辑器帮助菜单" /></p>
+<p><em>Nano 编辑器帮助菜单</em></p>
+<ul>
+<li>Ctrl + O: 保存更改到一个文件。它可以让你用一个与源文件相同或不同的名称来保存该文件，然后按 Enter 键来确认。</li>
+</ul>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231444dgk4qf4074vb9q6b.png" alt="Nano 编辑器保存更改模式" /></p>
+<p><em>Nano 编辑器的保存更改模式</em></p>
+<ul>
+<li>Ctrl + X: 离开当前文件，假如更改没有被保存，则它们将被丢弃；</li>
+<li>Ctrl + R: 通过指定一个完整的文件路径，让你选择一个文件来将该文件的内容插入到当前文件中；</li>
+</ul>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231444mfuldufe2pzyyxe8.png" alt="Nano: 插入文件内容到主文件中" /></p>
+<p><em>Nano: 插入文件内容到主文件中</em></p>
+<p>上图的操作将把 <code>/etc/passwd</code> 的内容插入到当前文件中。</p>
+<ul>
+<li>Ctrl + K: 剪切当前行；</li>
+<li>Ctrl + U: 粘贴；</li>
+<li>Ctrl + C: 取消当前的操作并返回先前的屏幕；</li>
+</ul>
+<p>为了轻松地在打开的文件中浏览， nano 提供了下面的功能：</p>
+<ul>
+<li>Ctrl + F 和 Ctrl + B 分别先前或向后移动光标；而 Ctrl + P 和 Ctrl + N 则分别向上或向下移动一行，功能与箭头键相同；</li>
+<li>Ctrl + space 和 Alt + space 分别向前或向后移动一个单词；</li>
+</ul>
+<p>最后，</p>
+<ul>
+<li>假如你想将光标移动到文档中的特定位置，使用 Ctrl + _ (下划线) 并接着输入 X,Y 将准确地带你到 第 X 行，第 Y 列。</li>
+</ul>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231444tch3efiuwpifxez2.png" alt="在 nano 中定位到具体的行，列" /></p>
+<p><em>在 nano 中定位到具体的行和列</em></p>
+<p>上面的例子将带你到当前文档的第 15 行，第 14 列。</p>
+<p>假如你可以回忆起你早期的 Linux 岁月，特别是当你刚从 Windows 迁移到 Linux 中，你就可能会同意：对于一个新手来说，使用 nano 来开始学习是最好的方式。</p>
+<h3 id="toc_2">使用 Vim 编辑器来编辑文件</h3>
+<p>Vim 是 vi 的加强版本，它是 Linux 中一个著名的文本编辑器，可在所有兼容 POSIX 的 *nix 系统中获取到，例如在 RHEL 7 中。假如你有机会并可以安装 Vim，请继续；假如不能，这篇文章中的大多数（若不是全部）的提示也应该可以正常工作。</p>
+<p>Vim 的一个出众的特点是可以在多个不同的模式中进行操作：</p>
+<ul>
+<li><ruby>命令模式<rp>（</rp><rt>Command Mode</rt><rp>）</rp></ruby>将允许你在文件中跳转和输入命令，这些命令是由一个或多个字母组成的简洁且大小写敏感的组合。假如你想重复执行某个命令特定次数，你可以在这个命令前加上需要重复的次数（这个规则只有极少数例外）。例如， <code>yy</code>（或 <code>Y</code>，yank 的缩写）可以复制整个当前行，而 <code>4yy</code>（或 <code>4Y</code>）则复制整个从当前行到接下来的 3 行(总共 4 行)。</li>
+<li>我们总是可以通过敲击 <code>Esc</code> 键来进入命令模式（无论我们正工作在哪个模式下）。</li>
+<li>在<ruby>末行模式<rp>（</rp><rt>Ex Mode</rt><rp>）</rp></ruby>中，你可以操作文件（包括保存当前文件和运行外部的程序或命令）。要进入末行模式，你必须从命令模式中（换言之，输入 <code>Esc</code> + <code>:</code>)输入一个冒号(<code>:</code>)，再直接跟上你想使用的末行模式命令的名称。</li>
+<li>对于<ruby>插入模式<rp>（</rp><rt>Insert Mode</rt><rp>）</rp></ruby>，可以输入字母 <code>i</code> 进入，然后只需要输入文字即可。大多数的击键结果都将出现在屏幕中的文本中。</li>
+</ul>
+<p>现在，让我们看看如何在 vim 中执行在上一节列举的针对 nano 的相同的操作。不要忘记敲击 Enter 键来确认 vim 命令。</p>
+<p>为了从命令行中获取 vim 的完整手册，在命令模式下键入 <code>:help</code> 并敲击 Enter 键：</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231445svvzzavunbvav5kv.png" alt="vim 编辑器帮助菜单" /></p>
+<p><em>vim 编辑器帮助菜单</em></p>
+<p>上面的部分呈现出一个内容列表，这些定义的小节则描述了 Vim 的特定话题。要浏览某一个小节，可以将光标放到它的上面，然后按 <code>Ctrl + ]</code> （闭方括号）。注意，底部的小节展示的是当前文件的内容。</p>
+<p>1、 要保存更改到文件，在命令模式中运行下面命令中的任意一个，就可以达到这个目的：</p>
+<pre class="prettyprint linenums"><code>:wq!
+:x!
+ZZ (是的，两个 ZZ,前面无需添加冒号)
+</code></pre>
+<p>2、 要离开并丢弃更改，使用 <code>:q!</code>。这个命令也将允许你离开上面描述过的帮助菜单，并返回到命令模式中的当前文件。</p>
+<p>3、 剪切 N 行：在命令模式中键入 <code>Ndd</code>。</p>
+<p>4、 复制 M 行：在命令模式中键入 <code>Myy</code>。</p>
+<p>5、 粘贴先前剪贴或复制过的行：在命令模式中按 <code>P</code>键。</p>
+<p>6、 要插入另一个文件的内容到当前文件：</p>
+<pre class="prettyprint linenums"><code>:r filename
+</code></pre>
+<p>例如，插入 <code>/etc/fstab</code> 的内容，可以这样做：</p>
+<p><a href="http://www.tecmint.com/wp-content/uploads/2015/03/Insert-Content-vi-Editor.png">在 vi 编辑器中插入文件的内容</a></p>
+<p><em>在 vi 编辑器中插入文件的内容</em></p>
+<p>7、 插入一个命令的输出到当前文档：</p>
+<pre class="prettyprint linenums"><code>:r! command
+</code></pre>
+<p>例如，要在光标所在的当前位置后面插入日期和时间：</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231446qns4zsysfv77tssf.png" alt="在 vi 编辑器中插入时间和日期" /></p>
+<p><em>在 vi 编辑器中插入时间和日期</em></p>
+<p>在另一篇我写的文章中，(<a href="http://www.tecmint.com/vi-editor-usage/">LFCS 系列（二）</a>)，我更加详细地解释了在 vim 中可用的键盘快捷键和功能。或许你可以参考那个教程来查看如何使用这个强大的文本编辑器的更深入的例子。</p>
+<h3 id="toc_3">使用 grep 和正则表达式来分析文本</h3>
+<p>到现在为止，你已经学习了如何使用 nano 或 vim 创建和编辑文件。打个比方说，假如你成为了一个文本编辑器忍者 &ndash; 那又怎样呢？ 在其他事情上，你也需要知道如何在文本中搜索正则表达式。</p>
+<p>正则表达式（也称为 "regex" 或 "regexp"） 是一种识别一个特定文本字符串或模式的方式，使得一个程序可以将这个模式和任意的文本字符串相比较。尽管利用 grep 来使用正则表达式值得用一整篇文章来描述，这里就让我们复习一些基本的知识：</p>
+<p><strong>1、 最简单的正则表达式是一个由数字和字母构成的字符串（例如，单词 "svm"） ，或者两个（在使用两个字符串时，你可以使用 <code>|</code>(或) 操作符）：</strong></p>
+<pre class="prettyprint linenums"><code># grep -Ei 'svm|vmx' /proc/cpuinfo
+</code></pre>
+<p>上面命令的输出结果中若有这两个字符串之一的出现，则标志着你的处理器支持虚拟化:</p>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231447xf5wkowee5ecwsew.png" alt="正则表达式示例" /></p>
+<p><em>正则表达式示例</em></p>
+<p><strong>2、 第二种正则表达式是一个范围列表，由方括号包裹。</strong></p>
+<p>例如， <code>c[aeiou]t</code> 匹配字符串 cat、cet、cit、cot 和 cut，而 <code>[a-z]</code> 和 <code>[0-9]</code> 则相应地匹配小写字母或十进制数字。假如你想重复正则表达式 X 次，在正则表达式的后面立即输入 <code>{X}</code>即可。</p>
+<p>例如，让我们从 <code>/etc/fstab</code> 中析出存储设备的 UUID：</p>
+<pre class="prettyprint linenums"><code># grep -Ei '[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}' -o /etc/fstab
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231448zutw1oqegs11u6uw.png" alt="在 Linux 中从一个文件中析出字符串" /></p>
+<p><em>从一个文件中析出字符串</em></p>
+<p>方括号中的第一个表达式 <code>[0-9a-f]</code> 被用来表示小写的十六进制字符，<code>{8}</code>是一个量词，暗示前面匹配的字符串应该重复的次数（在一个 UUID 中的开头序列是一个 8 个字符长的十六进制字符串）。</p>
+<p>在圆括号中，量词 <code>{4}</code>和连字符暗示下一个序列是一个 4 个字符长的十六进制字符串，接着的量词 <code>({3})</code>表示前面的表达式要重复 3 次。</p>
+<p>最后，在 UUID 中的最后一个 12 个字符长的十六进制字符串可以由 <code>[0-9a-f]{12}</code> 取得， <code>-o</code> 选项表示只打印出在 <code>/etc/fstab</code>中匹配行中的匹配的(非空)部分。</p>
+<p><strong>3、 POSIX 字符类</strong></p>
+<table border="1" cellpadding="4">
+<thead>
+<tr><th>字符类</th><th>匹配 &hellip;</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[:alnum:]</code></td>
+<td>任意字母或数字 [a-zA-Z0-9]</td>
+</tr>
+<tr>
+<td><code>[:alpha:]</code></td>
+<td>任意字母 [a-zA-Z]</td>
+</tr>
+<tr>
+<td><code>[:blank:]</code></td>
+<td>空格或制表符</td>
+</tr>
+<tr>
+<td><code>[:cntrl:]</code></td>
+<td>任意控制字符 (ASCII 码的 0 至 32)</td>
+</tr>
+<tr>
+<td><code>[:digit:]</code></td>
+<td>任意数字 [0-9]</td>
+</tr>
+<tr>
+<td><code>[:graph:]</code></td>
+<td>任意可见字符</td>
+</tr>
+<tr>
+<td><code>[:lower:]</code></td>
+<td>任意小写字母 [a-z]</td>
+</tr>
+<tr>
+<td><code>[:print:]</code></td>
+<td>任意非控制字符</td>
+</tr>
+<tr>
+<td><code>[:space:]</code></td>
+<td>任意空格</td>
+</tr>
+<tr>
+<td><code>[:punct:]</code></td>
+<td>任意标点字符</td>
+</tr>
+<tr>
+<td><code>[:upper:]</code></td>
+<td>任意大写字母 [A-Z]</td>
+</tr>
+<tr>
+<td><code>[:xdigit:]</code></td>
+<td>任意十六进制数字 [0-9a-fA-F]</td>
+</tr>
+<tr>
+<td><code>[:word:]</code></td>
+<td>任意字母，数字和下划线 [a-zA-Z0-9_]</td>
+</tr>
+</tbody>
+</table>
+<p>例如，我们可能会对查找已添加到我们系统中给真实用户的 UID 和 GID（参考&ldquo;<a href="https://linux.cn/article-6155-1.html">RHCSA 系列（二）: 如何进行文件和目录管理</a>&rdquo;来回忆起这些知识）感兴趣。那么，我们将在 <code>/etc/passwd</code> 文件中查找 4 个字符长的序列：</p>
+<pre class="prettyprint linenums"><code># grep -Ei [[:digit:]]{4} /etc/passwd
+</code></pre>
+<p><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231449tvx4ixv54xtw17g7.png" alt="在文件中查找一个字符串" /></p>
+<p><em>在文件中查找一个字符串</em></p>
+<p>上面的示例可能不是真实世界中使用正则表达式的最好案例，但它清晰地启发了我们如何使用 POSIX 字符类来使用 grep 分析文本。</p>
+<h3 id="toc_4">总结</h3>
+<p>在这篇文章中，我们已经提供了一些技巧来最大地利用针对命令行用户的两个文本编辑器 nano 和 vim，这两个工具都有相关的扩展文档可供阅读，你可以分别查询它们的官方网站(链接在下面给出)以及使用&ldquo;<a href="https://linux.cn/article-6133-1-rel.html">RHCSA 系列（一）: 回顾基础命令及系统文档</a>&rdquo;中给出的建议。</p>
+<h4 id="toc_5">参考文件链接</h4>
+<ul>
+<li><a href="http://www.nano-editor.org/">http://www.nano-editor.org/</a></li>
+<li><a href="http://www.vim.org/">http://www.vim.org/</a></li>
+</ul>
+<hr />
+<p>via: <a href="http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/">http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/</a></p>
+<p>作者：<a href="http://www.tecmint.com/author/gacanepa/">Gabriel C&aacute;nepa</a> 译者：<a href="https://github.com/FSSlc">FSSlc</a> 校对：<a href="https://github.com/wxy">wxy</a></p>
+<p>本文由 <a href="https://github.com/LCTT/TranslateProject">LCTT</a> 原创翻译，<a href="https://linux.cn/">Linux中国</a> 荣誉推出</p>
+<p class="copyright">
+    	 
+    		    			    			<span class="z">原文：<a href="http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/" target="_blank">http://www.tecmint.com/rhcsa-exam-how-to-use-nano-vi-editors/</a></span>
+    		    		<span class="y">作者： Gabriel Cánepa</span>    		<br class="clear" />
+    	    	<span class="z">译文：<a href="http://lctt.github.io/" target=_blank>LCTT</a>&nbsp;&nbsp;<a href="https://linux.cn/article-6229-1.html" target="_blank">https://linux.cn/article-6229-1.html</a></span>
+            			<span class="y">译者： FSSlc</span>    		<br class="clear" />
+    	</p>
+
+  				
+</div>
+</div>
+<div class="b">
+<div class="hm">
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6229-shareweibo.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231442zmaexaxjqn7exmzn.png.large.jpg') );" class="tsina_large"></a>
+<a href="javascript:void();" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6229-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');" class="weixin_large"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6229&amp;handlekey=favoritearticlehk_6229" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="fav_large" title="收藏"></a>
+</div>
+<div class="copyright">
+    	    		<span>本文由 LCTT 原创翻译，<a href="https://linux.cn/article-6229-1.html">Linux中国首发</a>。也想加入译者行列，为开源做一些自己的贡献么？欢迎加入 <a href="http://lctt.github.io/" target=_blank>LCTT</a>！<br />翻译工作和译文发表仅用于学习和交流目的，翻译工作遵照 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>，如果我们的工作有侵犯到您的权益，请及时联系我们。</span>
+    		    		<br class="clear" />
+    		<span style="color:red;">欢迎遵照<a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target=_blank>CC-BY-NC-SA 协议规定</a>转载，敬请在正文中标注并保留原文/译文链接和作者/译者等信息。</span>
+                		<br class="clear" />
+    	    	<span>文章仅代表作者的知识和看法，如有不同观点，请楼下排队<a href="javascript:void(0);" onclick="$('message').focus();">吐槽</a> :D</span>
+    	<br class="clear" />
+    </div>
+
+
+<!--[diy=diycontentbottom]--><div id="diycontentbottom" class="area"></div><!--[/diy]-->
+
+<script src="https://dn-linuxcn.qbox.me/static/js/home.js?g08" type="text/javascript"></script>
+<div id="click_div"><table cellpadding="0" cellspacing="0" class="atd">
+<tr></tr>
+</table>
+<script type="text/javascript">
+function errorhandle_clickhandle(message, values) {
+if(values['id']) {
+showCreditPrompt();
+show_click(values['idtype'], values['id'], values['clickid']);
+}
+}
+</script>
+
+</div>
+
+<!--[diy=diycontentclickbottom]--><div id="diycontentclickbottom" class="area"></div><!--[/diy]-->
+
+<script type="text/javascript">
+var menudata = [{"title":"\u4f7f\u7528 Nano \u7f16\u8f91\u5668\u6765\u7f16\u8f91\u6587\u4ef6","level":3,"position":1072,"child":[],"page":1},{"title":"\u4f7f\u7528 Vim \u7f16\u8f91\u5668\u6765\u7f16\u8f91\u6587\u4ef6","level":3,"position":4206,"child":[],"page":1},{"title":"\u4f7f\u7528 grep \u548c\u6b63\u5219\u8868\u8fbe\u5f0f\u6765\u5206\u6790\u6587\u672c","level":3,"position":8517,"child":[],"page":1},{"title":"\u603b\u7ed3","level":3,"position":13401,"child":[{"title":"\u53c2\u8003\u6587\u4ef6\u94fe\u63a5","level":4,"position":13851,"child":[],"page":1}],"page":1}];
+menuAnchor(menudata);
+</script>
+<div class="o cl ptm pbm">
+<a href="home.php?mod=spacecp&amp;ac=share&amp;type=article&amp;id=6229&amp;handlekey=sharearticlehk_6229" id="a_share" onclick="showWindow(this.id, this.href, 'get', 0);" title="站内分享" class="siteshare z"></a>
+<a href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6229&amp;handlekey=favoritearticlehk_6229" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite z" title="收藏"></a>
+<a href="misc.php?mod=invite&amp;action=article&amp;id=6229" id="a_invite" onclick="showWindow('invite', this.href, 'get', 0);" class="invite z" title="邀请"></a>
+				
+</div>
+<div class="pren pbm cl">
+<em>上一篇：<a href="https://linux.cn/article-6227-1.html">你需要了解的 Chrome 45 的改变</a></em><em>下一篇：<a href="https://linux.cn/article-6240-1.html">Linux 有问必答：如何在 Linux 中统计一个进程的线程数</a></em></div>
+</div>
+</div>
+
+<!--[diy=diycontentrelatetop]--><div id="diycontentrelatetop" class="area"></div><!--[/diy]-->
+
+<!--[diy=diycontentrelate]--><div id="diycontentrelate" class="area"></div><!--[/diy]-->
+
+<div style="margin-right:15px;">
+<div id="add_comment" class="bm">
+<div class="bm_h cl">
+<h3>发表评论</h3>
+</div>
+<div class="bm_c pbn">
+<form id="cform" name="cform" action="portal.php?mod=portalcp&ac=comment" method="post" autocomplete="off">
+<div class="tedt">
+<div class="area">
+<textarea name="message" rows="3" class="pt" id="message" onkeydown="ctrlEnter(event, 'commentsubmit_btn');"></textarea>
+</div>
+</div>
+
+<div class="mtm z"><span id="seccode_cSGwe412"></span>		
+<script type="text/javascript" reload="1">updateseccode('cSGwe412', '<sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div>', 'portal::view');</script>
+<script type="text/javascript">
+(function($){
+$("#cform").submit(function(e) {
+if ($("#checksec_none_cSGwe412").length>0) {
+alert("请输入验证码");
+return false;
+} else if ($("#checksec_error_cSGwe412").length>0) {
+alert("验证码输入错误，请重新输入");
+return false;
+} else if ($("#checksec_loading_cSGwe412").length>0) {
+alert("验证码验证中……");
+return false;
+}
+});
+})(jQuery);
+</script>
+</div>
+<input type="hidden" name="portal_referer" value="https://linux.cn/article-6229-1.html#comment">
+<input type="hidden" name="referer" value="https://linux.cn/article-6229-1.html#comment" />
+<input type="hidden" name="id" value="0" />
+<input type="hidden" name="idtype" value="" />
+<input type="hidden" name="aid" value="6229">
+<input id="reppid" type="hidden" name="reppid" value="">
+<input type="hidden" name="formhash" value="4f8870df">
+<input type="hidden" name="replysubmit" value="true">
+<input type="hidden" name="commentsubmit" value="true" />
+<p class="mtm z"><button type="submit" name="commentsubmit_btn" id="commentsubmit_btn" value="true" class="pn"><strong>评论</strong></button></p>
+<br class="clear" />
+</form>
+</div>
+</div>
+</div>
+<div id="comment" class="bm" style="margin-right:15px;">
+<div class="bm_h cl">
+<h3 class="z"><a name="comment"></a>最新评论</h3>
+<h3 class="y"><a href="javascript:void(0);" class="y" style="color:#C00;" onclick="$('message').focus();">我也要发表评论</a></h3>
+</div>
+<div id="comment_ul" class="bm_c"><a name="comment_anchor_35092"></a>
+<dl id="comment_35092_li" class="ptm pbm bbda cl">
+<dt class="mbm">
+<span>来自上海的 QQ Browser 9.1|Windows 7 用户</span>
+<span class="xg1 xw0 vm">2015-9-17 10:16</span>
+</dt>
+<dd>
+圣战、、、、</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="portal.php?mod=review&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6229&amp;pid=35092&amp;hash=4f8870df" onclick="ajaxmenu(this, 3000, 0, 0, '43', '');return false;" onmouseover="this.title = ($('review_support_35092').innerHTML ? $('review_support_35092').innerHTML : 0) + ' 人 赞'">赞 <span id="review_support_35092">6</span></a> 
+<!--<a href="javascript:;" onclick="portal_comment_reppost(35092, '6229');">回复</a> --><a id="reply_35092" onclick="showWindow('comment', this.href, 'get', 0);" href="portal.php?mod=portalcp&amp;ac=comment&amp;op=reply&amp;cid=35092&amp;aid=6229&amp;idtype=">回复</a> </span>
+</dd>
+</dl><div class="ptm pbm cl">
+</div>
+</div>
+</div>
+
+<!--[diy=diycontentcomment]--><div id="diycontentcomment" class="area"></div><!--[/diy]-->
+</div>
+<div class="sd pph">
+
+
+<div class="drag">
+<!--[diy=diyrighttop]--><div id="diyrighttop" class="area"></div><!--[/diy]-->
+</div>
+
+<!--jobs招聘-->
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/geh" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201510/17/224804fp51lp1fj4fp5rp1.jpg" height="100" width="350" border="0"></a></div></div>
+
+<!--jobs招聘-->
+
+<!--热门评论-->
+<div id="hot_comment" class="bm">
+<div class="bm_h cl">
+<h2>热点评论</h2>
+</div>
+<div class="bm_c">
+<div class="xl cl"><dl class="ptm pbm bbda cl">
+<dt class="mbm">
+<span>来自上海的 QQ Browser 9.1|Windows 7 用户</span>
+<span class="xg1 xw0 vm">2015-9-17 10:16</span>
+</dt>
+<dd>圣战、、、、</dd>
+<dd>
+<span class="y xw0 xi2 opt">
+<a class="replyadd" href="forum.php?mod=misc&amp;action=postreview&amp;do=support&amp;idtype=aid&amp;tid=6229&amp;pid=35092&amp;hash=4f8870df"  onclick="showWindow('login', this.href)">赞 <span name="review_support_rep_35092">6</span></a> 
+</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="experience" class="bm">
+<div class="bm_h cl">
+<h3>体验环境</h3>
+</div>
+<div class="bm_c">
+<ul><li><a href="http://linux.cn/go/7m2" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/exp_centos7.png" /></a></li>
+</ul>
+<br class="clear" />
+</div>
+</div>
+
+<div style="margin-bottom:5px;"></div>
+
+<div id="right_affix" style="width:350px;">
+<div style="margin-bottom:5px;">
+    <div><a href="http://linux.cn/go/2s3" target="_blank"><img src="https://dn-linuxcn.qbox.me/data/attachment/album/201509/28/124649rz6vo2skyprmycsi.png" height="150" width="100%" border="0"></a></div></div>
+<div id="inner_nav" class="bm">
+<div class="bm_h cl">
+<h3>本文导航</h3>
+</div>
+<div class="bm_c inner_menu">
+<ul class='xl cl'><li><span class="folder">-</span><a href="article-6229-1.html#3_1072">使用 Nano 编辑器来编辑文件</a></li><li><span class="folder">-</span><a href="article-6229-1.html#3_4206">使用 Vim 编辑器来编辑文件</a></li><li><span class="folder">-</span><a href="article-6229-1.html#3_8517">使用 grep 和正则表达式来分析文本</a></li><li><span class="folder"><a href="javascript:void(0);" onclick="menuFolder(this);">-</a></span><a href="article-6229-1.html#3_13401">总结</a></li><ul class='xl cl'><li><span class="folder">-</span><a href="article-6229-1.html#4_13851">参考文件链接</a></li></ul></ul></div>
+</div>
+
+<div class="bm block">
+<div class="bm_h cl">
+<h3>相关阅读</h3>
+</div>
+<div class="bm_c pbn" id="related_tag">
+<ul class="xl xl2 cl bbs pbm" id="tag"><li><a href="tag-RHCSA.html">RHCSA</a></li>
+</ul>
+</div>
+<div class="bm_c xl xl1 cl" id="related_article">
+<ul><li><em>2015-9-10</em><a href="https://linux.cn/article-6187-1.html" target="_blank">RHCSA 系列（三）: 如何管理 RHEL7 的用户和组</a> </li>
+<li><em>2015-9-18</em><a href="https://linux.cn/article-6249-1.html" target="_blank">RHCSA 系列（五）: RHEL7 中的进程管理：开机，关机</a> </li>
+<li><em>2015-9-23</em><a href="article-6266-1-rel.html" target="_blank">RHCSA 系列（八）: 加固 SSH，设定主机名及启用网络服务</a> </li>
+<li><em>2015-9-24</em><a href="article-6286-1-rel.html" target="_blank">RHCSA 系列（九）: 安装、配置及加固一个 Web 和 FTP 服务器</a> </li>
+<li><em>2015-9-26</em><a href="article-6300-1-rel.html" target="_blank">RHCSA 系列（十）: Yum 包管理、Cron 自动任务计划和监控系统日志</a> </li>
+<li><em>2015-9-29</em><a href="article-6315-1-rel.html" target="_blank">RHCSA 系列（十一）: 使用 firewalld 和 iptables 来控制网络流量</a> </li>
+</ul>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+(function($){
+$(window).load(function() {
+// 顶部固顶菜单高度
+affix_topmenu = 35;
+// 可见窗口的高度
+window_height = $(window).height();
+
+// 右侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+affix_rtop = $("#right_affix").offset().top - affix_topmenu;
+// 右侧固顶区的底部固顶条件，当滚动至此时，本区域以底部固顶
+affix_rbottom = $('body').height() - $('#comment').offset().top - $('#comment').height() - 2;
+// 右侧固顶区的高度
+affix_rheight = $("#right_affix").height();
+if (window_height >= affix_topmenu + affix_rheight) {
+// 可见窗口可以见到全部的右侧固顶区域时，使用顶部和底部固顶条件
+affix_roffset = {top : affix_rtop, bottom: affix_rbottom};
+} else {
+// 否则，只使用顶部固顶条件（如果也设置了底部固顶条件，或导致闪烁）
+affix_roffset = {top : affix_rtop};
+}
+
+$("#right_affix").affix({offset : affix_roffset});
+
+// 左侧固顶区的顶部固顶条件，当滚动至此时，本区域以顶部固顶
+//affix_ltop = $("#add_comment").offset().top - affix_topmenu;
+//affix_loffset = {top : affix_ltop};
+
+//$("#add_comment").affix({offset : affix_loffset});
+
+// 文章内插图及注释
+
+var max_width = $("#article_content").width();
+var imgp = $("#article_content P IMG").parent("P");
+imgp.each(function(){
+// 如果有图片描述
+var desc = $(this).next("P");
+var img = $(this).children("IMG");
+if (desc.contents().length == 1 && desc.contents().first().is("em") ) {
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+} else {
+var desc_txt = img.attr("title") || img.attr("alt");
+if (desc_txt != '') {
+$(this).after("<p><em>" + desc_txt + "</em></p>");
+var desc = $(this).next("P");
+
+  					$(this).addClass("article_img");
+desc.addClass("article_img_desc");
+}
+}
+var max_width = $("#article_content").width() - 60;
+if (img.attr("width") > max_width) {
+img.attr("width",'');
+img.attr("height",'');
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+} else if (img.width() > max_width) {
+img.css("height",parseInt(img.height() * (max_width / img.attr("width"))));
+img.css("width",max_width);
+img.css("cursor","pointer");
+img.click(function(){window.open(img.attr("src"));});
+}
+});
+var re_sitelink = /^https?:\/\/(www.)?linux(.net)?.cn\//i;
+$("#article_content a").map(function(){
+if (re_sitelink.test(this.href)) {
+if ($(this).text() == 'Linux中国') $(this).attr('href',$(location).attr('href'));
+} else {
+$(this).addClass("ext").attr("rel","external nofollow");
+}
+});
+})
+})(jQuery);
+</script>
+<div class="drag">
+<!--[diy=diy2]--><div id="diy2" class="area"></div><!--[/diy]-->
+</div>
+
+
+</div>
+</div>
+
+
+<div class="wp mtn">
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<input type="hidden" id="portalview" value="1">
+
+<link rel="stylesheet" href="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.css?g08" type="text/css" />
+<script src="https://dn-linuxcn.qbox.me/static/js/prettify/prettify.min.js?g08" type="text/javascript"></script>
+<script type="text/javascript">
+var sourceBaseUrl = "https://dn-linuxcn.qbox.me/static/js/tinymce/plugins/prettify";
+prettyPrint();
+</script>	</div>
+
+
+    <div id="footer">
+        <p>
+            <span>Linux.CN &copy; 2003-2015 Linux中国</span>
+            <span class="line">|</span>
+            <span>Powered by <strong>DX</strong> | 图片存储于<a href="http://www.qiniu.com/" target="_blank">七牛云存储</a></span>
+        </p>
+        <p>
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">京ICP备05083684号-1</a>            京公网安备110105001595
+        </p>
+        <p>
+        <a href="//linux.cn/article-3-1.html">服务条款</a> |
+        除特别申明外，本站原创内容版权遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank">CC-BY-NC-SA 协议规定</a></p>
+        <p>
+        <a href="https://linux.cn/"><img src="https://dn-linuxcn.qbox.me/static/image/common/linuxcn_logo_mini.png" align="absmiddle" /></a>
+        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><img src="https://dn-linuxcn.qbox.me/static/image/common/cc.png" align="absmiddle" /></a>
+        </p>
+<p>
+</p>
+</div>
+
+<div id="ft" class="cl"></div>
+<div id="scrolltop">
+<span>
+<a href="javascript:void();" class="wxicon" onmouseover="show_qrcode(event,'#qrcode', SITEURL + 'article-6229-1-wx.html');" onmouseout="show_qrcode(event,'#qrcode','');"></a>
+<a title="分享到新浪微博" href="javascript:void( share_tsina(SITEURL + 'article-6229-1.html','article_title','article_content','https://dn-linuxcn.qbox.me/data/attachment/album/201509/15/231442zmaexaxjqn7exmzn.png.large.jpg') );" class="tsina"></a>
+<a title="收藏" href="home.php?mod=spacecp&amp;ac=favorite&amp;type=article&amp;id=6229&amp;handlekey=favoritearticlehk_6229" id="a_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" class="favorite" title="收藏"></a>
+</span>
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa" ><b>返回顶部</b></a></span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });</script>
+<div id="qrcode">
+<p>分享到微信朋友圈</p>
+<div id="canvas"></div>
+<p><em>打开微信，点击底部的“发现”，<br />
+使用“扫一扫”将网页分享至朋友圈。</em></p></div>
+</body>
+</html>

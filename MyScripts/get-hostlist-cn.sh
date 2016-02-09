@@ -9,6 +9,12 @@ TMP2="/tmp/get-hostlist-$(date +%Y%m%d).txt"
 CONFIGFILE="/etc/dnsmasq.d/mal-hostlist-$(date +%Y%m%d).conf"
 TXT="/etc/dnsmasq.d/domain-block-manual.txt"
 
+if [ "$UID" != 0 ]; then
+        echo "You must be root!"
+        exit
+fi
+
+
 /usr/bin/wget -O $TMP1 http://dn-mwsl-hosts.qbox.me/hosts.txt
 
 [ ! -s $TMP1 ] && echo "$TMP1 is empty. Please re-download." && exit
@@ -24,11 +30,15 @@ while read line; do
         echo "address=${ADDRESS}" >> $CONFIGFILE 
 done < $TMP2
 
-head $CONFIGFILE
-tail $CONFIGFILE
+TITLE=$(read line < $TMP1 && echo ${line})
+echo "Updated successfully: $TITLE"
 
 [ -e $TXT ] && cat $TXT >> $CONFIGFILE
+echo "A manual list founded and it's been added."
 
-# rm $TMP1
-# /etc/init.d/dnsmasq restart
+tail $CONFIGFILE
+
+rm $TMP1
+/etc/init.d/dnsmasq restart
+
 exit

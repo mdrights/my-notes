@@ -39,6 +39,6 @@ echo "A manual list founded and it's been added."
 tail $CONFIGFILE
 
 rm $TMP1
-/etc/init.d/dnsmasq restart
+# /etc/init.d/dnsmasq restart
 
 exit

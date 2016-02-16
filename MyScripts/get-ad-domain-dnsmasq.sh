@@ -6,7 +6,8 @@ CONFIGFILE=/etc/dnsmasq.d/ad-list.$(date +%Y%m%d).conf
 LISTURL="http://pgl.yoyo.org/adservers/serverlist.php?hostformat=dnsmasq&showintro=0"
 TMPFILE="/tmp/ad-list.$(date +%Y%m%d).txt"
 TXT="/etc/dnsmasq.d/domain-block-manual.txt"
-PRIV_DATE=$(date +%Y%m%d) - 1
+
+let PRIV_DATE=$(date +%Y%m%d)-1
 PRIV_FILE=/etc/dnsmasq.d/ad-list.$PRIV_DATE.conf
 
 

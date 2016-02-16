@@ -8,7 +8,8 @@ TMP1="/tmp/temp1.txt"
 TMP2="/tmp/get-hostlist-$(date +%Y%m%d).txt"
 CONFIGFILE="/etc/dnsmasq.d/mal-hostlist-$(date +%Y%m%d).conf"
 TXT="/etc/dnsmasq.d/domain-block-manual.txt"
-PRIV_DATE="$(date +%Y%m%d) - 7"
+
+let PRIV_DATE=$(date +%Y%m%d)-7
 PRIV_FILE="/etc/dnsmasq.d/mal-hostlist-$PRIV_DATE.conf"
 
 if [ "$UID" != 0 ]; then

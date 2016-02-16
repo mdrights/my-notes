@@ -6,11 +6,19 @@ CONFIGFILE=/etc/dnsmasq.d/ad-list.$(date +%Y%m%d).conf
 LISTURL="http://pgl.yoyo.org/adservers/serverlist.php?hostformat=dnsmasq&showintro=0"
 TMPFILE="/tmp/ad-list.$(date +%Y%m%d).txt"
 TXT="/etc/dnsmasq.d/domain-block-manual.txt"
+PRIV_DATE=$(date +%Y%m%d) - 1
+PRIV_FILE=/etc/dnsmasq.d/ad-list.$PRIV_DATE.conf
+
 
 if [ "$UID" != 0 ]; then
 	echo "You must be root!"
 	exit
 fi
+
+if [ -f $PRIV_FILE ]; then
+	rm $PRIV_FILE
+fi
+
 
 /usr/bin/wget -O $TMPFILE $LISTURL
 
@@ -27,6 +35,10 @@ sed -e "s/#.*//" \
 [ -e $TXT ] && cat $TXT >> $CONFIGFILE
 echo "A manual list founded and it's been added."
 
+rm $TMPFILE
+echo "done!"
+
 /etc/init.d/dnsmasq restart
 
+echo
 exit

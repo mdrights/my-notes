@@ -1,10 +1,16 @@
 #!/bin/bash
 # My script for spotting those hosts brutally attacking my VPS, intervally.
+# I am tring to improve this script with more functions.
+# On Feb 16, 2016.
 
 
 DIR="/var/www"
 TXT="who-attacks-me.html"
 HOST=$(hostname)
+
+if [ -f $DIR/$TXT ]; then
+	mv $DIR/$TXT $HOME/attack-ip-archive-$(date).txt
+fi
 
 echo "<html>
 <head>
@@ -18,7 +24,7 @@ $HOST
 </h2>
 <br />
 <h5>
-" >> $DIR/$TXT
+" > $DIR/$TXT
 
 # egrep -a -o '(ssh)(.*)(Invalid)(.*)([0-9]{1,3}[\.]){3}[0-9]{1,3}' /var/log/auth.log >> $DIR/$TXT 
 
@@ -41,6 +47,7 @@ echo "
 " >> $DIR/$TXT
 
 echo "done!"
+rm $IP
 echo
 
 exit

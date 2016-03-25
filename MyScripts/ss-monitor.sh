@@ -6,6 +6,7 @@ if [ $UID != 0 ];then
 	exit 0
 fi
 
+
 Filein=/tmp/SS-in.txt
 Fileout=/tmp/SS-out.txt
 Result=/home/linus/SS-Result.txt
@@ -13,18 +14,25 @@ CurMonth=`date +%b`
 CurDay=`date +%d`
 
 
+echo "Your host's listening ports."
+ss -tulp > $Result
+echo >> $Result
+echo "The memory usage." >> $Result
+free -h >> $Result
+echo >> $Result
+
 # Filter and writing the Incoming IPs within today.
 
 grep 'SS-in' /var/log/messages | grep "$CurMonth $CurDay" > $Filein
 
-echo "`date`, `hostname`." > $Result
+echo "`date`, `hostname`." >> $Result
 echo "Shadowsocks Incoming IPs:" >> $Result
 echo >> $Result
 
 /usr/bin/awk '{print $1$2; print $11}' $Filein >> $Result
 
 echo >> $Result
-echo "------------------------------------------------------------" >> $Result
+echo "---------------------------------------" >> $Result
 
 # Filter and writing the Destination IPs within today.
 

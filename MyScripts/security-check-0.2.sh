@@ -16,12 +16,26 @@ echo "0.0 Back up first!"
 cp /etc/ssh/sshd_config /root/sshd_config
 cp /etc/ssh/ssh_config /root/ssh_config
 
+# 0.1 Install some software.
+echo "0.1 Install some software."
+apt-get update
+apt-get upgrade 
+apt-get install wget git iftop htop python python-pip
+
+echo "Install Shadowsocks."
+pip install shadowsocks
+
+
 #1 (in which Password settings were ignored.)
 echo "1 apt-get checking ..."
 apt-get upgrade -s | grep -i security
 
 #2 ssh
-echo "2 ssh setting."
+echo "2 openSSH setting."
+
+echo "Do the SSH setting? (y or n)"
+read c
+if [ "$c" == "y" ];then
 
 echo "HashKnownHosts yes
 Protocol 2
@@ -31,25 +45,29 @@ PermitEmptyPasswords no
 MaxAuthTries 5
 " >> /etc/ssh/sshd_config
 
-echo "Have you upload your ssh key already? -If yes, press y."
-read a
-if [ "$a" == "y" ];then
+	echo "Have you upload your ssh key already? -If yes, press y."
+	read a
+	if [ "$a" == "y" ];then
 	echo "
 	PubkeyAuthentication yes
 	PasswordAuthentication no
 	" >> /etc/ssh/sshd_config
-else
+	else
 	echo "Still using password Authentication."
-fi
+	fi
 
-echo "Have you create a normal user for yourself yet? -If yes, press y."
-read b
-if [ "$b" == "y" ];then
+	echo "Have you create a normal user for yourself yet (in order to forbid root login)? -If yes, press y."
+	read b
+	if [ "$b" == "y" ];then
 	echo "Forbiding root login..."
 	echo "PermitRootLogin no" >> /etc/ssh/sshd_config
-else
+	else
 	echo "Still Permitting root login. Change later."
+	fi
+else
+	continue
 fi
+
 
 #3 File Auditing
 
@@ -58,22 +76,45 @@ echo "1. Wildcarding"
 find / -path /proc -prune -name "-*"
 
 echo "2. World-writable files. need to be changed."
-find / -path /proc -prune -o -perm -2 ! -type l -ls
+n2=$(find / -path /proc -prune -o -perm -2 ! -type l -ls | awk '{print $11}')
+echo "$n2"
+for file in $n2;do
+	chmod o-w $file
+done	
 
-echo "Log files should be read only: rw-r----- /var/log/"
-find /var/log -perm -o=r ! -type l
+
+echo "Log files should not be read by others: rw-r----- /var/log/"
+n21=`find /var/log -perm -o=r ! -type l`
+echo "$n21"
+for file in $n21;do
+	chmod o-r $file
+done
+
 
 echo "3. Files with no owner are threat."
-find / -path /proc -prune -o -nouser -o -nogroup
+n3=$(find / -path /proc -prune -o -nouser -o -nogroup)
+echo "$n3"
+for file in $n3;do
+	chown root $file
+done
 
 echo "4. See which user is available?"
 egrep -v '.*:\*|:\!' /etc/shadow | awk -F: '{print $1}'
 
 echo "6. delete users without ':x:'"
-grep -v ':x:' /etc/passwd
+n6=$(grep -v ':x:' /etc/passwd)
+echo "$n6"
+for name in $n6;do
+	userdel $name
+done
 
 echo "7. find out the users without password."
-cat /etc/shadow | cut -d: -f 1,2 | grep '!'
+n7=$(cat /etc/shadow | cut -d: -f 1,2 | grep '!' | awk -F : '{print $1}')
+echo "$n7"
+for user in $n7;do
+	userdel $user
+done
+
 
 echo "8. find out the locked users."
 cat /etc/shadow | cut -d: -f 1,2 | grep '*'
@@ -82,10 +123,13 @@ echo "9. find out the expired users."
 cat /etc/shadow | cut -d: -f 1,2 | grep '!!'
 
 echo "10. The permission of /boot should be at least 644, even 600."
-ls -l /boot
+n10=$(ls -l /boot)
+echo "$n10"
+
 
 echo "11. find out the executable files with suid/sgid."
 find / -xdev -user root \( -perm -4000 -o -perm -2000 \)
+
 
 echo "Check ACL status. (setfacl -m u:user:r file)"
 #getfacl

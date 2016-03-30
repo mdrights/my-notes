@@ -15,10 +15,7 @@ CurDay=`date +%d`
 
 
 echo "Your host's listening ports."
-ss -tulp > $Result
-echo >> $Result
-echo "The memory usage." >> $Result
-free -h >> $Result
+ss -tulp | grep -o "users.*" > $Result
 echo >> $Result
 
 # Filter and writing the Incoming IPs within today.
@@ -35,13 +32,14 @@ echo >> $Result
 echo "---------------------------------------" >> $Result
 
 # Filter and writing the Destination IPs within today.
+# Not doing it now.
 
-grep 'SS-out' /var/log/messages | grep "$CurMonth $CurDay" > $Fileout
+#grep 'SS-out' /var/log/messages | grep "$CurMonth $CurDay" > $Fileout
 
-echo "Shadowsocks Outgoing IPs:" >> $Result
-echo >> $Result
+#echo "Shadowsocks Outgoing IPs:" >> $Result
+#echo >> $Result
 
-/usr/bin/awk '{print $1$2; print $10}' $Fileout >> $Result
+#/usr/bin/awk '{print $1$2; print $10}' $Fileout >> $Result
 
 echo >> $Result
 

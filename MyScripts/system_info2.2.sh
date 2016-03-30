@@ -54,6 +54,15 @@ fi
 done
 #< <(df -h --total | grep -vi filesystem)
 
+# The open ports and services.
+echo -e "\e[31;43m***** OPEN SERVICES *****\e[0m" >> $Result
+ss -tulp | grep -o "users.*" >> $Result
+
+echo -e "\e[31;43m***** ESTABLISHED CONNECTIONS *****\e[0m" >> $Result
+ss -tu >> $Result
+
+
+
 echo "Sending email..." >> $Result
 
 cat $Result | mutt -s "VPS info at `date`, `hostname`" linusyeung@live.com

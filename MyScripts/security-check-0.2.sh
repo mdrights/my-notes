@@ -26,13 +26,12 @@ echo "Install Shadowsocks."
 pip install shadowsocks
 
 
-#1 (in which Password settings were ignored.)
-echo "1 apt-get checking ..."
+# Checking security upgrade.
+echo "1 Checking security upgrade."
 apt-get upgrade -s | grep -i security
 
 #2 ssh
 echo "2 openSSH setting."
-
 echo "Do the SSH setting? (y or n)"
 read c
 if [ "$c" == "y" ];then
@@ -178,6 +177,7 @@ kernel.kptr_restrict=1
 
 #8 SSL/TLS baseline
 
+echo "9. Browser (Firefox) privacy settings...please go there."
 # Any other...
 
 #echo "Want to exit and cope with that? (y or n)"

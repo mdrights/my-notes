@@ -1,0 +1,632 @@
+[[TOC]]
+
+ * Copyright (C) 2006-2007, 2010, 2014 (tup, maxigas, ihave2p, et al.)
+ * Distributed under the X11 license
+ * See [wiki:doc/LegalStuff] for a full text
+
+== Transparently Routing Traffic Through Tor ==
+
+Tor has support for transparent proxy connections in addition to SOCKS connections. With traditional proxy methods like SOCKS, setting up the proxy server itself isn't enough; proxy-supporting applications must be chosen, and each application on each machine using the proxy must be specially configured by the user or network administrator to connect through the proxy. Sometimes this isn't possible because an application doesn't support SOCKS, or the administrator doesn't want users to know their traffic is being sent through a proxy. These problems can be avoided by using your operating system's packet filtering facility to redirect outbound connections into a transparent proxy, so named because its presence is intended to be invisible to clients.
+
+This document details two common uses for Tor's transparent functionality. The first is routing all traffic on a standalone machine through Tor. Once this is set up, every network application will make its TCP connections through Tor; no application will be able to reveal your IP address by connecting directly. The second is creating an anonymizing middlebox that intercepts traffic from other machines and redirects it through Tor.
+
+== Brief Notes ==
+
+Currently, transparent proxy connections are only supported for netfilter in Linux and pf in BSD.
+
+Please read [https://trac.torproject.org/projects/tor/wiki/doc/TransparentProxyLeaks Transparent Proxy Leaks] (mostly Microsoft Windows related) and/or consider an [https://trac.torproject.org/projects/tor/wiki/doc/TorifyHOWTO/IsolatingProxy Isolating Proxy] as alternative.
+
+See [https://www.whonix.org Whonix] for a complete, ready-made VM based solution (alternatively using multiple physical computers) built around the [https://trac.torproject.org/projects/tor/wiki/doc/TorifyHOWTO/IsolatingProxy Isolating Proxy] and Transparent Proxy [https://trac.torproject.org/projects/tor/wiki/doc/TransparentProxy#AnonymizingMiddlebox Anonymizing Middlebox] design.
+
+Since a transparent proxy operates without application support, we have to accept ordinary DNS requests and somehow resolve them through Tor in order to avoid anonymity compromising [wiki:doc/TorFAQ#SOCKSAndDNS DNS leaks]. Tor versions starting with 0.2.0.1-alpha have a built-in DNSPort designed to operate as a limited DNS server.  We will cover this later in the document.
+
+Here is an outdated discussion, though it is good to remember: [https://lists.torproject.org/pipermail/tor-talk/2013-April/027709.html tor-talk Tor transparent proxy leaks?].
+
+= WARNING =
+
+'''Possible leak! Released March 28th, 2014 - Please incorporate the following iptables rules as they have not been incorporated into this article!
+
+* '''[https://lists.torproject.org/pipermail/tor-talk/2014-March/032503.html Linux kernel transproxy packet leak (w/ repro case + workaround) #1]'''
+* '''[https://lists.torproject.org/pipermail/tor-talk/2014-March/032507.html Linux kernel transproxy packet leak (w/ repro case + workaround) #2]'''
+
+== Linux (netfilter) ==
+
+'''Required software:'''
+ * iptables 1.3.5 or later
+ * Tor 0.2.0.1-alpha or later
+
+'''Assumptions:'''
+ * Kernel IP forwarding is disabled
+ * You don't want traffic to 192.168.1.0/24 and 192.168.0.0/24 redirected through Tor
+ * Your internal IP address is 192.168.1.1
+ * Your internal network interface is {{{eth0}}}
+ * Tor runs under UID 109
+
+----
+=== Local Redirection Through Tor ===
+'''See also [[#WARNING]]!
+
+To enable the transparent proxy and the DNS proxy add the following to your torrc:
+
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+Configure your system's DNS resolver to use Tor's DNSPort on the loopback interface by modifying {{{/etc/resolv.conf}}}:
+
+{{{
+nameserver 127.0.0.1
+}}}
+
+Use the {{{iptables}}} ruleset below as an example.
+
+{{{
+#!/bin/sh
+
+### set variables
+#destinations you don't want routed through Tor
+_non_tor="192.168.1.0/24 192.168.0.0/24"
+
+#the UID that Tor runs as (varies from system to system)
+_tor_uid="109"
+
+#Tor's TransPort
+_trans_port="9040"
+
+### flush iptables
+iptables -F
+iptables -t nat -F
+
+### set iptables *nat
+iptables -t nat -A OUTPUT -m owner --uid-owner $_tor_uid -j RETURN
+iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
+
+#allow clearnet access for hosts in $_non_tor
+for _clearnet in $_non_tor 127.0.0.0/9 127.128.0.0/10; do
+   iptables -t nat -A OUTPUT -d $_clearnet -j RETURN
+done
+
+#redirect all other output to Tor's TransPort
+iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $_trans_port
+
+### set iptables *filter
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#allow clearnet access for hosts in $_non_tor
+for _clearnet in $_non_tor 127.0.0.0/8; do
+   iptables -A OUTPUT -d $_clearnet -j ACCEPT
+done
+
+#allow only Tor output
+iptables -A OUTPUT -m owner --uid-owner $_tor_uid -j ACCEPT
+iptables -A OUTPUT -j REJECT
+}}}
+
+----
+=== Anonymizing Middlebox ===
+'''See also [[#WARNING]]!
+
+To enable the transparent proxy and the DNS proxy, add the following to your torrc.
+
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+TransListenAddress 192.168.1.1
+DNSPort 53
+DNSListenAddress 192.168.1.1
+}}}
+
+Use the {{{iptables}}} ruleset below as an example.
+
+{{{
+#!/bin/sh
+
+# Tor's TransPort
+_trans_port="9040"
+
+# your internal interface
+_int_if="eth0"
+
+iptables -F
+iptables -t nat -F
+
+iptables -t nat -A PREROUTING -i $_int_if -p udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t nat -A PREROUTING -i $_int_if -p tcp --syn -j REDIRECT --to-ports $_trans_port
+}}}
+
+----
+=== Local Redirection and Anonymizing Middlebox ===
+'''See also [[#WARNING]]!
+
+To enable the transparent proxy and the DNS proxy, add the following to your torrc.
+
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+TransListenAddress 127.0.0.1
+TransListenAddress 192.168.1.1
+DNSPort 53
+DNSListenAddress 127.0.0.1
+DNSListenAddress 192.168.1.1
+}}}
+
+Configure your system's DNS resolver to use Tor's DNSPort on the loopback interface by modifying {{{/etc/resolv.conf}}}.
+
+{{{
+nameserver 127.0.0.1
+}}}
+
+Use the {{{iptables}}} ruleset below as an example.
+
+{{{
+#!/bin/sh
+
+### set variables
+#destinations you don't want routed through Tor
+_non_tor="192.168.1.0/24 192.168.0.0/24"
+
+#the UID that Tor runs as (varies from system to system)
+_tor_uid="109"
+
+#Tor's TransPort
+_trans_port="9040"
+
+#your internal interface
+_int_if="eth0"
+
+### flush iptables
+iptables -F
+iptables -t nat -F
+
+### set iptables *nat
+iptables -t nat -A OUTPUT -o lo -j RETURN
+iptables -t nat -A OUTPUT -m owner --uid-owner $_tor_uid -j RETURN
+iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports 53
+
+#allow clearnet access for hosts in $_non_tor
+for _clearnet in $_non_tor; do
+   iptables -t nat -A OUTPUT -d $_clearnet -j RETURN
+   iptables -t nat -A PREROUTING -i $_int_if -d $_clearnet -j RETURN
+done
+
+#redirect all other pre-routing and output to Tor
+iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $_trans_port
+iptables -t nat -A PREROUTING -i $_int_if -p udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t nat -A PREROUTING -i $_int_if -p tcp --syn -j REDIRECT --to-ports $_trans_port
+
+### set iptables *filter
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#allow clearnet access for hosts in $_non_tor
+for _clearnet in $_non_tor 127.0.0.0/8; do
+ iptables -A OUTPUT -d $_clearnet -j ACCEPT
+done
+
+#allow only Tor output
+iptables -A OUTPUT -m owner --uid-owner $_tor_uid -j ACCEPT
+iptables -A OUTPUT -j REJECT
+}}}
+
+----
+=== Transparently anonymizing traffic for a specific user ===
+'''Warning''': While this sounds great there is one disadvantage: ALL your dns request will be made through Tor. You anonymous ones and your non-anonymous ones. Not sure how safe it is to make first an anonymous DNS request and to non-anonymously view a target afterwards. '''See also [[#WARNING]]!
+ * Update: This may be outdated. You can use iptables to only redirect dns requests from the "anonymous" user and leave everything else as it is. See /etc/resolv.conf comments below.
+ * Update (2014-02-07): There is a script which adds the relevant iptables rules [https://github.com/isislovecruft/scripts/blob/master/transproxy.firewall.sh here], though you will still need to set up the new user account and configure Tor as described below.
+
+At first, we need to create a new user:
+{{{
+useradd -m anonymous
+}}}
+
+Then modify the torrc file:
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+Restart Tor (this example is for Debian or Ubuntu):
+{{{
+/etc/init.d/tor restart
+}}}
+
+Then add some iptables rules (implementing some basic proxy functionality):
+
+iptables rules (iptables version >= 1.4.4):
+{{{
+iptables -t nat -A OUTPUT ! -o lo -p tcp -m owner --uid-owner anonymous -m tcp -j REDIRECT --to-ports 9040
+iptables -t nat -A OUTPUT ! -o lo -p udp -m owner --uid-owner anonymous -m udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t filter -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp --dport 9040 -j ACCEPT
+iptables -t filter -A OUTPUT -p udp -m owner --uid-owner anonymous -m udp --dport 53 -j ACCEPT
+iptables -t filter -A OUTPUT ! -o lo -m owner --uid-owner anonymous -j DROP
+}}}
+Explanation: The first rule redirects HTTP (actually, TCP) traffic to the local port where TOR is listening. The second rule redirects DNS (actually, UDP) traffic to the local port 53 where TOR is listening for DNS queries. The last three rules block miscellaneous traffic (anything not TCP or DNS, such as UDP) that would not go through Tor, making sure that there is no leaking. The reason for the ACCEPT rules is that before iptables 1.4.2 it was possible to do this (e.g. DROP a packet) from the nat chain, but in higher version the DROP target is only available in the filter chain.
+
+WARNING: Ping (ICMP) is not blocked because ping packets have no "owner" the rule could match against. Either accept this as a risk for possible leaks or globally block ICMP with:
+
+iptables -A OUTPUT -p icmp -j REJECT
+
+
+Tests show that for some reason this solution is still leaking DNS queries, so you can configure all DNS traffic to go through Tor on your computer:
+{{{
+echo "nameserver 127.0.0.1" > /etc/resolv.conf
+}}}
+Update: This may or may not be true, I suspect this was copied because there was a DNS leak when using NON_TOR exceptions. Those do not apply here. Better leave resolv.conf as it is (but test for leaks). Otherwise the warning about mixing clear text and tor DNS requests does apply!
+
+
+Now you can run apps with sudo and they will be magically anonymized:
+{{{
+sudo -H -u anonymous irssi
+}}}
+
+If you want to make the iptables rules permanent you have to make sure they are executed at startup time, for example by adding a script in the right directory. On Debian/Ubuntu you can do something like this:
+{{{
+sudo touch /etc/init.d/anonuser
+sudo chmod a+x /etc/init.d/anonuser
+sudo vim /etc/init.d/anonuser
+}}}
+
+Enter the following into a script that will generate iptables rules:
+{{{
+#!/bin/sh
+# I learned this from https://wiki.torproject.org/noreply/TheOnionRouter/TransparentProxy
+# It's for running applications as user "anonymous", without proxy servers, through Tor.
+iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp -j REDIRECT --to-ports 9040
+iptables -t nat -A OUTPUT -p udp -m owner --uid-owner anonymous -m udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t filter -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp --dport 9040 -j ACCEPT
+iptables -t filter -A OUTPUT -p udp -m owner --uid-owner anonymous -m udp --dport 53 -j ACCEPT
+iptables -t filter -A OUTPUT -m owner --uid-owner anonymous -j DROP
+}}}
+
+To use Vidalia to control Tor over Tor's control port, you'll want the following rule (assuming your Tor control port is on 127.0.0.1:9051):
+{{{
+iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp --syn -d 127.0.0.1 --dport 9051 -j ACCEPT
+}}}
+
+A very simple set of rules with a functional Vidalia might look like the following:
+{{{
+iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp --syn -d 127.0.0.1 --dport 9051 -j ACCEPT
+iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner anonymous -m tcp --syn -j REDIRECT --to-ports 9040
+iptables -t nat -A OUTPUT -p udp -m owner --uid-owner anonymous -m udp --dport 53 -j REDIRECT --to-ports 53
+iptables -t nat -A OUTPUT -m owner --uid-owner anonymous -j DROP
+}}}
+
+----
+=== Transparently Doing DNS and Routing for .onion Traffic ===
+
+'''Warning''': While this sounds great there is one disadvantage: ALL your dns request will be made through Tor-- anonymous and non-anonymous. This can slow down accessing webpages (since you will not be directed to the server closest to your location) that you are not accessing anonymously. '''See also [[#WARNING]]!
+
+This method works for all users, and allows software you don't want to run through a proxy to use .onion addresses to access hidden services. Traffic to non-.onion addresses is left alone.
+
+Add the following lines to the torrc file:
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+This sets up Tor to resolve DNS, and gives it a network to map .onion addresses on to. (If you're using 10.192 for something, use a different 10. address.) It also sets port 9040 as the tor Transport port (separate from any proxy port.)
+
+Modify /etc/resolv.conf as follows:
+{{{
+nameserver 127.0.0.1
+}}}
+
+This tells all DNS queries to go through Tor. (Remove any existing entries.)
+
+Finally, one iptables rule:
+{{{
+iptables -t nat -A OUTPUT -p tcp -d 10.192.0.0/10 -j REDIRECT --to-ports 9040
+}}}
+
+This tells iptables to transparently redirect any traffic destined for the Tor virtual address space through the Tor transport port you designated above.
+
+Now any .onion addresses will be resolved, mapped into the 10.192/10 space, and transported through Tor, while leaving all non-.onion addresses alone! Interoperability reigns.
+
+----
+== BSD (PF) ==
+
+'''Warning''': ALL your DNS request will be made through Tor -- anonymous and non-anonymous. This can slow down accessing webpages that you are not accessing anonymously.
+
+'''Assumptions:'''
+ * kernel IP forwarding is disabled
+ * you don't want traffic to 192.168.1.0/24 and 192.168.0.0/24 redirected through Tor
+ * your internal network interface is {{{fxp0}}}
+ * '''/dev/pf is readable (OpenBSD) or readable and writable (other BSDs) by Tor (if you are running Tor in a chroot, you must also have /dev/pf inside the chroot)'''
+
+=== Local Redirection Through Tor ===
+
+To enable the transparent proxy and DNS proxy, add the following to your torrc.
+
+{{{
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+Configure your system's DNS resolver to use Tor's DNSPort on the loopback interface by modifying {{{/etc/resolv.conf}}}.
+
+{{{
+lookup file bind
+nameserver 127.0.0.1
+}}}
+
+If dhclient is rewriting your {{{/etc/resolv.conf}}} file, add the following line to {{{/etc/dhclient.conf}}} and (only on OpenBSD?) invoke {{{sh /etc/netstart}}}:
+
+{{{
+supersede domain-name-servers 127.0.0.1;
+}}}
+
+As root, create a second loopback interface.
+
+{{{
+ifconfig lo1 create up 127.0.0.2
+}}}
+
+Configure the interface when netstart is invoked (at startup) in OpenBSD:
+
+{{{
+# echo "inet 127.0.0.2" > /etc/hostname.lo1
+}}}
+
+Use the PF ruleset below as an example for FreeBSD & OpenBSD prior to 4.7.
+
+{{{
+# destinations you don't want routed through Tor
+non_tor = "{ 192.168.1.0/24 192.168.0.0/24 }"
+
+# Tor's TransPort
+trans_port = "9040"
+
+scrub in
+
+rdr pass on lo1 inet proto tcp all -> 127.0.0.1 port $trans_port
+rdr pass on lo1 inet proto udp to port domain -> 127.0.0.1 port domain
+
+block return out
+
+pass out quick on lo0 route-to lo1 inet proto tcp to 127.192.0.0/10 flags S/SA modulate state
+pass quick on { lo0 lo1 } keep state
+
+# uncomment the following line if you need to be able to connect to this system
+# from elsewhere on your $non_tor subnet
+#pass in proto tcp from $non_tor to $non_tor port { 22, 25, 80, 110 } flags S/SA keep state
+
+pass out quick inet proto tcp user _tor flags S/SA modulate state
+pass out quick route-to lo1 inet proto udp to port domain keep state
+pass out quick inet to $non_tor keep state
+pass out route-to lo1 inet proto tcp all flags S/SA modulate state
+}}}
+
+Use the PF ruleset below as an example for OpenBSD 4.7 and later.
+
+{{{
+# destinations you don't want routed through Tor
+non_tor = "{ 192.168.1.0/24 192.168.0.0/24 }"
+
+# Tor's TransPort
+trans_port = "9040"
+
+match in all scrub (no-df random-id reassemble tcp)
+antispoof for egress inet
+block return log on egress all
+
+pass in quick on lo1 inet proto tcp all flags S/SA modulate state rdr-to 127.0.0.1 port $trans_port
+pass in quick on lo1 inet proto udp to port domain rdr-to 127.0.0.1 port domain
+
+# uncomment the following line if you want to use hidden services
+#pass out quick on lo0 inet proto tcp to 127.192.0.0/10 route-to lo1
+
+pass quick on { lo0 lo1 }
+
+# uncomment the following line if you need to be able to connect to this system
+# from elsewhere on your $non_tor subnet
+#pass in proto tcp from $non_tor to $non_tor port { 22 25 80 110 }
+
+pass out quick inet proto tcp user _tor flags S/SA modulate state
+pass out quick inet proto udp to port domain route-to lo1
+pass out quick inet to $non_tor
+pass out inet proto tcp all route-to lo1
+}}}
+
+----
+
+=== Anonymizing Middlebox ===
+
+To enable the transparent proxy and the DNS proxy, add the following to your torrc.
+
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+Use the PF ruleset below as an example for FreeBSD and OpenBSD prior to 4.7.
+
+{{{
+# your internal interface
+int_if = "fxp0"
+
+# Tor's TransPort
+trans_port = "9040"
+
+set skip on lo
+
+scrub in
+
+rdr pass on $int_if inet proto tcp to !($int_if) -> 127.0.0.1 port $trans_port
+rdr pass on $int_if inet proto udp to port domain -> 127.0.0.1 port domain
+}}}
+
+Use the PF ruleset below as an example for OpenBSD 4.7 and later.
+
+{{{
+# your internal interface
+int_if = "fxp0"
+
+# Tor's TransPort
+trans_port = "9040"
+
+set skip on lo
+
+match in all scrub (no-df random-id)
+
+pass in quick on $int_if inet proto tcp to !($int_if) rdr-to 127.0.0.1 port $trans_port
+pass in quick on $int_if inet proto udp to port domain rdr-to 127.0.0.1 port domain
+}}}
+
+----
+
+=== Local Redirection and Anonymizing Middlebox ===
+
+To enable the transparent proxy and the DNS proxy, add the following to your torrc.
+
+{{{
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040
+DNSPort 53
+}}}
+
+Configure your system's DNS resolver to use Tor's DNSPort on the loopback interface by modifying {{{/etc/resolv.conf}}}.
+
+{{{
+lookup file bind
+nameserver 127.0.0.1
+}}}
+
+If dhclient is rewriting your {{{/etc/resolv.conf}}} file, add the following line to {{{/etc/dhclient.conf}}} and (only on OpenBSD?) invoke {{{sh /etc/netstart}}}:
+
+{{{
+supersede domain-name-servers 127.0.0.1;
+}}}
+
+As root, create a second loopback interface.
+
+{{{
+ifconfig lo1 create up 127.0.0.2
+}}}
+
+Configure the interface when netstart is invoked (at startup) in OpenBSD:
+
+{{{
+# echo "inet 127.0.0.2" > /etc/hostname.lo1
+}}}
+
+Use the PF ruleset below as an example for FreeBSD and OpenBSD prior to 4.7.
+
+{{{
+# your internal interface
+int_if = "fxp0"
+
+# destinations you don't want routed through Tor
+non_tor = "{ 192.168.1.0/24 192.168.0.0/24 }"
+
+# Tor's TransPort
+trans_port = "9040"
+
+scrub in
+
+rdr pass on { lo1 $int_if } inet proto tcp to !($int_if) -> 127.0.0.1 port $trans_port
+rdr pass on { lo1 $int_if } inet proto udp to port domain -> 127.0.0.1 port domain
+
+block return out
+
+pass quick on { lo0 lo1 } keep state
+
+pass out quick inet proto tcp user _tor flags S/SA modulate state
+pass out quick route-to lo1 inet proto udp to port domain keep state
+pass out quick inet to $non_tor keep state
+pass out route-to lo1 inet proto tcp all flags S/SA modulate state
+}}}
+
+Use the PF ruleset below as an example for OpenBSD 4.7 and later.
+
+{{{
+# your internal interface
+int_if = "fxp0"
+
+# destinations you don't want routed through Tor
+non_tor = "{ 192.168.1.0/24 192.168.0.0/24 }"
+
+# Tor's TransPort
+trans_port = "9040"
+
+match in all scrub (no-df random-id)
+
+pass in on { lo1 $int_if } inet proto tcp to !($int_if) rdr-to 127.0.0.1 port $trans_port
+pass in on { lo1 $int_if } inet proto udp to port domain rdr-to 127.0.0.1 port domain
+
+block return out
+
+pass quick on { lo0 lo1 } keep state
+
+pass out quick inet proto tcp user _tor flags S/SA modulate state
+pass out quick inet proto udp to port domain keep state route-to lo1
+pass out quick inet to $non_tor keep state
+pass out inet proto tcp all flags S/SA modulate state route-to lo1
+}}}
+
+----
+
+== Using firehol in linux ==
+
+On any system running iptables (Linux) you can use firehol if you are uncomfortable using iptables edit your /etc/firehol/firehol.conf to show:
+
+{{{
+server_tor_ports="tcp/9050 tcp/9051"
+client_tor_ports="default"
+server_proxy_ports="tcp/9040"
+client_proxy_ports="default"
+server_polipo_ports="tcp/8118"
+client_polipo_ports="default"
+server_dns_ports="udp/53"
+client_dns_ports="default"
+
+ #all incoming DNS goes to port 53 or whatever your torrc's DNSPort is
+ #for local redirection make sure your /etc/resolv.conf reads 'nameserver 127.0.0.1'
+redirect to 53 inface eth+ proto udp src 192.168.0.0/16 dst not 127.0.0.1 dport 53
+
+ #add to force all incoming tcp traffic to 9040 or whatever your torrc's TransPort is
+ #for some reason this will redirect locally generated tcp traffic too
+transparent_proxy "1:65535" 9040 debian-tor inface eth+ dst not "$UNROUTABLE_IPS"
+
+ #add to force all incoming tcp traffic to 9040 or whatever your torrc's TransPort is...
+ #this will ignore locally generated tcp
+transparent_proxy "1:65535" 9040 debian-tor src not 192.168.1.2 dst not "$UNROUTABLE_IPS"
+
+interface eth0 dhcp
+	policy return
+	client dhcp accept
+
+ #allow only outgoing TOR traffic
+interface eth0 internet src not "$UNROUTABLE_IPS"
+	client all accept user debian-tor
+
+ #add for local DNS and proxy access
+interface "eth0 lo" local src "192.168.1.2 127.0.0.1" dst "192.168.1.2 127.0.0.1"
+	server dns accept
+	server privoxy accept
+	server torproxy accept
+	client all accept
+
+ #add for local TOR socks and control port access
+interface lo internal src 127.0.0.1 dst 127.0.0.1
+	server tor accept
+	client all accept
+
+ #add for proxying a different subnet
+interface eth1 subnet src 192.168.2.0/24 dst any
+	server dns accept
+	server torproxy accept
+}}}
+
+Pick and choose which portions are right for you as not all lines are necessary in all situations.

@@ -1,0 +1,216 @@
+
+The World of Codegass
+
+少数派少数低产作者，喜欢热情洋溢的讲奇怪的事。
+
+
+一个粗略的博客样式修改指南
+on Apr 29, 2016 · 4 min read
+5
+
+在 ZeroNet 的诸多 Blog 里逛了一圈，发现大家大多使用的是 ZeroBlog 的默认样式，不怎么好看，而ZeroNet 默认的网页大小 10M 和它独有的评论系统也不便于我们去折腾一些博客模版，那么就只有在 Blog 样式的原基础上进行修改这种方法了。
+
+由于自己其实也是摸着石头过河，对 CSS 亦非轻车熟路，所以这篇文章将会日渐更新，大概会是一周一更，直到大部分我懂的 CSS 文档部分都介绍完成。
+
+OK，那么下面就让我们开始吧。1
+前置知识
+
+    我该去哪找到我的网站的 CSS 文档呢？
+
+关于 Blog 的建立，这里有一篇详细的指南，在建立好你的 Blog 之后，打开 ZeroBundle\ZeroNet\data\博客ID\css 里面的 all.css 就是你的网站的 CSS 文件。
+
+    你写的这些代码部分在整个 CSS 文档里好难找。
+
+使用代码编辑器的查找功能就能快速找到了。
+
+    关于 CSS 有些东西你没写。
+
+我只是粗略的讲一下一些定制，关于 CSS 的疑难杂症，你可以看这里。
+
+    我可不可以直接借用你的 Blog 的版式呢？
+
+完全没问题，你可以直接克隆我的 Blog 或是复制 CSS 文件替换到你的 Blog 文件中。
+文章整体样式
+
+    先让我讲个 CSS 文件以外的事情，默认的模版里，「提交评论」「关注更新」等这些东西都是英文的，如果要修改的话，你需要修改你网站的index.html文件，这里有一个包含头像如何修改的详细指南。
+
+建好 Blog 我们首先想修改的，就是文章的正文的字体大小，以及引用、链接的样式和颜色。当然，还有背景。
+链接
+
+首先以链接的修改为例子，说明一下几个值。
+
+a是控制链接的值，你只需修改 all.css 中的a值即可修改链接的样式。
+
+a:focus, a:hover {color:鼠标放上去时的链接颜色;text-decoration:underline;}a {color:你希望的链接颜色;text-decoration:none;}
+
+其中的 text-decoration是指文本的装饰，underline 和 none 分别是有下划线和什么装饰都没有。hover 则是指鼠标放在上面时的文本样式。
+正文
+
+正文的字体大小由于是仿照的 Medium 所以有点过大了2，我们需要把它修改到标准的 12px。
+
+body 是控制文章主体的值，不过它的优先级低于 .post .body，所以我们直接修改 .post .body 。
+将.post .body { font-size: 22.5px; line-height: 1.6; font-family: Tinos; margin-top: 20px }中的 font-size 的值修改为 12 px 即可。
+引用
+
+引用的样式同样继承自 Medium，但真心不怎么好看。
+
+blockquote { border-left: 3px solid 在这里填入你想要的颜色代码; color: 在这里填入你想要的颜色代码; margin-left: 0px; padding-left: 1em }
+
+其中 border-left 是控制引用左侧的色块的，3px 描述的是其粗细，solid 描述的是其连贯直线的样式，后面的颜色代码，你可以考虑使用经典的灰色 #b5b5b5 也可以是像 Medium 一样的骚绿 #00ab6b。
+
+color 是规定引用的文字颜色。另外你还可以添加 background-color 这个参数，让引文有背景色。
+背景
+
+背景默认是被设置为白色的，但是你同样可以设定为图片。在 CSS 文件中，背景也是由 body 来控制的。
+
+首先你要准备好一张想要作为背景的图片，不用很大，我们将使用重复参数使它铺满整个网页，建议使用纹理类图片，事实上，过大的图片将会阻碍你的 Blog 的打开速度，ZeroBlog 的一般限制大小为 10 M，别让背景图占掉了大部分空间。
+
+把图片放到 ZeroBundle\ZeroNet\data\博客ID\img 这个路径下，也就是你的网页的 img 文件夹。
+
+打开你 Blog 的 CSS 文档，找到
+
+body { background-color: white; color: #333332; margin: 10px; padding: 0px; font-family: 'Roboto', sans-serif; height: 15000px; overflow: hidden; -webkit-backface-visibility: hidden ; -moz-backface-visibility: hidden ; -o-backface-visibility: hidden ; -ms-backface-visibility: hidden ; backface-visibility: hidden }
+
+把其中的 background-color:white 一项直接删掉，添加 background-image: url(../img/你的图片名称.格式); background-repeat: repeat; 可以把背景图添加进你的 Blog 了。
+
+如果你的背景图比较大，而你不想让它随着网页滚动而是保持相对静止，你可以添加如下参数 background-attachment:fixed; 。
+按钮
+
+这里将会讲到三个按钮的修改，分别是「提交评论」「发布文章」「关注更新」。
+
+.button:hover 它控制的是你把鼠标放上按钮时按钮变成的样式。对它的修改会同时影响「提交评论」和「发布文章」两个按钮。
+
+.button:hover { background-color: 在这里填入你想要的颜色代码; border-color: 在这里填入你想要的颜色代码; text-decoration: none; -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; color: 在这里填入你想要的颜色代码 }
+
+background-color 规定按钮的背景色，border-color 规定按钮边框颜色，color 规定按钮的文字颜色。
+
+.comment-new .button-submit 它控制提交评论按钮的样式，其中的 background-color 控制背景色，border-bottom控制按钮下方的那条横线的颜色。
+
+.comment-new .button-submit { margin: 0px; font-weight: normal; padding: 5px 15px; display: inline-block; background-color: 填入你想要的颜色; border-bottom: 2px solid 填入你想要的颜色; font-size: 15px; line-height: 30px}
+
+「关注更新」这个按钮的 CSS 样式设定是单独存在的。搜索 feed 就能找到全部关于它的样式设定语句。这个按钮分别有三个状态，我分开来讲如何修改。
+关注前
+
+.feed-follow控制的是未关注前的按钮样式，原始的 CSS 文件中非常奇怪的把它的边框定义写为了两个部分。
+
+.feed-follow { font-size: 14px; display: inline-block; padding: 7px 14px; font-weight: normal; display: none; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; -ms-border-radius: 4px; border-radius: 4px ; border: 1px solid 边框的颜色; border-bottom: 1px solid 边框下半部分的颜色; transition: all 0.3s }
+
+border这个参数控制的是边框的整体颜色，你可以通过对它参数的修改直接达到修改整个边框颜色的作用。
+
+border-bottom 这个参数是下边框的单独定义，你可以直接把这项删掉，它优先级高于整体定义，所以它的参数会改变下边框的样式。
+
+在这里添加参数 color 可以直接修改该状态下的按钮的文字颜色。
+
+你还可以考虑在其中加上 backgroud-color 这个参数，来让这个按钮的背景色变的更显眼。
+
+修改了文字的颜色自然也就想修改那个扇形 RSS 符号的颜色。这个符号不是一体的，而是用边框代码写出来的，每一层都是分开定义的。
+
+最内层是 .icon-feed 控制的。
+
+.icon-feed { width: 3px; height: 3px; display: inline-block; -webkit-border-radius: 10px; -moz-border-radius: 10px; -o-border-radius: 10px; -ms-border-radius: 10px; border-radius: 10px ; background-color: 选择你喜欢的颜色; position: relative; margin-right: 10px; margin-top: 10px; margin-left: 5px; transition: all 0.3s }
+你只需修改background-color这项与你的文字颜色一致。
+
+中间一层是.icon-feed:after 控制的。
+
+.icon-feed:after { content: ""; width: 5px; height: 5px; border-top: 2px solid 上半部分的颜色; border-right: 2px solid 下半部分的颜色; -webkit-border-radius: 0px 6px 0px 0px; -moz-border-radius: 0px 6px 0px 0px; -o-border-radius: 0px 6px 0px 0px; -ms-border-radius: 0px 6px 0px 0px; border-radius: 0px 6px 0px 0px ; display: block; border-right: 2px solid 下半部分的颜色; bottom: 0px; position: absolute; transition: all 0.3s }
+
+在这里你只需要修改 border-top 和 border-right 的值来达到颜色一致，但是仔细查看你会发现，文档里有两个 border-right 这是作者自己犯错了，后一个 border-right 的优先级高于前一个，所以你可以考虑把其中一个删掉，或直接就只修改后一个就好。
+
+最外面一层是 .icon-feed:before 控制。和中间一层的修改方式一样，只是这里作者没有再搞出两个 border-right 了。
+鼠标放在关注上
+
+.feed-follow:hover 控制的是把鼠标放在关注按钮上时的样式。
+
+.feed-follow:hover { background-color: 背景颜色; -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; border-color: 边框颜色; color: 字体颜色 }
+关注中
+
+.feed-follow.following .text-following 控制点击关注后的字体颜色。
+
+.feed-follow.following .text-following { max-width: 60px; opacity: 1; color: 你想要的字体颜色; }
+
+.feed-follow.following .icon-feed:after, .feed-follow.following .icon-feed:before 控制扇形 RSS 符号的颜色。
+
+.feed-follow.following .icon-feed:after, .feed-follow.following .icon-feed:before { border-color: 你希望的符号颜色; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none }
+
+其实还有一个按下按钮时的样式，是.feed-follow:active 控制的，修改方式类同上面。
+代码块
+
+    这部分我自己暂时还有些东西没解决。
+
+代码块的修改在 code 这里控制
+
+code { background-color: 你希望的代码块背景色; border: 1px solid 代码块边框颜色; padding: 0px 5px; overflow: auto; -webkit-border-radius: 2px; -moz-border-radius: 2px; -o-border-radius: 2px; -ms-border-radius: 2px; border-radius: 2px ; display: inline-block; color: 代码文字的颜色; font-weight: normal; font-size: 13px; vertical-align: text-bottom; border-bottom-width: 2px; }
+
+
+    调整样式最好的办法就是用浏览器预览着来调整，这样既直观又快速。建议使用 Chrome。↩︎
+
+    当然如果你是克隆的别人调整好了字体大小的博客，那另当别论。 ↩︎
+
+13 Comments:
+Please sign in ━ 新评论
+Sign in as...
+提交评论
+godnyt ━ on May 23, 2016
+Reply
+
+请问一下，我修改了css和一点js之后blog就一直update失败是为什么呢
+cxgreat2014 ━ on May 19, 2016
+Reply
+
+看下我的博客如何？http://127.0.0.1:43110/cxg2014.bit/
+baoliaotai ━ on May 13, 2016
+Reply
+
+爆料 http://127.0.0.1:43110/18eb8HAMQnS8SLJRxMekSGjskNXEtNZZzw
+mosen ━ on Apr 29, 2016
+Reply
+
+我期待的代码块的样式修改终于有了。
+hand ━ on Apr 29, 2016
+Reply
+
+小白留名。
+cyrax ━ on Apr 27, 2016
+Reply
+
+推
+imawho ━ on Apr 27, 2016
+Reply
+
+    codegeass: 他那个长者一套简直溜23333333
+
+我又加了一个，现在是长者三件套
+codegeass ━ on Apr 27, 2016
+Reply
+
+    zybbs: 你那个也很好。
+
+他那个长者一套简直溜23333333
+zybbs ━ on Apr 27, 2016
+Reply
+
+    imawho: 很不错，另外有一些文字的翻译是在 all.js 里进行的，比如评论数和时间，具体见这里坐等代码块样式修改+1
+
+你那个也很好。
+zybbs ━ on Apr 27, 2016
+Reply
+
+我又过来看博主了，这篇好，期待后续。
+imawho ━ on Apr 27, 2016
+Reply
+
+很不错，另外有一些文字的翻译是在 all.js 里进行的，比如评论数和时间，具体见这里
+坐等代码块样式修改+1
+codegeass ━ on Apr 27, 2016
+Reply
+
+    mosen: 正需要这样的教程呢！期待更多内容。这次修改了自己博客引用的样式。期待：代码块的样式修改。不喜欢自带的样式。
+
+这两天我会集中更新这篇文章，后面还会写一个引用样式的进阶，欢迎来看～
+mosen ━ on Apr 27, 2016
+Reply
+
+正需要这样的教程呢！期待更多内容。这次修改了自己博客引用的样式。多谢分享。
+期待：代码块的样式修改。不喜欢自带的样式。
+Posts
+Comments

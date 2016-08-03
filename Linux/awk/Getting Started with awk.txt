@@ -1,0 +1,559 @@
+Go to the [first](gawk_1.html), [previous](gawk_2.html),
+[next](gawk_4.html), [last](gawk_24.html) section, [table of
+contents](gawk_toc.html).
+
+------------------------------------------------------------------------
+
+[Getting Started with `awk`](gawk_toc.html#TOC10)
+=================================================
+
+[]() []() []() []()
+
+The basic function of `awk` is to search files for lines (or other units
+of text) that contain certain patterns. When a line matches one of the
+patterns, `awk` performs specified actions on that line. `awk` keeps
+processing input lines in this way until the end of the input files are
+reached.
+
+[]() []() []() []() Programs in `awk` are different from programs in
+most other languages, because `awk` programs are **data-driven**; that
+is, you describe the data you wish to work with, and then what to do
+when you find it. Most other languages are **procedural**; you have to
+describe, in great detail, every step the program is to take. When
+working with procedural languages, it is usually much harder to clearly
+describe the data your program will process. For this reason, `awk`
+programs are often refreshingly easy to both write and read.
+
+[]() []() When you run `awk`, you specify an `awk` **program** that
+tells `awk` what to do. The program consists of a series of **rules**.
+(It may also contain **function definitions**, an advanced feature which
+we will ignore for now. See section [User-defined
+Functions](gawk_14.html#SEC129).) Each rule specifies one pattern to
+search for, and one action to perform when that pattern is found.
+
+Syntactically, a rule consists of a pattern followed by an action. The
+action is enclosed in curly braces to separate it from the pattern.
+Rules are usually separated by newlines. Therefore, an `awk` program
+looks like this:
+
+    pattern { action }
+    pattern { action }
+    ...
+
+[A Rose By Any Other Name](gawk_toc.html#TOC11)
+-----------------------------------------------
+
+[]() []() The `awk` language has evolved over the years. Full details
+are provided in section [The Evolution of the `awk`
+Language](gawk_18.html#SEC173). The language described in this book is
+often referred to as "new `awk`."
+
+Because of this, many systems have multiple versions of `awk`. Some
+systems have an `awk` utility that implements the original version of
+the `awk` language, and a `nawk` utility for the new version. Others
+have an `oawk` for the "old `awk`" language, and plain `awk` for the new
+one. Still others only have one version, usually the new
+one.[(2)](gawk_foot.html#FOOT2)
+
+All in all, this makes it difficult for you to know which version of
+`awk` you should run when writing your programs. The best advice we can
+give here is to check your local documentation. Look for `awk`, `oawk`,
+and `nawk`, as well as for `gawk`. Chances are, you will have some
+version of new `awk` on your system, and that is what you should use
+when running your programs. (Of course, if you're reading this book,
+chances are good that you have `gawk`!)
+
+Throughout this book, whenever we refer to a language feature that
+should be available in any complete implementation of POSIX `awk`, we
+simply use the term `awk`. When referring to a feature that is specific
+to the GNU implementation, we use the term `gawk`.
+
+[How to Run `awk` Programs](gawk_toc.html#TOC12)
+------------------------------------------------
+
+[]() []() There are several ways to run an `awk` program. If the program
+is short, it is easiest to include it in the command that runs `awk`,
+like this:
+
+    awk 'program' input-file1 input-file2 ...
+
+where program consists of a series of patterns and actions, as described
+earlier. (The reason for the single quotes is described below, in
+section [One-shot Throw-away `awk` Programs](gawk_3.html#SEC13).)
+
+When the program is long, it is usually more convenient to put it in a
+file and run it with a command like this:
+
+    awk -f program-file input-file1 input-file2 ...
+
+### [One-shot Throw-away `awk` Programs](gawk_toc.html#TOC13)
+
+Once you are familiar with `awk`, you will often type in simple programs
+the moment you want to use them. Then you can write the program as the
+first argument of the `awk` command, like this:
+
+    awk 'program' input-file1 input-file2 ...
+
+where program consists of a series of patterns and actions, as described
+earlier.
+
+[]() This command format instructs the **shell**, or command
+interpreter, to start `awk` and use the program to process records in
+the input file(s). There are single quotes around program so that the
+shell doesn't interpret any `awk` characters as special shell
+characters. They also cause the shell to treat all of program as a
+single argument for `awk` and allow program to be more than one line
+long.
+
+This format is also useful for running short or medium-sized `awk`
+programs from shell scripts, because it avoids the need for a separate
+file for the `awk` program. A self-contained shell script is more
+reliable since there are no other files to misplace.
+
+section [Useful One Line Programs](gawk_4.html#SEC24), presents several
+short, self-contained programs.
+
+As an interesting side point, the command
+
+    awk '/foo/' files ...
+
+is essentially the same as
+
+[]()
+
+    egrep foo files ...
+
+### [Running `awk` without Input Files](gawk_toc.html#TOC14)
+
+[]() []() You can also run `awk` without any input files. If you type
+the command line:
+
+    awk 'program'
+
+then `awk` applies the program to the **standard input**, which usually
+means whatever you type on the terminal. This continues until you
+indicate end-of-file by typing Control-d. (On other operating systems,
+the end-of-file character may be different. For example, on OS/2 and
+MS-DOS, it is Control-z.)
+
+For example, the following program prints a friendly piece of advice
+(from Douglas Adams' The Hitchhiker's Guide to the Galaxy), to keep you
+from worrying about the complexities of computer programming (\`BEGIN'
+is a feature we haven't discussed yet).
+
+    $ awk "BEGIN { print \"Don't Panic!\" }"
+    -| Don't Panic!
+
+[]() []() This program does not read any input. The \`\\' before each of
+the inner double quotes is necessary because of the shell's quoting
+rules, in particular because it mixes both single quotes and double
+quotes.
+
+This next simple `awk` program emulates the `cat` utility; it copies
+whatever you type at the keyboard to its standard output. (Why this
+works is explained shortly.)
+
+    $ awk '{ print }'
+    Now is the time for all good men
+    -| Now is the time for all good men
+    to come to the aid of their country.
+    -| to come to the aid of their country.
+    Four score and seven years ago, ...
+    -| Four score and seven years ago, ...
+    What, me worry?
+    -| What, me worry?
+    Control-d
+
+### [Running Long Programs](gawk_toc.html#TOC15)
+
+[]() []() []() []() Sometimes your `awk` programs can be very long. In
+this case it is more convenient to put the program into a separate file.
+To tell `awk` to use that file for its program, you type:
+
+    awk -f source-file input-file1 input-file2 ...
+
+The \`-f' instructs the `awk` utility to get the `awk` program from the
+file source-file. Any file name can be used for source-file. For
+example, you could put the program:
+
+    BEGIN { print "Don't Panic!" }
+
+into the file `` `advice' ``. Then this command:
+
+    awk -f advice
+
+does the same thing as this one:
+
+    awk "BEGIN { print \"Don't Panic!\" }"
+
+[]() []() which was explained earlier (see section [Running `awk`
+without Input Files](gawk_3.html#SEC14)). Note that you don't usually
+need single quotes around the file name that you specify with \`-f',
+because most file names don't contain any of the shell's special
+characters. Notice that in `` `advice' ``, the `awk` program did not
+have single quotes around it. The quotes are only needed for programs
+that are provided on the `awk` command line.
+
+If you want to identify your `awk` program files clearly as such, you
+can add the extension `` `.awk' `` to the file name. This doesn't affect
+the execution of the `awk` program, but it does make "housekeeping"
+easier.
+
+### [Executable `awk` Programs](gawk_toc.html#TOC16)
+
+[]() []() []() []() []()
+
+Once you have learned `awk`, you may want to write self-contained `awk`
+scripts, using the \`\#!' script mechanism. You can do this on many Unix
+systems[(3)](gawk_foot.html#FOOT3) (and someday on the GNU system).
+
+For example, you could update the file `` `advice' `` to look like this:
+
+    #! /bin/awk -f
+
+    BEGIN    { print "Don't Panic!" }
+
+After making this file executable (with the `chmod` utility), you can
+simply type \`advice' at the shell, and the system will arrange to run
+`awk` [(4)](gawk_foot.html#FOOT4) as if you had typed \`awk -f advice'.
+
+    $ advice
+    -| Don't Panic!
+
+Self-contained `awk` scripts are useful when you want to write a program
+which users can invoke without their having to know that the program is
+written in `awk`.
+
+[]() []() Some older systems do not support the \`\#!' mechanism. You
+can get a similar effect using a regular shell script. It would look
+something like this:
+
+    : The colon ensures execution by the standard shell.
+    awk 'program' "$@"
+
+Using this technique, it is *vital* to enclose the program in single
+quotes to protect it from interpretation by the shell. If you omit the
+quotes, only a shell wizard can predict the results.
+
+The `"$@"` causes the shell to forward all the command line arguments to
+the `awk` program, without interpretation. The first line, which starts
+with a colon, is used so that this shell script will work even if
+invoked by a user who uses the C shell. (Not all older systems obey this
+convention, but many do.)
+
+### [Comments in `awk` Programs](gawk_toc.html#TOC17)
+
+[]() []() []() []() []()
+
+A **comment** is some text that is included in a program for the sake of
+human readers; it is not really part of the program. Comments can
+explain what the program does, and how it works. Nearly all programming
+languages have provisions for comments, because programs are typically
+hard to understand without their extra help.
+
+In the `awk` language, a comment starts with the sharp sign character,
+\`\#', and continues to the end of the line. The \`\#' does not have to
+be the first character on the line. The `awk` language ignores the rest
+of a line following a sharp sign. For example, we could have put the
+following into `` `advice' ``:
+
+    # This program prints a nice friendly message.  It helps
+    # keep novice users from being afraid of the computer.
+    BEGIN    { print "Don't Panic!" }
+
+You can put comment lines into keyboard-composed throw-away `awk`
+programs also, but this usually isn't very useful; the purpose of a
+comment is to help you or another person understand the program at a
+later time.
+
+[A Very Simple Example](gawk_toc.html#TOC18)
+--------------------------------------------
+
+The following command runs a simple `awk` program that searches the
+input file `` `BBS-list' `` for the string of characters: \`foo'. (A
+string of characters is usually called a **string**. The term **string**
+is perhaps based on similar usage in English, such as "a string of
+pearls," or, "a string of cars in a train.")
+
+    awk '/foo/ { print $0 }' BBS-list
+
+When lines containing \`foo' are found, they are printed, because
+\`print \$0' means print the current line. (Just \`print' by itself
+means the same thing, so we could have written that instead.)
+
+You will notice that slashes, \`/', surround the string \`foo' in the
+`awk` program. The slashes indicate that \`foo' is a pattern to search
+for. This type of pattern is called a **regular expression**, and is
+covered in more detail later (see section [Regular
+Expressions](gawk_5.html#SEC25)). The pattern is allowed to match parts
+of words. There are single-quotes around the `awk` program so that the
+shell won't interpret any of it as special shell characters.
+
+Here is what this program prints:
+
+    $ awk '/foo/ { print $0 }' BBS-list
+    -| fooey        555-1234     2400/1200/300     B
+    -| foot         555-6699     1200/300          B
+    -| macfoo       555-6480     1200/300          A
+    -| sabafoo      555-2127     1200/300          C
+
+[]() []() []() []() In an `awk` rule, either the pattern or the action
+can be omitted, but not both. If the pattern is omitted, then the action
+is performed for *every* input line. If the action is omitted, the
+default action is to print all lines that match the pattern.
+
+[]() []() Thus, we could leave out the action (the `print` statement and
+the curly braces) in the above example, and the result would be the
+same: all lines matching the pattern \`foo' would be printed. By
+comparison, omitting the `print` statement but retaining the curly
+braces makes an empty action that does nothing; then no lines would be
+printed.
+
+[An Example with Two Rules](gawk_toc.html#TOC19)
+------------------------------------------------
+
+[]()
+
+The `awk` utility reads the input files one line at a time. For each
+line, `awk` tries the patterns of each of the rules. If several patterns
+match then several actions are run, in the order in which they appear in
+the `awk` program. If no patterns match, then no actions are run.
+
+After processing all the rules (perhaps none) that match the line, `awk`
+reads the next line (however, see section [The `next`
+Statement](gawk_10.html#SEC105), and also see section [The `nextfile`
+Statement](gawk_10.html#SEC106)). This continues until the end of the
+file is reached.
+
+For example, the `awk` program:
+
+    /12/  { print $0 }
+    /21/  { print $0 }
+
+contains two rules. The first rule has the string \`12' as the pattern
+and \`print \$0' as the action. The second rule has the string \`21' as
+the pattern and also has \`print \$0' as the action. Each rule's action
+is enclosed in its own pair of braces.
+
+This `awk` program prints every line that contains the string \`12' *or*
+the string \`21'. If a line contains both strings, it is printed twice,
+once by each rule.
+
+This is what happens if we run this program on our two sample data
+files, `` `BBS-list' `` and `` `inventory-shipped' ``, as shown here:
+
+    $ awk '/12/ { print $0 }
+    >      /21/ { print $0 }' BBS-list inventory-shipped
+    -| aardvark     555-5553     1200/300          B
+    -| alpo-net     555-3412     2400/1200/300     A
+    -| barfly       555-7685     1200/300          A
+    -| bites        555-1675     2400/1200/300     A
+    -| core         555-2912     1200/300          C
+    -| fooey        555-1234     2400/1200/300     B
+    -| foot         555-6699     1200/300          B
+    -| macfoo       555-6480     1200/300          A
+    -| sdace        555-3430     2400/1200/300     A
+    -| sabafoo      555-2127     1200/300          C
+    -| sabafoo      555-2127     1200/300          C
+    -| Jan  21  36  64 620
+    -| Apr  21  70  74 514
+
+Note how the line in `` `BBS-list' `` beginning with \`sabafoo' was
+printed twice, once for each rule.
+
+[A More Complex Example](gawk_toc.html#TOC20)
+---------------------------------------------
+
+Here is an example to give you an idea of what typical `awk` programs
+do. This example shows how `awk` can be used to summarize, select, and
+rearrange the output of another utility. It uses features that haven't
+been covered yet, so don't worry if you don't understand all the
+details.
+
+    ls -lg | awk '$6 == "Nov" { sum += $5 }
+                 END { print sum }'
+
+[]() []() This command prints the total number of bytes in all the files
+in the current directory that were last modified in November (of any
+year). (In the C shell you would need to type a semicolon and then a
+backslash at the end of the first line; in a POSIX-compliant shell, such
+as the Bourne shell or Bash, the GNU Bourne-Again shell, you can type
+the example as shown.)
+
+The \`ls -lg' part of this example is a system command that gives you a
+listing of the files in a directory, including file size and the date
+the file was last modified. Its output looks like this:
+
+    -rw-r--r--  1 arnold   user   1933 Nov  7 13:05 Makefile
+    -rw-r--r--  1 arnold   user  10809 Nov  7 13:03 gawk.h
+    -rw-r--r--  1 arnold   user    983 Apr 13 12:14 gawk.tab.h
+    -rw-r--r--  1 arnold   user  31869 Jun 15 12:20 gawk.y
+    -rw-r--r--  1 arnold   user  22414 Nov  7 13:03 gawk1.c
+    -rw-r--r--  1 arnold   user  37455 Nov  7 13:03 gawk2.c
+    -rw-r--r--  1 arnold   user  27511 Dec  9 13:07 gawk3.c
+    -rw-r--r--  1 arnold   user   7989 Nov  7 13:03 gawk4.c
+
+The first field contains read-write permissions, the second field
+contains the number of links to the file, and the third field identifies
+the owner of the file. The fourth field identifies the group of the
+file. The fifth field contains the size of the file in bytes. The sixth,
+seventh and eighth fields contain the month, day, and time,
+respectively, that the file was last modified. Finally, the ninth field
+contains the name of the file.
+
+[]() []() The \`\$6 == "Nov"' in our `awk` program is an expression that
+tests whether the sixth field of the output from \`ls -lg' matches the
+string \`Nov'. Each time a line has the string \`Nov' for its sixth
+field, the action \`sum += \$5' is performed. This adds the fifth field
+(the file size) to the variable `sum`. As a result, when `awk` has
+finished reading all the input lines, `sum` is the sum of the sizes of
+files whose lines matched the pattern. (This works because `awk`
+variables are automatically initialized to zero.)
+
+After the last line of output from `ls` has been processed, the `END`
+rule is executed, and the value of `sum` is printed. In this example,
+the value of `sum` would be 80600.
+
+These more advanced `awk` techniques are covered in later sections (see
+section [Overview of Actions](gawk_9.html#SEC97)). Before you can move
+on to more advanced `awk` programming, you have to know how `awk`
+interprets your input and displays your output. By manipulating fields
+and using `print` statements, you can produce some very useful and
+impressive looking reports.
+
+[`awk` Statements Versus Lines](gawk_toc.html#TOC21)
+----------------------------------------------------
+
+[]() []()
+
+Most often, each line in an `awk` program is a separate statement or
+separate rule, like this:
+
+    awk '/12/  { print $0 }
+         /21/  { print $0 }' BBS-list inventory-shipped
+
+However, `gawk` will ignore newlines after any of the following:
+
+    ,    {    ?    :    ||    &&    do    else
+
+A newline at any other point is considered the end of the statement.
+(Splitting lines after \`?' and \`:' is a minor `gawk` extension. The
+\`?' and \`:' referred to here is the three operand conditional
+expression described in section [Conditional
+Expressions](gawk_8.html#SEC84).)
+
+[]() []() []() If you would like to split a single statement into two
+lines at a point where a newline would terminate it, you can
+**continue** it by ending the first line with a backslash character,
+\`\\'. The backslash must be the final character on the line to be
+recognized as a continuation character. This is allowed absolutely
+anywhere in the statement, even in the middle of a string or regular
+expression. For example:
+
+    awk '/This regular expression is too long, so continue it\
+     on the next line/ { print $1 }'
+
+[]() We have generally not used backslash continuation in the sample
+programs in this book. Since in `gawk` there is no limit on the length
+of a line, it is never strictly necessary; it just makes programs more
+readable. For this same reason, as well as for clarity, we have kept
+most statements short in the sample programs presented throughout the
+book. Backslash continuation is most useful when your `awk` program is
+in a separate source file, instead of typed in on the command line. You
+should also note that many `awk` implementations are more particular
+about where you may use backslash continuation. For example, they may
+not allow you to split a string constant using backslash continuation.
+Thus, for maximal portability of your `awk` programs, it is best not to
+split your lines in the middle of a regular expression or a string.
+
+[]() []() **Caution: backslash continuation does not work as described
+above with the C shell.** Continuation with backslash works for `awk`
+programs in files, and also for one-shot programs *provided* you are
+using a POSIX-compliant shell, such as the Bourne shell or Bash, the GNU
+Bourne-Again shell. But the C shell (`csh`) behaves differently! There,
+you must use two backslashes in a row, followed by a newline. Note also
+that when using the C shell, *every* newline in your awk program must be
+escaped with a backslash. To illustrate:
+
+    % awk 'BEGIN { \
+    ?   print \\
+    ?       "hello, world" \
+    ? }'
+    -| hello, world
+
+Here, the \`%' and \`?' are the C shell's primary and secondary prompts,
+analogous to the standard shell's \`\$' and \`&gt;'.
+
+`awk` is a line-oriented language. Each rule's action has to begin on
+the same line as the pattern. To have the pattern and action on separate
+lines, you *must* use backslash continuation--there is no other way.
+
+[]() When `awk` statements within one rule are short, you might want to
+put more than one of them on a line. You do this by separating the
+statements with a semicolon, \`;'.
+
+This also applies to the rules themselves. Thus, the previous program
+could have been written:
+
+    /12/ { print $0 } ; /21/ { print $0 }
+
+**Note:** the requirement that rules on the same line must be separated
+with a semicolon was not in the original `awk` language; it was added
+for consistency with the treatment of statements within an action.
+
+[Other Features of `awk`](gawk_toc.html#TOC22)
+----------------------------------------------
+
+The `awk` language provides a number of predefined, or built-in
+variables, which your programs can use to get information from `awk`.
+There are other variables your program can set to control how `awk`
+processes your data.
+
+In addition, `awk` provides a number of built-in functions for doing
+common computational and string related operations.
+
+As we develop our presentation of the `awk` language, we introduce most
+of the variables and many of the functions. They are defined
+systematically in section [Built-in Variables](gawk_11.html#SEC108), and
+section [Built-in Functions](gawk_13.html#SEC123).
+
+[When to Use `awk`](gawk_toc.html#TOC23)
+----------------------------------------
+
+[]() []() You might wonder how `awk` might be useful for you. Using
+utility programs, advanced patterns, field separators, arithmetic
+statements, and other selection criteria, you can produce much more
+complex output. The `awk` language is very useful for producing reports
+from large amounts of raw data, such as summarizing information from the
+output of other utility programs like `ls`. (See section [A More Complex
+Example](gawk_3.html#SEC20).)
+
+Programs written with `awk` are usually much smaller than they would be
+in other languages. This makes `awk` programs easy to compose and use.
+Often, `awk` programs can be quickly composed at your terminal, used
+once, and thrown away. Since `awk` programs are interpreted, you can
+avoid the (usually lengthy) compilation part of the typical
+edit-compile-test-debug cycle of software development.
+
+Complex programs have been written in `awk`, including a complete
+retargetable assembler for eight-bit microprocessors (see section
+[Glossary](gawk_22.html#SEC228), for more information) and a microcode
+assembler for a special purpose Prolog computer. However, `awk`'s
+capabilities are strained by tasks of such complexity.
+
+If you find yourself writing `awk` scripts of more than, say, a few
+hundred lines, you might consider using a different programming
+language. Emacs Lisp is a good choice if you need sophisticated string
+or pattern matching capabilities. The shell is also good at string and
+pattern matching; in addition, it allows powerful use of the system
+utilities. More conventional languages, such as C, C++, and Lisp, offer
+better facilities for system programming and for managing the complexity
+of large programs. Programs in these languages may require more lines of
+source code than the equivalent `awk` programs, but they are easier to
+maintain and usually run more efficiently.
+
+------------------------------------------------------------------------
+
+Go to the [first](gawk_1.html), [previous](gawk_2.html),
+[next](gawk_4.html), [last](gawk_24.html) section, [table of
+contents](gawk_toc.html).

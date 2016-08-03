@@ -1,0 +1,883 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.50 from gawk.texi on 22 July 1996 -->
+<TITLE>AWK Language Programming - Getting Started with awk</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="gawk_1.html">first</A>, <A HREF="gawk_2.html">previous</A>, <A HREF="gawk_4.html">next</A>, <A HREF="gawk_24.html">last</A> section, <A HREF="gawk_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC10" HREF="gawk_toc.html#TOC10">Getting Started with <CODE>awk</CODE></A></H1>
+<P>
+<A NAME="IDX34"></A>
+<A NAME="IDX35"></A>
+<A NAME="IDX36"></A>
+<A NAME="IDX37"></A>
+
+</P>
+<P>
+The basic function of <CODE>awk</CODE> is to search files for lines (or other
+units of text) that contain certain patterns.  When a line matches one
+of the patterns, <CODE>awk</CODE> performs specified actions on that line.
+<CODE>awk</CODE> keeps processing input lines in this way until the end of the
+input files are reached.
+
+</P>
+<P>
+<A NAME="IDX38"></A>
+<A NAME="IDX39"></A>
+<A NAME="IDX40"></A>
+<A NAME="IDX41"></A>
+Programs in <CODE>awk</CODE> are different from programs in most other languages,
+because <CODE>awk</CODE> programs are <STRONG>data-driven</STRONG>; that is, you describe
+the data you wish to work with, and then what to do when you find it.
+Most other languages are <STRONG>procedural</STRONG>; you have to describe, in great
+detail, every step the program is to take.  When working with procedural
+languages, it is usually much
+harder to clearly describe the data your program will process.
+For this reason, <CODE>awk</CODE> programs are often refreshingly easy to both
+write and read.
+
+</P>
+<P>
+<A NAME="IDX42"></A>
+<A NAME="IDX43"></A>
+When you run <CODE>awk</CODE>, you specify an <CODE>awk</CODE> <STRONG>program</STRONG> that
+tells <CODE>awk</CODE> what to do.  The program consists of a series of
+<STRONG>rules</STRONG>.  (It may also contain <STRONG>function definitions</STRONG>,
+an advanced feature which we will ignore for now.
+See section <A HREF="gawk_14.html#SEC129">User-defined Functions</A>.)  Each rule specifies one
+pattern to search for, and one action to perform when that pattern is found.
+
+</P>
+<P>
+Syntactically, a rule consists of a pattern followed by an action.  The
+action is enclosed in curly braces to separate it from the pattern.
+Rules are usually separated by newlines.  Therefore, an <CODE>awk</CODE>
+program looks like this:
+
+</P>
+
+<PRE>
+<VAR>pattern</VAR> { <VAR>action</VAR> }
+<VAR>pattern</VAR> { <VAR>action</VAR> }
+...
+</PRE>
+
+
+
+<H2><A NAME="SEC11" HREF="gawk_toc.html#TOC11">A Rose By Any Other Name</A></H2>
+
+<P>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+The <CODE>awk</CODE> language has evolved over the years. Full details are
+provided in section <A HREF="gawk_18.html#SEC173">The Evolution of the <CODE>awk</CODE> Language</A>.
+The language described in this book
+is often referred to as "new <CODE>awk</CODE>."
+
+</P>
+<P>
+Because of this, many systems have multiple
+versions of <CODE>awk</CODE>.
+Some systems have an <CODE>awk</CODE> utility that implements the
+original version of the <CODE>awk</CODE> language, and a <CODE>nawk</CODE> utility
+for the new version.  Others have an <CODE>oawk</CODE> for the "old <CODE>awk</CODE>"
+language, and plain <CODE>awk</CODE> for the new one.  Still others only
+have one version, usually the new one.<A NAME="DOCF2" HREF="gawk_foot.html#FOOT2">(2)</A>
+
+</P>
+<P>
+All in all, this makes it difficult for you to know which version of
+<CODE>awk</CODE> you should run when writing your programs.  The best advice
+we can give here is to check your local documentation. Look for <CODE>awk</CODE>,
+<CODE>oawk</CODE>, and <CODE>nawk</CODE>, as well as for <CODE>gawk</CODE>. Chances are, you
+will have some version of new <CODE>awk</CODE> on your system, and that is what
+you should use when running your programs.  (Of course, if you're reading
+this book, chances are good that you have <CODE>gawk</CODE>!)
+
+</P>
+<P>
+Throughout this book, whenever we refer to a language feature
+that should be available in any complete implementation of POSIX <CODE>awk</CODE>,
+we simply use the term <CODE>awk</CODE>.  When referring to a feature that is
+specific to the GNU implementation, we use the term <CODE>gawk</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC12" HREF="gawk_toc.html#TOC12">How to Run <CODE>awk</CODE> Programs</A></H2>
+
+<P>
+<A NAME="IDX46"></A>
+<A NAME="IDX47"></A>
+There are several ways to run an <CODE>awk</CODE> program.  If the program is
+short, it is easiest to include it in the command that runs <CODE>awk</CODE>,
+like this:
+
+</P>
+
+<PRE>
+awk '<VAR>program</VAR>' <VAR>input-file1</VAR> <VAR>input-file2</VAR> ...
+</PRE>
+
+<P>
+where <VAR>program</VAR> consists of a series of patterns and actions, as
+described earlier.
+(The reason for the single quotes is described below, in
+section <A HREF="gawk_3.html#SEC13">One-shot Throw-away <CODE>awk</CODE> Programs</A>.)
+
+</P>
+<P>
+When the program is long, it is usually more convenient to put it in a file
+and run it with a command like this:
+
+</P>
+
+<PRE>
+awk -f <VAR>program-file</VAR> <VAR>input-file1</VAR> <VAR>input-file2</VAR> ...
+</PRE>
+
+
+
+<H3><A NAME="SEC13" HREF="gawk_toc.html#TOC13">One-shot Throw-away <CODE>awk</CODE> Programs</A></H3>
+
+<P>
+Once you are familiar with <CODE>awk</CODE>, you will often type in simple
+programs the moment you want to use them.  Then you can write the
+program as the first argument of the <CODE>awk</CODE> command, like this:
+
+</P>
+
+<PRE>
+awk '<VAR>program</VAR>' <VAR>input-file1</VAR> <VAR>input-file2</VAR> ...
+</PRE>
+
+<P>
+where <VAR>program</VAR> consists of a series of <VAR>patterns</VAR> and
+<VAR>actions</VAR>, as described earlier.
+
+</P>
+<P>
+<A NAME="IDX48"></A>
+This command format instructs the <STRONG>shell</STRONG>, or command interpreter,
+to start <CODE>awk</CODE> and use the <VAR>program</VAR> to process records in the
+input file(s).  There are single quotes around <VAR>program</VAR> so that
+the shell doesn't interpret any <CODE>awk</CODE> characters as special shell
+characters.  They also cause the shell to treat all of <VAR>program</VAR> as
+a single argument for <CODE>awk</CODE> and allow <VAR>program</VAR> to be more
+than one line long.
+
+</P>
+<P>
+This format is also useful for running short or medium-sized <CODE>awk</CODE>
+programs from shell scripts, because it avoids the need for a separate
+file for the <CODE>awk</CODE> program.  A self-contained shell script is more
+reliable since there are no other files to misplace.
+
+</P>
+<P>
+section <A HREF="gawk_4.html#SEC24">Useful One Line Programs</A>, presents several short,
+self-contained programs.
+
+</P>
+<P>
+As an interesting side point, the command
+
+</P>
+
+<PRE>
+awk '/foo/' <VAR>files</VAR> ...
+</PRE>
+
+<P>
+is essentially the same as
+
+</P>
+<P>
+<A NAME="IDX49"></A>
+
+<PRE>
+egrep foo <VAR>files</VAR> ...
+</PRE>
+
+
+
+<H3><A NAME="SEC14" HREF="gawk_toc.html#TOC14">Running <CODE>awk</CODE> without Input Files</A></H3>
+
+<P>
+<A NAME="IDX50"></A>
+<A NAME="IDX51"></A>
+You can also run <CODE>awk</CODE> without any input files.  If you type the
+command line:
+
+</P>
+
+<PRE>
+awk '<VAR>program</VAR>'
+</PRE>
+
+<P>
+then <CODE>awk</CODE> applies the <VAR>program</VAR> to the <STRONG>standard input</STRONG>,
+which usually means whatever you type on the terminal.  This continues
+until you indicate end-of-file by typing <KBD>Control-d</KBD>.
+(On other operating systems, the end-of-file character may be different.
+For example, on OS/2 and MS-DOS, it is <KBD>Control-z</KBD>.)
+
+</P>
+<P>
+For example, the following program prints a friendly piece of advice
+(from Douglas Adams' <CITE>The Hitchhiker's Guide to the Galaxy</CITE>),
+to keep you from worrying about the complexities of computer programming
+(<SAMP>`BEGIN'</SAMP> is a feature we haven't discussed yet).
+
+</P>
+
+<PRE>
+$ awk "BEGIN { print \"Don't Panic!\" }"
+-| Don't Panic!
+</PRE>
+
+<P>
+<A NAME="IDX52"></A>
+<A NAME="IDX53"></A>
+This program does not read any input.  The <SAMP>`\'</SAMP> before each of the
+inner double quotes is necessary because of the shell's quoting rules,
+in particular because it mixes both single quotes and double quotes.
+
+</P>
+<P>
+This next simple <CODE>awk</CODE> program
+emulates the <CODE>cat</CODE> utility; it copies whatever you type at the
+keyboard to its standard output. (Why this works is explained shortly.)
+
+</P>
+
+<PRE>
+$ awk '{ print }'
+Now is the time for all good men
+-| Now is the time for all good men
+to come to the aid of their country.
+-| to come to the aid of their country.
+Four score and seven years ago, ...
+-| Four score and seven years ago, ...
+What, me worry?
+-| What, me worry?
+<KBD>Control-d</KBD>
+</PRE>
+
+
+
+<H3><A NAME="SEC15" HREF="gawk_toc.html#TOC15">Running Long Programs</A></H3>
+
+<P>
+<A NAME="IDX54"></A>
+<A NAME="IDX55"></A>
+<A NAME="IDX56"></A>
+<A NAME="IDX57"></A>
+Sometimes your <CODE>awk</CODE> programs can be very long.  In this case it is
+more convenient to put the program into a separate file.  To tell
+<CODE>awk</CODE> to use that file for its program, you type:
+
+</P>
+
+<PRE>
+awk -f <VAR>source-file</VAR> <VAR>input-file1</VAR> <VAR>input-file2</VAR> ...
+</PRE>
+
+<P>
+The <SAMP>`-f'</SAMP> instructs the <CODE>awk</CODE> utility to get the <CODE>awk</CODE> program
+from the file <VAR>source-file</VAR>.  Any file name can be used for
+<VAR>source-file</VAR>.  For example, you could put the program:
+
+</P>
+
+<PRE>
+BEGIN { print "Don't Panic!" }
+</PRE>
+
+<P>
+into the file <TT>`advice'</TT>.  Then this command:
+
+</P>
+
+<PRE>
+awk -f advice
+</PRE>
+
+<P>
+does the same thing as this one:
+
+</P>
+
+<PRE>
+awk "BEGIN { print \"Don't Panic!\" }"
+</PRE>
+
+<P>
+<A NAME="IDX58"></A>
+<A NAME="IDX59"></A>
+which was explained earlier (see section <A HREF="gawk_3.html#SEC14">Running <CODE>awk</CODE> without Input Files</A>).
+Note that you don't usually need single quotes around the file name that you
+specify with <SAMP>`-f'</SAMP>, because most file names don't contain any of the shell's
+special characters.  Notice that in <TT>`advice'</TT>, the <CODE>awk</CODE>
+program did not have single quotes around it.  The quotes are only needed
+for programs that are provided on the <CODE>awk</CODE> command line.
+
+</P>
+<P>
+If you want to identify your <CODE>awk</CODE> program files clearly as such,
+you can add the extension <TT>`.awk'</TT> to the file name.  This doesn't
+affect the execution of the <CODE>awk</CODE> program, but it does make
+"housekeeping" easier.
+
+</P>
+
+
+<H3><A NAME="SEC16" HREF="gawk_toc.html#TOC16">Executable <CODE>awk</CODE> Programs</A></H3>
+<P>
+<A NAME="IDX60"></A>
+<A NAME="IDX61"></A>
+<A NAME="IDX62"></A>
+<A NAME="IDX63"></A>
+<A NAME="IDX64"></A>
+
+</P>
+<P>
+Once you have learned <CODE>awk</CODE>, you may want to write self-contained
+<CODE>awk</CODE> scripts, using the <SAMP>`#!'</SAMP> script mechanism.  You can do
+this on many Unix systems<A NAME="DOCF3" HREF="gawk_foot.html#FOOT3">(3)</A> (and someday on the GNU system).
+
+</P>
+<P>
+For example, you could update the file <TT>`advice'</TT> to look like this:
+
+</P>
+
+<PRE>
+#! /bin/awk -f
+
+BEGIN    { print "Don't Panic!" }
+</PRE>
+
+<P>
+After making this file executable (with the <CODE>chmod</CODE> utility), you
+can simply type <SAMP>`advice'</SAMP>
+at the shell, and the system will arrange to run <CODE>awk</CODE> <A NAME="DOCF4" HREF="gawk_foot.html#FOOT4">(4)</A> as if you had typed <SAMP>`awk -f advice'</SAMP>.
+
+</P>
+
+<PRE>
+$ advice
+-| Don't Panic!
+</PRE>
+
+<P>
+Self-contained <CODE>awk</CODE> scripts are useful when you want to write a
+program which users can invoke without their having to know that the program is
+written in <CODE>awk</CODE>.
+
+</P>
+<P>
+<A NAME="IDX65"></A>
+<A NAME="IDX66"></A>
+Some older systems do not support the <SAMP>`#!'</SAMP> mechanism. You can get a
+similar effect using a regular shell script.  It would look something
+like this:
+
+</P>
+
+<PRE>
+: The colon ensures execution by the standard shell.
+awk '<VAR>program</VAR>' "$@"
+</PRE>
+
+<P>
+Using this technique, it is <EM>vital</EM> to enclose the <VAR>program</VAR> in
+single quotes to protect it from interpretation by the shell.  If you
+omit the quotes, only a shell wizard can predict the results.
+
+</P>
+<P>
+The <CODE>"$@"</CODE> causes the shell to forward all the command line
+arguments to the <CODE>awk</CODE> program, without interpretation.  The first
+line, which starts with a colon, is used so that this shell script will
+work even if invoked by a user who uses the C shell.  (Not all older systems
+obey this convention, but many do.)
+
+</P>
+
+
+<H3><A NAME="SEC17" HREF="gawk_toc.html#TOC17">Comments in <CODE>awk</CODE> Programs</A></H3>
+<P>
+<A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+<A NAME="IDX69"></A>
+<A NAME="IDX70"></A>
+<A NAME="IDX71"></A>
+
+</P>
+<P>
+A <STRONG>comment</STRONG> is some text that is included in a program for the sake
+of human readers; it is not really part of the program.  Comments
+can explain what the program does, and how it works.  Nearly all
+programming languages have provisions for comments, because programs are
+typically hard to understand without their extra help.
+
+</P>
+<P>
+In the <CODE>awk</CODE> language, a comment starts with the sharp sign
+character, <SAMP>`#'</SAMP>, and continues to the end of the line.
+The <SAMP>`#'</SAMP> does not have to be the first character on the line. The
+<CODE>awk</CODE> language ignores the rest of a line following a sharp sign.
+For example, we could have put the following into <TT>`advice'</TT>:
+
+</P>
+
+<PRE>
+# This program prints a nice friendly message.  It helps
+# keep novice users from being afraid of the computer.
+BEGIN    { print "Don't Panic!" }
+</PRE>
+
+<P>
+You can put comment lines into keyboard-composed throw-away <CODE>awk</CODE>
+programs also, but this usually isn't very useful; the purpose of a
+comment is to help you or another person understand the program at
+a later time.
+
+</P>
+
+
+<H2><A NAME="SEC18" HREF="gawk_toc.html#TOC18">A Very Simple Example</A></H2>
+
+<P>
+The following command runs a simple <CODE>awk</CODE> program that searches the
+input file <TT>`BBS-list'</TT> for the string of characters: <SAMP>`foo'</SAMP>.  (A
+string of characters is usually called a <STRONG>string</STRONG>.
+The term <STRONG>string</STRONG> is perhaps based on similar usage in English, such
+as "a string of pearls," or, "a string of cars in a train.")
+
+</P>
+
+<PRE>
+awk '/foo/ { print $0 }' BBS-list
+</PRE>
+
+<P>
+When lines containing <SAMP>`foo'</SAMP> are found, they are printed, because
+<SAMP>`print $0'</SAMP> means print the current line.  (Just <SAMP>`print'</SAMP> by
+itself means the same thing, so we could have written that
+instead.)
+
+</P>
+<P>
+You will notice that slashes, <SAMP>`/'</SAMP>, surround the string <SAMP>`foo'</SAMP>
+in the <CODE>awk</CODE> program.  The slashes indicate that <SAMP>`foo'</SAMP>
+is a pattern to search for.  This type of pattern is called a
+<STRONG>regular expression</STRONG>, and is covered in more detail later
+(see section <A HREF="gawk_5.html#SEC25">Regular Expressions</A>).
+The pattern is allowed to match parts of words.
+There are
+single-quotes around the <CODE>awk</CODE> program so that the shell won't
+interpret any of it as special shell characters.
+
+</P>
+<P>
+Here is what this program prints:
+
+</P>
+
+<PRE>
+$ awk '/foo/ { print $0 }' BBS-list
+-| fooey        555-1234     2400/1200/300     B
+-| foot         555-6699     1200/300          B
+-| macfoo       555-6480     1200/300          A
+-| sabafoo      555-2127     1200/300          C
+</PRE>
+
+<P>
+<A NAME="IDX72"></A>
+<A NAME="IDX73"></A>
+<A NAME="IDX74"></A>
+<A NAME="IDX75"></A>
+In an <CODE>awk</CODE> rule, either the pattern or the action can be omitted,
+but not both.  If the pattern is omitted, then the action is performed
+for <EM>every</EM> input line.  If the action is omitted, the default
+action is to print all lines that match the pattern.
+
+</P>
+<P>
+<A NAME="IDX76"></A>
+<A NAME="IDX77"></A>
+Thus, we could leave out the action (the <CODE>print</CODE> statement and the curly
+braces) in the above example, and the result would be the same: all
+lines matching the pattern <SAMP>`foo'</SAMP> would be printed.  By comparison,
+omitting the <CODE>print</CODE> statement but retaining the curly braces makes an
+empty action that does nothing; then no lines would be printed.
+
+</P>
+
+
+<H2><A NAME="SEC19" HREF="gawk_toc.html#TOC19">An Example with Two Rules</A></H2>
+<P>
+<A NAME="IDX78"></A>
+
+</P>
+<P>
+The <CODE>awk</CODE> utility reads the input files one line at a
+time.  For each line, <CODE>awk</CODE> tries the patterns of each of the rules.
+If several patterns match then several actions are run, in the order in
+which they appear in the <CODE>awk</CODE> program.  If no patterns match, then
+no actions are run.
+
+</P>
+<P>
+After processing all the rules (perhaps none) that match the line,
+<CODE>awk</CODE> reads the next line (however,
+see section <A HREF="gawk_10.html#SEC105">The <CODE>next</CODE> Statement</A>,
+and also see section <A HREF="gawk_10.html#SEC106">The <CODE>nextfile</CODE> Statement</A>).
+This continues until the end of the file is reached.
+
+</P>
+<P>
+For example, the <CODE>awk</CODE> program:
+
+</P>
+
+<PRE>
+/12/  { print $0 }
+/21/  { print $0 }
+</PRE>
+
+<P>
+contains two rules.  The first rule has the string <SAMP>`12'</SAMP> as the
+pattern and <SAMP>`print $0'</SAMP> as the action.  The second rule has the
+string <SAMP>`21'</SAMP> as the pattern and also has <SAMP>`print $0'</SAMP> as the
+action.  Each rule's action is enclosed in its own pair of braces.
+
+</P>
+<P>
+This <CODE>awk</CODE> program prints every line that contains the string
+<SAMP>`12'</SAMP> <EM>or</EM> the string <SAMP>`21'</SAMP>.  If a line contains both
+strings, it is printed twice, once by each rule.
+
+</P>
+<P>
+This is what happens if we run this program on our two sample data files,
+<TT>`BBS-list'</TT> and <TT>`inventory-shipped'</TT>, as shown here:
+
+</P>
+
+<PRE>
+$ awk '/12/ { print $0 }
+&#62;      /21/ { print $0 }' BBS-list inventory-shipped
+-| aardvark     555-5553     1200/300          B
+-| alpo-net     555-3412     2400/1200/300     A
+-| barfly       555-7685     1200/300          A
+-| bites        555-1675     2400/1200/300     A
+-| core         555-2912     1200/300          C
+-| fooey        555-1234     2400/1200/300     B
+-| foot         555-6699     1200/300          B
+-| macfoo       555-6480     1200/300          A
+-| sdace        555-3430     2400/1200/300     A
+-| sabafoo      555-2127     1200/300          C
+-| sabafoo      555-2127     1200/300          C
+-| Jan  21  36  64 620
+-| Apr  21  70  74 514
+</PRE>
+
+<P>
+Note how the line in <TT>`BBS-list'</TT> beginning with <SAMP>`sabafoo'</SAMP>
+was printed twice, once for each rule.
+
+</P>
+
+
+<H2><A NAME="SEC20" HREF="gawk_toc.html#TOC20">A More Complex Example</A></H2>
+
+<P>
+Here is an example to give you an idea of what typical <CODE>awk</CODE>
+programs do.  This example shows how <CODE>awk</CODE> can be used to
+summarize, select, and rearrange the output of another utility.  It uses
+features that haven't been covered yet, so don't worry if you don't
+understand all the details.
+
+</P>
+
+<PRE>
+ls -lg | awk '$6 == "Nov" { sum += $5 }
+             END { print sum }'
+</PRE>
+
+<P>
+<A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
+This command prints the total number of bytes in all the files in the
+current directory that were last modified in November (of any year).
+(In the C shell you would need to type a semicolon and then a backslash
+at the end of the first line; in a POSIX-compliant shell, such as the
+Bourne shell or Bash, the GNU Bourne-Again shell, you can type the example
+as shown.)
+
+</P>
+<P>
+The <SAMP>`ls -lg'</SAMP> part of this example is a system command that gives
+you a listing of the files in a directory, including file size and the date
+the file was last modified. Its output looks like this:
+
+</P>
+
+<PRE>
+-rw-r--r--  1 arnold   user   1933 Nov  7 13:05 Makefile
+-rw-r--r--  1 arnold   user  10809 Nov  7 13:03 gawk.h
+-rw-r--r--  1 arnold   user    983 Apr 13 12:14 gawk.tab.h
+-rw-r--r--  1 arnold   user  31869 Jun 15 12:20 gawk.y
+-rw-r--r--  1 arnold   user  22414 Nov  7 13:03 gawk1.c
+-rw-r--r--  1 arnold   user  37455 Nov  7 13:03 gawk2.c
+-rw-r--r--  1 arnold   user  27511 Dec  9 13:07 gawk3.c
+-rw-r--r--  1 arnold   user   7989 Nov  7 13:03 gawk4.c
+</PRE>
+
+<P>
+The first field contains read-write permissions, the second field contains
+the number of links to the file, and the third field identifies the owner of
+the file. The fourth field identifies the group of the file.
+The fifth field contains the size of the file in bytes.  The
+sixth, seventh and eighth fields contain the month, day, and time,
+respectively, that the file was last modified.  Finally, the ninth field
+contains the name of the file.
+
+</P>
+<P>
+<A NAME="IDX81"></A>
+<A NAME="IDX82"></A>
+The <SAMP>`$6 == "Nov"'</SAMP> in our <CODE>awk</CODE> program is an expression that
+tests whether the sixth field of the output from <SAMP>`ls -lg'</SAMP>
+matches the string <SAMP>`Nov'</SAMP>.  Each time a line has the string
+<SAMP>`Nov'</SAMP> for its sixth field, the action <SAMP>`sum += $5'</SAMP> is
+performed.  This adds the fifth field (the file size) to the variable
+<CODE>sum</CODE>.  As a result, when <CODE>awk</CODE> has finished reading all the
+input lines, <CODE>sum</CODE> is the sum of the sizes of files whose
+lines matched the pattern.  (This works because <CODE>awk</CODE> variables
+are automatically initialized to zero.)
+
+</P>
+<P>
+After the last line of output from <CODE>ls</CODE> has been processed, the
+<CODE>END</CODE> rule is executed, and the value of <CODE>sum</CODE> is
+printed.  In this example, the value of <CODE>sum</CODE> would be 80600.
+
+</P>
+<P>
+These more advanced <CODE>awk</CODE> techniques are covered in later sections
+(see section <A HREF="gawk_9.html#SEC97">Overview of Actions</A>).  Before you can move on to more
+advanced <CODE>awk</CODE> programming, you have to know how <CODE>awk</CODE> interprets
+your input and displays your output.  By manipulating fields and using
+<CODE>print</CODE> statements, you can produce some very useful and impressive
+looking reports.
+
+</P>
+
+
+<H2><A NAME="SEC21" HREF="gawk_toc.html#TOC21"><CODE>awk</CODE> Statements Versus Lines</A></H2>
+<P>
+<A NAME="IDX83"></A>
+<A NAME="IDX84"></A>
+
+</P>
+<P>
+Most often, each line in an <CODE>awk</CODE> program is a separate statement or
+separate rule, like this:
+
+</P>
+
+<PRE>
+awk '/12/  { print $0 }
+     /21/  { print $0 }' BBS-list inventory-shipped
+</PRE>
+
+<P>
+However, <CODE>gawk</CODE> will ignore newlines after any of the following:
+
+</P>
+
+<PRE>
+,    {    ?    :    ||    &#38;&#38;    do    else
+</PRE>
+
+<P>
+A newline at any other point is considered the end of the statement.
+(Splitting lines after <SAMP>`?'</SAMP> and <SAMP>`:'</SAMP> is a minor <CODE>gawk</CODE>
+extension.  The <SAMP>`?'</SAMP> and <SAMP>`:'</SAMP> referred to here is the 
+three operand conditional expression described in
+section <A HREF="gawk_8.html#SEC84">Conditional Expressions</A>.)
+
+</P>
+<P>
+<A NAME="IDX85"></A>
+<A NAME="IDX86"></A>
+<A NAME="IDX87"></A>
+If you would like to split a single statement into two lines at a point
+where a newline would terminate it, you can <STRONG>continue</STRONG> it by ending the
+first line with a backslash character, <SAMP>`\'</SAMP>.  The backslash must be
+the final character on the line to be recognized as a continuation
+character.  This is allowed absolutely anywhere in the statement, even
+in the middle of a string or regular expression.  For example:
+
+</P>
+
+<PRE>
+awk '/This regular expression is too long, so continue it\
+ on the next line/ { print $1 }'
+</PRE>
+
+<P>
+<A NAME="IDX88"></A>
+We have generally not used backslash continuation in the sample programs
+in this book.  Since in <CODE>gawk</CODE> there is no limit on the
+length of a line, it is never strictly necessary; it just makes programs
+more readable.  For this same reason, as well as for clarity, we have
+kept most statements short in the sample programs presented throughout
+the book.  Backslash continuation is most useful when your
+<CODE>awk</CODE> program is in a separate source file, instead of typed in on
+the command line.  You should also note that many <CODE>awk</CODE>
+implementations are more particular about where you may use backslash
+continuation. For example, they may not allow you to split a string
+constant using backslash continuation.  Thus, for maximal portability of
+your <CODE>awk</CODE> programs, it is best not to split your lines in the
+middle of a regular expression or a string.
+
+</P>
+<P>
+<A NAME="IDX89"></A>
+<A NAME="IDX90"></A>
+<STRONG>Caution: backslash continuation does not work as described above
+with the C shell.</STRONG>  Continuation with backslash works for <CODE>awk</CODE>
+programs in files, and also for one-shot programs <EM>provided</EM> you
+are using a POSIX-compliant shell, such as the Bourne shell or Bash, the
+GNU Bourne-Again shell.  But the C shell (<CODE>csh</CODE>) behaves
+differently!  There, you must use two backslashes in a row, followed by
+a newline.  Note also that when using the C shell, <EM>every</EM> newline
+in your awk program must be escaped with a backslash. To illustrate:
+
+</P>
+
+<PRE>
+% awk 'BEGIN { \
+?   print \\
+?       "hello, world" \
+? }'
+-| hello, world
+</PRE>
+
+<P>
+Here, the <SAMP>`%'</SAMP> and <SAMP>`?'</SAMP> are the C shell's primary and secondary
+prompts, analogous to the standard shell's <SAMP>`$'</SAMP> and <SAMP>`&#62;'</SAMP>.
+
+</P>
+<P>
+<CODE>awk</CODE> is a line-oriented language.  Each rule's action has to
+begin on the same line as the pattern.  To have the pattern and action
+on separate lines, you <EM>must</EM> use backslash continuation--there
+is no other way.
+
+</P>
+<P>
+<A NAME="IDX91"></A>
+When <CODE>awk</CODE> statements within one rule are short, you might want to put
+more than one of them on a line.  You do this by separating the statements
+with a semicolon, <SAMP>`;'</SAMP>.
+
+</P>
+<P>
+This also applies to the rules themselves.
+Thus, the previous program could have been written:
+
+</P>
+
+<PRE>
+/12/ { print $0 } ; /21/ { print $0 }
+</PRE>
+
+<P>
+<STRONG>Note:</STRONG> the requirement that rules on the same line must be
+separated with a semicolon was not in the original <CODE>awk</CODE>
+language; it was added for consistency with the treatment of statements
+within an action.
+
+</P>
+
+
+<H2><A NAME="SEC22" HREF="gawk_toc.html#TOC22">Other Features of <CODE>awk</CODE></A></H2>
+
+<P>
+The <CODE>awk</CODE> language provides a number of predefined, or built-in variables, which
+your programs can use to get information from <CODE>awk</CODE>.  There are other
+variables your program can set to control how <CODE>awk</CODE> processes your
+data.
+
+</P>
+<P>
+In addition, <CODE>awk</CODE> provides a number of built-in functions for doing
+common computational and string related operations.
+
+</P>
+<P>
+As we develop our presentation of the <CODE>awk</CODE> language, we introduce
+most of the variables and many of the functions. They are defined
+systematically in section <A HREF="gawk_11.html#SEC108">Built-in Variables</A>, and
+section <A HREF="gawk_13.html#SEC123">Built-in Functions</A>.
+
+</P>
+
+
+<H2><A NAME="SEC23" HREF="gawk_toc.html#TOC23">When to Use <CODE>awk</CODE></A></H2>
+
+<P>
+<A NAME="IDX92"></A>
+<A NAME="IDX93"></A>
+You might wonder how <CODE>awk</CODE> might be useful for you.  Using
+utility programs, advanced patterns, field separators, arithmetic
+statements, and other selection criteria, you can produce much more
+complex output.  The <CODE>awk</CODE> language is very useful for producing
+reports from large amounts of raw data, such as summarizing information
+from the output of other utility programs like <CODE>ls</CODE>.  
+(See section <A HREF="gawk_3.html#SEC20">A More Complex Example</A>.)
+
+</P>
+<P>
+Programs written with <CODE>awk</CODE> are usually much smaller than they would
+be in other languages.  This makes <CODE>awk</CODE> programs easy to compose and
+use.  Often, <CODE>awk</CODE> programs can be quickly composed at your terminal,
+used once, and thrown away.  Since <CODE>awk</CODE> programs are interpreted, you
+can avoid the (usually lengthy) compilation part of the typical
+edit-compile-test-debug cycle of software development.
+
+</P>
+<P>
+Complex programs have been written in <CODE>awk</CODE>, including a complete
+retargetable assembler for eight-bit microprocessors (see section <A HREF="gawk_22.html#SEC228">Glossary</A>, for
+more information) and a microcode assembler for a special purpose Prolog
+computer.  However, <CODE>awk</CODE>'s capabilities are strained by tasks of
+such complexity.
+
+</P>
+<P>
+If you find yourself writing <CODE>awk</CODE> scripts of more than, say, a few
+hundred lines, you might consider using a different programming
+language.  Emacs Lisp is a good choice if you need sophisticated string
+or pattern matching capabilities.  The shell is also good at string and
+pattern matching; in addition, it allows powerful use of the system
+utilities.  More conventional languages, such as C, C++, and Lisp, offer
+better facilities for system programming and for managing the complexity
+of large programs.  Programs in these languages may require more lines
+of source code than the equivalent <CODE>awk</CODE> programs, but they are
+easier to maintain and usually run more efficiently.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="gawk_1.html">first</A>, <A HREF="gawk_2.html">previous</A>, <A HREF="gawk_4.html">next</A>, <A HREF="gawk_24.html">last</A> section, <A HREF="gawk_toc.html">table of contents</A>.
+</BODY>
+</HTML>
